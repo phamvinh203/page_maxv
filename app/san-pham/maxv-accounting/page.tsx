@@ -1,13 +1,23 @@
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
+import { Plans } from "@/app/_components/pricing/plans/plans";
+import { FeatureGrid } from "@/app/_components/product/feature-grid";
 import { ProductHero } from "@/app/_components/product/product-hero";
 import { Badge } from "@/app/_components/ui/badge";
+import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
-import { accountingModules, maxvAccounting } from "@/app/_data/maxv-accounting";
+import {
+  accountingModules,
+  accountingReasons,
+  accountingSolutions,
+  maxvAccounting,
+} from "@/app/_data/maxv-accounting";
+import { pricing } from "@/app/_data/pricing";
 
 export const metadata: Metadata = {
   title: "MaxV Accounting – Phần mềm kế toán online",
@@ -27,14 +37,61 @@ export default function Page() {
         secondary={{ label: "Tư vấn gói phù hợp", href: "/bang-gia/tu-van-goi-phu-hop" }}
       />
 
+      <section aria-labelledby="accounting-solutions-heading" className="py-12 sm:py-14">
+        <Container>
+          <div className="text-center">
+            <SectionHeading id="accounting-solutions-heading">Giải quyết mọi bài toán kế toán</SectionHeading>
+            <p className="mt-3 text-sm leading-7 text-muted-foreground">
+              Tối ưu quy trình, tiết kiệm thời gian, nâng cao hiệu quả quản trị
+            </p>
+          </div>
+          <FeatureGrid
+            stacked
+            items={accountingSolutions}
+            className="sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
+          />
+        </Container>
+      </section>
+
+      <section
+        aria-labelledby="accounting-reasons-heading"
+        className="bg-linear-to-b from-white to-[#f6fbff] py-12 sm:py-14"
+      >
+        <Container className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div>
+            <SectionHeading id="accounting-reasons-heading" className="lg:text-3xl">
+              Vì sao doanh nghiệp nên chọn <span className="text-primary">MaxV Accounting</span>
+            </SectionHeading>
+            <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground">
+              Một nền tảng web cho kế toán tổng hợp, tiền, bán hàng, mua hàng, tồn kho và giá thành.
+            </p>
+            <Button asChild className="mt-6 h-11 rounded-lg">
+              <Link href="/bang-gia/tu-van-goi-phu-hop">Tư vấn gói phù hợp <ArrowRight aria-hidden="true" /></Link>
+            </Button>
+          </div>
+          <Card className="shadow-xs">
+            <CardContent className="p-6">
+              <ul className="space-y-4">
+                {accountingReasons.map((reason) => (
+                  <li key={reason} className="flex items-start gap-3 text-sm leading-6 text-foreground">
+                    <Check aria-hidden="true" className="mt-1 size-4 shrink-0 text-primary" strokeWidth={2.5} />
+                    {reason}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </Container>
+      </section>
+
       <section aria-labelledby="accounting-modules-heading" className="py-12 sm:py-14">
         <Container>
-          <SectionHeading id="accounting-modules-heading" className="max-w-2xl lg:text-3xl">
-            7 phân hệ kế toán trên một nền tảng
-          </SectionHeading>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-            MaxV Accounting đang được hoàn thiện và ra mắt dần. Trạng thái của từng phân hệ được ghi rõ trên thẻ.
-          </p>
+          <div className="text-center">
+            <SectionHeading id="accounting-modules-heading">7 phân hệ kế toán trên một nền tảng</SectionHeading>
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
+              MaxV Accounting đang được hoàn thiện và ra mắt dần. Trạng thái của từng phân hệ được ghi rõ trên thẻ.
+            </p>
+          </div>
           <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {accountingModules.map(({ id, title, description, items, status }) => (
               <li key={id} className="min-w-0">
@@ -60,6 +117,10 @@ export default function Page() {
           </ul>
         </Container>
       </section>
+
+      <div className="bg-linear-to-b from-white to-[#f6fbff] pt-12 sm:pt-14">
+        <Plans heading={{ title: "Gói phần mềm phù hợp với doanh nghiệp", description: pricing.description }} />
+      </div>
 
       <TrialSignup />
     </>
