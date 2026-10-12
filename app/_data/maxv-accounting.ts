@@ -73,6 +73,47 @@ export const accountingReasons = [
   "Đội ngũ hỗ trợ trực tiếp, phản hồi nhanh chóng",
 ];
 
+type Testimonial = {
+  id: string;
+  quote: string;
+  name: string;
+  role: string;
+  initial: string;
+  avatar?: string;
+};
+
+// Customer quotes supplied by the site owner (from the live maxv.vn page).
+// avatar: square photo under /images/testimonials/ (e.g. "/images/testimonials/tan-ke-toan.jpg"); without it the initial is shown.
+export const accountingTestimonials: Testimonial[] = [
+  {
+    id: "tan-ke-toan",
+    quote:
+      "Dùng phần mềm kế toán Maxv giúp công việc kế toán của công ty tôi được tự động hóa hiệu quả hơn rất nhiều. Cảm ơn Maxv!",
+    name: "Bà Tân (Tân Kế Toán)",
+    role: "Giám đốc, Tân Kế Toán",
+    initial: "T",
+    // avatar: "./images/",
+  },
+  {
+    id: "mitasp",
+    quote:
+      "Cảm ơn Maxv đã mang đến giải pháp hỗ trợ doanh nghiệp chuyên nghiệp, nhiều tiện ích và giúp công việc kế toán dễ dàng hơn.",
+    name: "Ông Đào Trung Hiếu",
+    role: "Giám đốc, Mitasp",
+    initial: "H",
+    // avatar: "./images/",
+  },
+  {
+    id: "office-360",
+    quote:
+      "Maxv Accounting giúp Office360 quản lý nhiều doanh nghiệp nhanh chóng, hiệu quả hơn trong công việc kế toán. Cảm ơn Maxv!",
+    name: "Ông Nguyễn Văn Nam",
+    role: "Giám đốc, Office 360",
+    initial: "N",
+    // avatar: "./images/",
+  },
+];
+
 export const accountingModules = [
   {
     id: "he-thong",
