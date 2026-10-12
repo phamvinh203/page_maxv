@@ -2,6 +2,7 @@ import { Hero } from "@/app/_components/home/hero/hero";
 import { CustomerTrust } from "@/app/_components/home/customer-trust/customer-trust";
 import { IndustrySolutions } from "@/app/_components/home/industry-solutions/industry-solutions";
 import { Features } from "@/app/_components/home/features/features";
+import { Workflow } from "@/app/_components/home/workflow/workflow";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <CustomerTrust />
       <IndustrySolutions />
       <Features />
+      <Workflow />
     </>
   );
 }
