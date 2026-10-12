@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,20 +9,25 @@ import { heroImage } from "@/app/_lib/assets";
 import { cn } from "@/app/_lib/utils";
 
 type Cta = { label: string; href: string };
+type Chip = { label: string; hint: string; Icon: LucideIcon };
 
 export function ProductHero({
+  eyebrow = "SẢN PHẨM",
   title,
   highlight,
   description,
   benefits,
+  chips,
   imageAlt,
   primary,
   secondary,
 }: {
+  eyebrow?: string;
   title: string;
   highlight: string;
   description: string;
-  benefits: string[];
+  benefits?: string[];
+  chips?: Chip[];
   imageAlt?: string;
   primary: Cta;
   secondary: Cta;
@@ -39,7 +44,7 @@ export function ProductHero({
         )}
       >
         <div className="relative z-10 lg:py-8">
-          <Badge variant="eyebrow">SẢN PHẨM</Badge>
+          <Badge variant="eyebrow">{eyebrow}</Badge>
           <h1
             id="product-heading"
             className="mt-4 text-[2rem] leading-[1.18] font-bold tracking-tight text-foreground sm:text-[2.625rem] xl:text-5xl"
@@ -58,11 +63,27 @@ export function ProductHero({
               <Link href={secondary.href}>{secondary.label}</Link>
             </Button>
           </div>
-          <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-3 text-[11px] font-medium text-foreground/80 sm:mt-9">
-            {benefits.map((benefit) => (
-              <li key={benefit}>{benefit}</li>
-            ))}
-          </ul>
+          {chips ? (
+            <ul className="mt-7 flex flex-wrap gap-3 sm:mt-9">
+              {chips.map(({ label, hint, Icon }) => (
+                <li key={label} className="flex items-center gap-2 rounded-lg border border-white/80 bg-white/70 px-3 py-2">
+                  <Icon aria-hidden="true" className="size-4 shrink-0 text-primary" />
+                  <p className="text-xs leading-4 font-semibold text-foreground">
+                    {label}
+                    <span className="block text-[10px] font-medium text-muted-foreground">{hint}</span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            benefits && (
+              <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-3 text-[11px] font-medium text-foreground/80 sm:mt-9">
+                {benefits.map((benefit) => (
+                  <li key={benefit}>{benefit}</li>
+                ))}
+              </ul>
+            )
+          )}
         </div>
 
         {imageAlt && (
