@@ -7,6 +7,7 @@ import { Features } from "@/app/_components/home/features/features";
 import { Workflow } from "@/app/_components/home/workflow/workflow";
 import { CustomerStories } from "@/app/_components/home/customer-stories/customer-stories";
 import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
+import { homeJsonLd } from "@/app/_lib/seo";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -16,6 +17,10 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd).replace(/</g, "\\u003c") }}
+      />
       <Hero />
       <CustomerTrust />
       <IndustrySolutions />

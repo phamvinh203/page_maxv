@@ -1,11 +1,43 @@
 import type { Metadata } from "next";
 
 export const site = {
-  url: "https://app.vinhlab.site",
+  // shortcut: fallback is the current staging domain; set NEXT_PUBLIC_SITE_URL to the real one in production.
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.vinhlab.site").replace(/\/$/, ""),
   name: "MaxV",
   title: "MaxV – Phần mềm kế toán online",
   description:
     "Kế toán nhanh hơn, quản trị tài chính dễ hơn với MaxV. Tự động lấy hóa đơn, hạch toán, quản lý công nợ, tồn kho, giá thành và lập báo cáo trên một nền tảng.",
+};
+
+export const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${site.url}/#organization`,
+      name: site.name,
+      url: site.url,
+      logo: `${site.url}/images/logo_maxv.png`,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#website`,
+      url: site.url,
+      name: site.name,
+      description: site.description,
+      inLanguage: "vi-VN",
+      publisher: { "@id": `${site.url}/#organization` },
+    },
+    {
+      "@type": "SoftwareApplication",
+      name: site.name,
+      url: site.url,
+      description: site.description,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      publisher: { "@id": `${site.url}/#organization` },
+    },
+  ],
 };
 
 // shortcut: placeholder pages stay out of search; replace this metadata and add them to the sitemap when their content is ready.
@@ -16,7 +48,6 @@ export function createPlaceholderMetadata(title: string, path: string): Metadata
   return {
     title,
     description,
-    alternates: { canonical: path },
     robots: { index: false, follow: true },
     openGraph: {
       type: "website",
