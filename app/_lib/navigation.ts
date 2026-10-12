@@ -1,3 +1,5 @@
+import { newsCategories } from "@/app/_data/news";
+
 const productLinks = [
   { label: "MaxV Accounting", href: "/san-pham/maxv-accounting" },
   { label: "MaxV HĐĐT", href: "/san-pham/maxv-hddt" },
@@ -26,6 +28,8 @@ const customerLinks = [
   { label: "Khách hàng tiêu biểu", href: "/khach-hang/khach-hang-tieu-bieu" },
 ];
 
+const newsLinks = newsCategories.map(({ label, slug }) => ({ label, href: `/tin-tuc/${slug}` }));
+
 const supportLinks = [
   { label: "Trung tâm trợ giúp", href: "/tai-nguyen/trung-tam-tro-giup" },
   { label: "Hướng dẫn sử dụng", href: "/tai-nguyen/huong-dan-su-dung" },
@@ -45,6 +49,7 @@ export const headerNavigation = [
   { title: "Tính năng", items: featureLinks },
   { title: "Bảng giá", href: "/bang-gia" },
   { title: "Khách hàng", items: customerLinks },
+  { title: "Tin tức", items: newsLinks },
   { title: "Tài nguyên", items: supportLinks },
 ];
 
