@@ -4,6 +4,7 @@ import { IndustrySolutions } from "@/app/_components/home/industry-solutions/ind
 import { Features } from "@/app/_components/home/features/features";
 import { Workflow } from "@/app/_components/home/workflow/workflow";
 import { CustomerStories } from "@/app/_components/home/customer-stories/customer-stories";
+import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Features />
       <Workflow />
       <CustomerStories />
+      <TrialSignup />
     </>
   );
 }
