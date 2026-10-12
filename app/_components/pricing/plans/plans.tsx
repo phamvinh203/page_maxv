@@ -16,18 +16,18 @@ export function Plans() {
         <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => (
             <li key={plan.id} className="min-w-0">
-              <Card className="h-full gap-0 rounded-xl py-0 shadow-xs">
+              <Card className="h-full shadow-xs">
                 <CardContent className="flex h-full flex-col p-6">
                   <h3 className="text-base font-semibold">{plan.name}</h3>
                   <p className="mt-1 min-h-12 text-xs leading-6 text-muted-foreground">{plan.audience}</p>
 
                   <p className="mt-4 flex flex-wrap items-baseline gap-x-1 text-primary">
-                    <span aria-hidden={!plan.from} className="w-full text-xs text-muted-foreground">{plan.from ? "Chỉ từ" : "\u00A0"}</span>
+                    <span className="min-h-4 w-full text-xs text-muted-foreground">{plan.from && "Chỉ từ"}</span>
                     <span className="text-3xl font-bold tracking-tight">{plan.price ?? "Liên hệ"}</span>
                     {plan.period && <span className="text-sm font-semibold">{plan.period}</span>}
                   </p>
 
-                  <Button asChild variant={plan.price === null || plan.id === "dung-thu" ? "outline" : "default"} className="mt-5 h-10 rounded-lg">
+                  <Button asChild variant={plan.featured ? "default" : "outline"} className="mt-5 h-10 rounded-lg">
                     <Link href={plan.cta.href}>{plan.cta.label} <ArrowRight aria-hidden="true" /></Link>
                   </Button>
 

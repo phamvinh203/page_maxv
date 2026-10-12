@@ -9,7 +9,9 @@ export const pricing = {
 };
 
 // Module keys mirror MODULES in maxv_v2/be_maxv/src/constants/modules.ts (hddt is always on in the product).
-export const modules = [
+type ModuleKey = "hddt" | "tokhai" | "dvc" | "accounting" | "hrm";
+
+export const modules: { key: ModuleKey; label: string; soon?: boolean }[] = [
   { key: "hddt", label: "Hóa đơn điện tử – đồng bộ từ Thuế điện tử" },
   { key: "tokhai", label: "Tờ khai thuế GTGT 01" },
   { key: "dvc", label: "Dịch vụ công – tờ khai, giấy nộp tiền" },
@@ -17,8 +19,20 @@ export const modules = [
   { key: "hrm", label: "Nhân sự – chấm công, tiền lương, thuế TNCN" },
 ];
 
+type Plan = {
+  id: string;
+  name: string;
+  audience: string;
+  price: string | null;
+  period?: string;
+  from?: boolean;
+  featured?: boolean;
+  modules: ModuleKey[];
+  cta: { label: string; href: string };
+};
+
 // shortcut: only the entry price is known; price: null renders "Liên hệ". Add real prices and MST/user limits when confirmed.
-export const plans = [
+export const plans: Plan[] = [
   {
     id: "dung-thu",
     name: "Dùng thử",
@@ -33,6 +47,7 @@ export const plans = [
     audience: "Hộ kinh doanh, doanh nghiệp nhỏ",
     price: `${pricing.price}${pricing.currency}`,
     from: true,
+    featured: true,
     period: pricing.period,
     modules: ["hddt", "tokhai"],
     cta: { label: "Dùng thử miễn phí", href: "/dung-thu" },
