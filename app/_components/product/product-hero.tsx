@@ -6,6 +6,7 @@ import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
 import { heroImage } from "@/app/_lib/assets";
+import { cn } from "@/app/_lib/utils";
 
 type Cta = { label: string; href: string };
 
@@ -22,7 +23,7 @@ export function ProductHero({
   highlight: string;
   description: string;
   benefits: string[];
-  imageAlt: string;
+  imageAlt?: string;
   primary: Cta;
   secondary: Cta;
 }) {
@@ -31,7 +32,12 @@ export function ProductHero({
       aria-labelledby="product-heading"
       className="overflow-hidden bg-linear-to-br from-[#f1fbff] to-[#e3f3ff]"
     >
-      <Container className="grid items-center gap-6 pt-10 pb-6 sm:pt-14 lg:grid-cols-[1fr_1.15fr] lg:gap-0 lg:py-8">
+      <Container
+        className={cn(
+          "grid items-center gap-6 pt-10 pb-6 sm:pt-14",
+          imageAlt ? "lg:grid-cols-[1fr_1.15fr] lg:gap-0 lg:py-8" : "sm:pb-12 lg:py-14",
+        )}
+      >
         <div className="relative z-10 lg:py-8">
           <Badge variant="eyebrow">SẢN PHẨM</Badge>
           <h1
@@ -59,16 +65,18 @@ export function ProductHero({
           </ul>
         </div>
 
-        <div className="relative -mx-4 sm:-mx-6 lg:mx-0 lg:-mr-8">
-          <Image
-            src={heroImage}
-            alt={imageAlt}
-            sizes="(min-width: 1280px) 680px, (min-width: 1024px) 55vw, 100vw"
-            loading="eager"
-            fetchPriority="high"
-            className="h-auto w-full [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)] lg:[mask-image:linear-gradient(to_right,transparent,black_12%)]"
-          />
-        </div>
+        {imageAlt && (
+          <div className="relative -mx-4 sm:-mx-6 lg:mx-0 lg:-mr-8">
+            <Image
+              src={heroImage}
+              alt={imageAlt}
+              sizes="(min-width: 1280px) 680px, (min-width: 1024px) 55vw, 100vw"
+              loading="eager"
+              fetchPriority="high"
+              className="h-auto w-full [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)] lg:[mask-image:linear-gradient(to_right,transparent,black_12%)]"
+            />
+          </div>
+        )}
       </Container>
     </section>
   );
