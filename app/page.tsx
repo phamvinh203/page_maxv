@@ -3,6 +3,7 @@ import { CustomerTrust } from "@/app/_components/home/customer-trust/customer-tr
 import { IndustrySolutions } from "@/app/_components/home/industry-solutions/industry-solutions";
 import { Features } from "@/app/_components/home/features/features";
 import { Workflow } from "@/app/_components/home/workflow/workflow";
+import { CustomerStories } from "@/app/_components/home/customer-stories/customer-stories";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <IndustrySolutions />
       <Features />
       <Workflow />
+      <CustomerStories />
     </>
   );
 }
