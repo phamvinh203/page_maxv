@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
+import { FeatureGrid } from "@/app/_components/product/feature-grid";
 import { ProductHero } from "@/app/_components/product/product-hero";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
@@ -30,23 +31,7 @@ export default function Page() {
           <SectionHeading id="hddt-features-heading" className="max-w-2xl lg:text-3xl">
             Mọi thứ bạn cần để quản lý hóa đơn điện tử
           </SectionHeading>
-          <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {hddtFeatures.map(({ id, title, description, Icon }) => (
-              <li key={id} className="min-w-0">
-                <Card className="h-full shadow-xs">
-                  <CardContent className="flex items-start gap-3 p-5">
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/10 bg-secondary text-primary">
-                      <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
-                    </span>
-                    <div className="min-w-0">
-                      <h3 className="text-sm leading-5 font-semibold text-foreground">{title}</h3>
-                      <p className="mt-2 text-xs leading-6 text-muted-foreground">{description}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </li>
-            ))}
-          </ul>
+          <FeatureGrid items={hddtFeatures} className="sm:grid-cols-2 lg:grid-cols-3" />
         </Container>
       </section>
 
