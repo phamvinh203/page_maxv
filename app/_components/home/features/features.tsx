@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
@@ -33,14 +34,12 @@ export function Features() {
             doanh nghiệp tối ưu quy trình, tiết kiệm chi phí và nâng cao hiệu
             quả quản trị.
           </p>
-          {/* shortcut: the features page URL is pending; connect it when supplied. */}
           <Button
             size="lg"
-            disabled
-            className="mt-6 h-11 rounded-lg shadow-sm shadow-primary/15 disabled:opacity-100"
+            asChild
+            className="mt-6 h-11 rounded-lg shadow-sm shadow-primary/15"
           >
-            Khám phá tính năng
-            <ArrowRight aria-hidden="true" />
+            <Link href="/tinh-nang">Khám phá tính năng <ArrowRight aria-hidden="true" /></Link>
           </Button>
         </div>
 

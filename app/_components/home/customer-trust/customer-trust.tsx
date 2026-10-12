@@ -1,4 +1,5 @@
 import { ArrowRight, Award, Building2, ThumbsUp } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
@@ -27,15 +28,13 @@ export function CustomerTrust() {
           </h2>
           <div className="mt-4 flex items-start gap-4">
             <CustomerLogos customers={customers} />
-            {/* shortcut: customer page URL is pending; connect it when supplied. */}
             <Button
               variant="link"
               size="sm"
-              disabled
-              className="mt-4 h-auto gap-1 px-0 py-0 text-xs font-medium disabled:opacity-100"
+              asChild
+              className="mt-4 h-auto gap-1 px-0 py-0 text-xs font-medium"
             >
-              Xem thêm
-              <ArrowRight aria-hidden="true" className="size-3" />
+              <Link href="/khach-hang/khach-hang-tieu-bieu">Xem thêm <ArrowRight aria-hidden="true" className="size-3" /></Link>
             </Button>
           </div>
         </div>

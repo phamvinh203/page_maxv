@@ -8,10 +8,10 @@ import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
 import {
   NavigationMenu, NavigationMenuContent, NavigationMenuItem,
-  NavigationMenuList, NavigationMenuTrigger,
+  NavigationMenuList, NavigationMenuTrigger, NavigationMenuLink,
 } from "@/app/_components/ui/navigation-menu";
 import {
-  Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger,
+  Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetClose,
 } from "@/app/_components/ui/sheet";
 import { maxvLogo } from "@/app/_lib/assets";
 import { headerNavigation } from "@/app/_lib/navigation";
@@ -32,8 +32,10 @@ export function Header() {
                 <NavigationMenuContent className="min-w-60 p-2">
                   <ul>
                     {group.items.map((item) => (
-                      <li key={item}>
-                        <button type="button" disabled className="w-full cursor-not-allowed rounded-md px-3 py-2.5 text-left text-sm text-muted-foreground">{item}</button>
+                      <li key={item.href}>
+                        <NavigationMenuLink asChild className="px-3 py-2.5 text-muted-foreground">
+                          <Link href={item.href}>{item.label}</Link>
+                        </NavigationMenuLink>
                       </li>
                     ))}
                   </ul>
@@ -47,9 +49,9 @@ export function Header() {
           <Button variant="ghost" size="icon" disabled aria-label="Tìm kiếm" className="hidden text-primary disabled:opacity-100 xl:inline-flex">
             <Search aria-hidden="true" />
           </Button>
-          <Button variant="outline" disabled className="hidden h-10 rounded-lg border-input px-5 text-primary disabled:opacity-100 sm:inline-flex">Đăng nhập</Button>
-          <Button disabled aria-label="Dùng thử miễn phí" className="h-10 rounded-lg px-3 text-xs shadow-sm shadow-primary/20 disabled:opacity-100 sm:px-5 sm:text-sm">
-            <span className="sm:hidden">Dùng thử</span><span className="hidden sm:inline">Dùng thử miễn phí</span> <ArrowRight aria-hidden="true" />
+          <Button variant="outline" asChild className="hidden h-10 rounded-lg border-input px-5 text-primary sm:inline-flex"><Link href="/dang-nhap">Đăng nhập</Link></Button>
+          <Button asChild className="h-10 rounded-lg px-3 text-xs shadow-sm shadow-primary/20 sm:px-5 sm:text-sm">
+            <Link href="/dung-thu" aria-label="Dùng thử miễn phí"><span className="sm:hidden">Dùng thử</span><span className="hidden sm:inline">Dùng thử miễn phí</span> <ArrowRight aria-hidden="true" /></Link>
           </Button>
           <Sheet>
             <SheetTrigger asChild>
@@ -67,14 +69,24 @@ export function Header() {
                       {group.title}<ChevronDown aria-hidden="true" className="size-4 transition-transform group-open:rotate-180" />
                     </summary>
                     <ul className="space-y-1 pb-4">
-                      {group.items.map((item) => <li key={item}><button type="button" disabled className="w-full cursor-not-allowed py-2 text-left text-sm text-muted-foreground">{item}</button></li>)}
+                      {group.items.map((item) => (
+                        <li key={item.href}>
+                          <SheetClose asChild>
+                            <Link href={item.href} className="block rounded-md py-2 text-sm text-muted-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">{item.label}</Link>
+                          </SheetClose>
+                        </li>
+                      ))}
                     </ul>
                   </details>
                 ))}
               </nav>
               <div className="mt-auto grid gap-3 p-6">
-                <Button variant="outline" disabled className="disabled:opacity-100">Đăng nhập</Button>
-                <Button disabled className="disabled:opacity-100">Dùng thử miễn phí <ArrowRight aria-hidden="true" /></Button>
+                <SheetClose asChild>
+                  <Button variant="outline" asChild><Link href="/dang-nhap">Đăng nhập</Link></Button>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Button asChild><Link href="/dung-thu">Dùng thử miễn phí <ArrowRight aria-hidden="true" /></Link></Button>
+                </SheetClose>
               </div>
             </SheetContent>
           </Sheet>

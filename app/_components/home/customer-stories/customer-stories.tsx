@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, Building2, Quote, UserRound } from "lucide-react";
 
 import { Pricing } from "@/app/_components/home/pricing/pricing";
@@ -39,12 +40,11 @@ export function CustomerStories() {
           <p className="mt-2 text-sm leading-6 text-white/90">
             {customerStory.description}
           </p>
-          {/* shortcut: the story URL is pending; connect it through the data file when supplied. */}
           {customerStory.href ? (
             <Button asChild size="sm" className="mt-5 rounded-lg">
-              <a href={customerStory.href}>
+              <Link href={customerStory.href}>
                 Xem chi tiết <ArrowRight aria-hidden="true" />
-              </a>
+              </Link>
             </Button>
           ) : (
             <Button disabled size="sm" className="mt-5 rounded-lg disabled:opacity-100">

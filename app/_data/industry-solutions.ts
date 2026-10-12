@@ -7,7 +7,7 @@ export const industrySolutions = [
     title: "Thương mại – Dịch vụ",
     description: "Quản lý bán hàng, công nợ, kho, nhanh chóng và chính xác.",
     image: "",
-    href: "",
+    href: "/giai-phap/thuong-mai-dich-vu",
     Icon: ShoppingBag,
   },
   {
@@ -15,7 +15,7 @@ export const industrySolutions = [
     title: "Xây dựng – Xây lắp",
     description: "Theo dõi công trình, chi phí, vật tư, nhân công hiệu quả.",
     image: "",
-    href: "",
+    href: "/giai-phap/xay-dung-xay-lap",
     Icon: HardHat,
   },
   {
@@ -23,7 +23,7 @@ export const industrySolutions = [
     title: "Sản xuất",
     description: "Kiểm soát tồn kho, giá thành, đáp ứng yêu cầu quản trị.",
     image: "",
-    href: "",
+    href: "/giai-phap/san-xuat",
     Icon: Factory,
   },
   {
@@ -31,7 +31,7 @@ export const industrySolutions = [
     title: "Hộ kinh doanh",
     description: "Đơn giản, dễ dùng, phù hợp với quy mô nhỏ.",
     image: "",
-    href: "",
+    href: "/giai-phap/ho-kinh-doanh",
     Icon: Store,
   },
   {
@@ -39,7 +39,7 @@ export const industrySolutions = [
     title: "Kế toán dịch vụ",
     description: "Hỗ trợ nhiều doanh nghiệp cùng lúc, tiết kiệm thời gian.",
     image: "",
-    href: "",
+    href: "/giai-phap/ke-toan-dich-vu",
     Icon: BriefcaseBusiness,
   },
 ];

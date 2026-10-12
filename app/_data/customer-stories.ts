@@ -5,7 +5,7 @@ export const customerStory = {
   description:
     "Giảm 60% thời gian tổng hợp số liệu công trình, và kiểm soát chi phí hiệu quả hơn.",
   image: "",
-  href: "",
+  href: "/khach-hang/cong-ty-xay-dung-abc",
   results: [
     { value: "60%", label: "Giảm thời gian tổng hợp số liệu" },
     { value: "40%", label: "Tiết kiệm chi phí" },

@@ -5,5 +5,5 @@ export const pricing = {
   price: "138.000",
   currency: "đ",
   period: "/tháng",
-  href: "",
+  href: "/bang-gia",
 };

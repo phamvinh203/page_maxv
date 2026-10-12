@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Badge } from "@/app/_components/ui/badge";
@@ -36,14 +37,12 @@ export function IndustrySolutions() {
               hiệu quả hơn.
             </p>
           </div>
-          {/* shortcut: the solutions index URL is pending; connect it when supplied. */}
           <Button
             variant="link"
-            disabled
-            className="h-auto shrink-0 px-0 py-0 text-sm disabled:opacity-100 lg:mb-2"
+            asChild
+            className="h-auto shrink-0 px-0 py-0 text-sm lg:mb-2"
           >
-            Xem tất cả giải pháp
-            <ArrowRight aria-hidden="true" />
+            <Link href="/giai-phap">Xem tất cả giải pháp <ArrowRight aria-hidden="true" /></Link>
           </Button>
         </div>
 
@@ -89,10 +88,10 @@ export function IndustrySolutions() {
                       asChild
                       className="mt-auto h-auto self-start px-0 py-0 text-xs"
                     >
-                      <a href={href} aria-label={`Tìm hiểu thêm về ${title}`}>
+                      <Link href={href} aria-label={`Tìm hiểu thêm về ${title}`}>
                         Tìm hiểu thêm
                         <ArrowRight aria-hidden="true" className="size-3.5" />
-                      </a>
+                      </Link>
                     </Button>
                   ) : (
                     <Button

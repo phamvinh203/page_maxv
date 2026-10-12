@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowRight,
   FileCheck2,
@@ -51,23 +52,21 @@ export function Hero() {
             và lập báo cáo trên một nền tảng.
           </p>
 
-          {/* shortcut: CTA destinations are pending; connect them when URLs are supplied. */}
           <div className="mt-6 flex flex-col gap-3 min-[360px]:flex-row sm:mt-7">
             <Button
               size="lg"
-              disabled
-              className="h-12 rounded-lg px-5 shadow-md shadow-primary/15 disabled:opacity-100 sm:px-6"
+              asChild
+              className="h-12 rounded-lg px-5 shadow-md shadow-primary/15 sm:px-6"
             >
-              Dùng thử miễn phí
-              <ArrowRight aria-hidden="true" />
+              <Link href="/dung-thu">Dùng thử miễn phí <ArrowRight aria-hidden="true" /></Link>
             </Button>
             <Button
               variant="outline"
               size="lg"
-              disabled
-              className="h-12 rounded-lg border-primary/40 bg-white/40 px-6 text-primary disabled:opacity-100"
+              asChild
+              className="h-12 rounded-lg border-primary/40 bg-white/40 px-6 text-primary"
             >
-              Xem bảng giá
+              <Link href="/bang-gia">Xem bảng giá</Link>
             </Button>
           </div>
 

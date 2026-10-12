@@ -22,7 +22,7 @@ export function Footer() {
               <h2 className="mb-3 text-sm font-semibold">{group.title}</h2>
               <ul className="space-y-2">
                 {group.items.map((item) => (
-                  <li key={item}><button type="button" disabled className="cursor-not-allowed text-left text-xs leading-5 text-blue-100/85">{item}</button></li>
+                  <li key={item.href}><Link href={item.href} className="rounded-sm text-xs leading-5 text-blue-100/85 hover:text-white hover:underline focus-visible:outline-2 focus-visible:outline-white">{item.label}</Link></li>
                 ))}
               </ul>
             </nav>

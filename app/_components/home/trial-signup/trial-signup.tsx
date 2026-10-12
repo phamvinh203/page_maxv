@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
@@ -29,30 +30,29 @@ export function TrialSignup() {
           </p>
         </div>
 
-        {/* shortcut: registration and OAuth destinations are pending; wire submissions before enabling these controls. */}
-        <fieldset disabled aria-describedby="trial-signup-status" className="min-w-0">
-          <legend className="sr-only">Đăng ký dùng thử MaxV</legend>
-          <p id="trial-signup-status" className="sr-only">Đăng ký dùng thử hiện chưa khả dụng.</p>
+        {/* shortcut: contact collection and OAuth are pending; enable them when registration is implemented. */}
+        <div className="min-w-0">
           <div className="flex flex-col gap-2 rounded-xl border border-white/70 bg-white p-1.5 shadow-lg shadow-blue-950/10 sm:flex-row sm:items-center">
             <label htmlFor="trial-contact" className="sr-only">Số điện thoại hoặc email của bạn</label>
             <Input
               id="trial-contact"
               name="contact"
               type="text"
+              disabled
               placeholder="Nhập số điện thoại hoặc email của bạn"
               className="h-11 flex-1 border-0 bg-white text-foreground shadow-none placeholder:text-xs disabled:opacity-100"
             />
-            <Button type="button" className="h-11 rounded-lg px-5 text-xs disabled:opacity-100">
-              Đăng ký dùng thử <ArrowRight aria-hidden="true" />
+            <Button asChild className="h-11 rounded-lg px-5 text-xs">
+              <Link href="/dung-thu">Đăng ký dùng thử <ArrowRight aria-hidden="true" /></Link>
             </Button>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <p className="w-full text-xs text-blue-50 sm:w-auto">Hoặc đăng ký nhanh qua</p>
-            <Button type="button" variant="outline" className="h-9 min-w-28 rounded-lg border-white/70 bg-white text-xs text-muted-foreground disabled:opacity-100">
+            <Button type="button" disabled variant="outline" className="h-9 min-w-28 rounded-lg border-white/70 bg-white text-xs text-muted-foreground disabled:opacity-100">
               <span aria-hidden="true" className="text-base font-bold text-[#4285f4]">G</span>
               Google
             </Button>
-            <Button type="button" variant="outline" className="h-9 min-w-28 rounded-lg border-white/70 bg-white text-xs text-muted-foreground disabled:opacity-100">
+            <Button type="button" disabled variant="outline" className="h-9 min-w-28 rounded-lg border-white/70 bg-white text-xs text-muted-foreground disabled:opacity-100">
               <span aria-hidden="true" className="grid size-4 grid-cols-2 gap-0.5">
                 <span className="bg-[#f25022]" />
                 <span className="bg-[#7fba00]" />
@@ -62,7 +62,7 @@ export function TrialSignup() {
               Microsoft
             </Button>
           </div>
-        </fieldset>
+        </div>
       </Container>
     </section>
   );
