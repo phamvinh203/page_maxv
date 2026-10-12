@@ -21,11 +21,6 @@ export const featureLinks = [
   { label: "Bảo mật dữ liệu", href: "/tinh-nang/bao-mat-du-lieu" },
 ];
 
-export const pricingLinks = [
-  { label: "Gói phần mềm", href: "/bang-gia/goi-phan-mem" },
-  { label: "Tư vấn gói phù hợp", href: "/bang-gia/tu-van-goi-phu-hop" },
-];
-
 export const customerLinks = [
   { label: "Câu chuyện khách hàng", href: "/khach-hang/cau-chuyen-khach-hang" },
   { label: "Khách hàng tiêu biểu", href: "/khach-hang/khach-hang-tieu-bieu" },
@@ -48,7 +43,7 @@ export const headerNavigation = [
   { title: "Sản phẩm", items: productLinks },
   { title: "Giải pháp", items: solutionLinks },
   { title: "Tính năng", items: featureLinks },
-  { title: "Bảng giá", items: pricingLinks },
+  { title: "Bảng giá", href: "/bang-gia" },
   { title: "Khách hàng", items: customerLinks },
   { title: "Tài nguyên", items: supportLinks },
 ];

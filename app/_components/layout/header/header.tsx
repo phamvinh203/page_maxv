@@ -8,7 +8,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
 import {
   NavigationMenu, NavigationMenuContent, NavigationMenuItem,
-  NavigationMenuList, NavigationMenuTrigger, NavigationMenuLink,
+  NavigationMenuList, NavigationMenuTrigger, NavigationMenuLink, navigationMenuTriggerStyle,
 } from "@/app/_components/ui/navigation-menu";
 import {
   Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetClose,
@@ -28,18 +28,26 @@ export function Header() {
           <NavigationMenuList className="gap-0">
             {headerNavigation.map((group) => (
               <NavigationMenuItem key={group.title}>
-                <NavigationMenuTrigger className="px-3 text-xs font-medium text-foreground">{group.title}</NavigationMenuTrigger>
-                <NavigationMenuContent className="min-w-60 p-2">
-                  <ul>
-                    {group.items.map((item) => (
-                      <li key={item.href}>
-                        <NavigationMenuLink asChild className="px-3 py-2.5 text-muted-foreground">
-                          <Link href={item.href}>{item.label}</Link>
-                        </NavigationMenuLink>
-                      </li>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
+                {group.items ? (
+                  <>
+                    <NavigationMenuTrigger className="px-3 text-xs font-medium text-foreground">{group.title}</NavigationMenuTrigger>
+                    <NavigationMenuContent className="min-w-60 p-2">
+                      <ul>
+                        {group.items.map((item) => (
+                          <li key={item.href}>
+                            <NavigationMenuLink asChild className="px-3 py-2.5 text-muted-foreground">
+                              <Link href={item.href}>{item.label}</Link>
+                            </NavigationMenuLink>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </>
+                ) : (
+                  <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} px-3 text-xs text-foreground`}>
+                    <Link href={group.href}>{group.title}</Link>
+                  </NavigationMenuLink>
+                )}
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
@@ -63,7 +71,7 @@ export function Header() {
                 <SheetDescription>Sản phẩm, giải pháp và hỗ trợ doanh nghiệp.</SheetDescription>
               </SheetHeader>
               <nav aria-label="Điều hướng di động" className="px-6 py-3">
-                {headerNavigation.map((group) => (
+                {headerNavigation.map((group) => group.items ? (
                   <details key={group.title} className="group border-b last:border-0">
                     <summary className="flex cursor-pointer list-none items-center justify-between py-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
                       {group.title}<ChevronDown aria-hidden="true" className="size-4 transition-transform group-open:rotate-180" />
@@ -78,6 +86,12 @@ export function Header() {
                       ))}
                     </ul>
                   </details>
+                ) : (
+                  <div key={group.title} className="border-b last:border-0">
+                    <SheetClose asChild>
+                      <Link href={group.href} className="block py-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-primary">{group.title}</Link>
+                    </SheetClose>
+                  </div>
                 ))}
               </nav>
               <div className="mt-auto grid gap-3 p-6">

@@ -41,8 +41,11 @@ export const homeJsonLd = {
 };
 
 // shortcut: placeholder pages stay out of search; replace this metadata and add them to the sitemap when their content is ready.
-export function createPlaceholderMetadata(title: string, path: string): Metadata {
-  const description = `${title} | ${site.title}.`;
+export function createPlaceholderMetadata(
+  title: string,
+  path: string,
+  description = `${title} | ${site.title}.`,
+): Metadata {
   const shareTitle = `${title} | ${site.name}`;
 
   return {
