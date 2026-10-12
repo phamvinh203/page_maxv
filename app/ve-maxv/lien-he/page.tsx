@@ -1,4 +1,10 @@
 import { Container } from "@/app/_components/ui/container";
+import { createPlaceholderMetadata } from "@/app/_lib/seo";
+
+export const metadata = createPlaceholderMetadata(
+  "Liên hệ",
+  "/ve-maxv/lien-he",
+);
 
 export default function Page() {
   return (

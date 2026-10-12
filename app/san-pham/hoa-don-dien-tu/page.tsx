@@ -1,4 +1,10 @@
 import { Container } from "@/app/_components/ui/container";
+import { createPlaceholderMetadata } from "@/app/_lib/seo";
+
+export const metadata = createPlaceholderMetadata(
+  "Hóa đơn điện tử",
+  "/san-pham/hoa-don-dien-tu",
+);
 
 export default function Page() {
   return (

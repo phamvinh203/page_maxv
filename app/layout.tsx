@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Header } from "@/app/_components/layout/header/header";
 import { Footer } from "@/app/_components/layout/footer/footer";
+import { site } from "@/app/_lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,12 +12,27 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  applicationName: site.name,
   title: {
-    default: "MaxV – Phần mềm kế toán online",
+    default: site.title,
     template: "%s | MaxV",
   },
-  description:
-    "Kế toán nhanh hơn, quản trị tài chính dễ hơn với MaxV. Tự động lấy hóa đơn, hạch toán, quản lý công nợ, tồn kho, giá thành và lập báo cáo trên một nền tảng.",
+  description: site.description,
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    siteName: site.name,
+    title: site.title,
+    description: site.description,
+    url: site.url,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.description,
+    images: [{ url: "/opengraph-image", alt: site.title }],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
