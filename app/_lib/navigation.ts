@@ -1,11 +1,11 @@
-export const productLinks = [
+const productLinks = [
   { label: "MaxV Accounting", href: "/san-pham/maxv-accounting" },
   { label: "MaxV HĐĐT", href: "/san-pham/maxv-hddt" },
   { label: "Hóa đơn điện tử", href: "/san-pham/hoa-don-dien-tu" },
   { label: "Chữ ký số", href: "/san-pham/chu-ky-so" },
 ];
 
-export const solutionLinks = [
+const solutionLinks = [
   { label: "Thương mại – Dịch vụ", href: "/giai-phap/thuong-mai-dich-vu" },
   { label: "Xây dựng – Xây lắp", href: "/giai-phap/xay-dung-xay-lap" },
   { label: "Sản xuất", href: "/giai-phap/san-xuat" },
@@ -13,7 +13,7 @@ export const solutionLinks = [
   { label: "Kế toán dịch vụ", href: "/giai-phap/ke-toan-dich-vu" },
 ];
 
-export const featureLinks = [
+const featureLinks = [
   { label: "Tự động lấy hóa đơn", href: "/tinh-nang/tu-dong-lay-hoa-don" },
   { label: "Tự động hạch toán", href: "/tinh-nang/tu-dong-hach-toan" },
   { label: "Quản lý công nợ – tồn kho", href: "/tinh-nang/quan-ly-cong-no-ton-kho" },
@@ -21,19 +21,19 @@ export const featureLinks = [
   { label: "Bảo mật dữ liệu", href: "/tinh-nang/bao-mat-du-lieu" },
 ];
 
-export const customerLinks = [
+const customerLinks = [
   { label: "Câu chuyện khách hàng", href: "/khach-hang/cau-chuyen-khach-hang" },
   { label: "Khách hàng tiêu biểu", href: "/khach-hang/khach-hang-tieu-bieu" },
 ];
 
-export const supportLinks = [
+const supportLinks = [
   { label: "Trung tâm trợ giúp", href: "/tai-nguyen/trung-tam-tro-giup" },
   { label: "Hướng dẫn sử dụng", href: "/tai-nguyen/huong-dan-su-dung" },
   { label: "Tài liệu", href: "/tai-nguyen/tai-lieu" },
   { label: "Gửi yêu cầu hỗ trợ", href: "/tai-nguyen/gui-yeu-cau-ho-tro" },
 ];
 
-export const companyLinks = [
+const companyLinks = [
   { label: "Giới thiệu", href: "/ve-maxv/gioi-thieu" },
   { label: "Tuyển dụng", href: "/ve-maxv/tuyen-dung" },
   { label: "Liên hệ", href: "/ve-maxv/lien-he" },
