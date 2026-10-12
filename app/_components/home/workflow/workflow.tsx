@@ -30,7 +30,7 @@ export function Workflow() {
         >
           {workflowSteps.map(({ id, title, description }, index) => (
             <li key={id} className="group relative min-w-0">
-              <Card className="h-full rounded-xl border-border/70 py-0 shadow-xs">
+              <Card className="h-full border-border/70 shadow-xs">
                 <CardContent className="flex items-start gap-3 p-4">
                   <span
                     aria-hidden="true"

@@ -49,7 +49,7 @@ export function IndustrySolutions() {
         <ul className="mt-7 grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
           {industrySolutions.map(({ id, title, description, image, href, Icon }) => (
             <li key={id} className="min-w-0">
-              <Card className="h-full gap-0 overflow-hidden py-0 shadow-xs transition-shadow hover:shadow-md">
+              <Card className="h-full overflow-hidden shadow-xs transition-shadow hover:shadow-md">
                 <div className="relative aspect-[2/1] bg-secondary">
                   {image ? (
                     <Image
@@ -82,28 +82,16 @@ export function IndustrySolutions() {
                   <p className="mt-2 mb-5 text-xs leading-6 text-muted-foreground">
                     {description}
                   </p>
-                  {href ? (
-                    <Button
-                      variant="link"
-                      asChild
-                      className="mt-auto h-auto self-start px-0 py-0 text-xs"
-                    >
-                      <Link href={href} aria-label={`Tìm hiểu thêm về ${title}`}>
-                        Tìm hiểu thêm
-                        <ArrowRight aria-hidden="true" className="size-3.5" />
-                      </Link>
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="link"
-                      disabled
-                      aria-label={`Tìm hiểu thêm về ${title}`}
-                      className="mt-auto h-auto self-start px-0 py-0 text-xs disabled:opacity-100"
-                    >
+                  <Button
+                    variant="link"
+                    asChild
+                    className="mt-auto h-auto self-start px-0 py-0 text-xs"
+                  >
+                    <Link href={href} aria-label={`Tìm hiểu thêm về ${title}`}>
                       Tìm hiểu thêm
                       <ArrowRight aria-hidden="true" className="size-3.5" />
-                    </Button>
-                  )}
+                    </Link>
+                  </Button>
                 </CardContent>
               </Card>
             </li>

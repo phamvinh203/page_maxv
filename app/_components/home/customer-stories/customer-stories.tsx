@@ -40,17 +40,11 @@ export function CustomerStories() {
           <p className="mt-2 text-sm leading-6 text-white/90">
             {customerStory.description}
           </p>
-          {customerStory.href ? (
-            <Button asChild size="sm" className="mt-5 rounded-lg">
-              <Link href={customerStory.href}>
-                Xem chi tiết <ArrowRight aria-hidden="true" />
-              </Link>
-            </Button>
-          ) : (
-            <Button disabled size="sm" className="mt-5 rounded-lg disabled:opacity-100">
+          <Button asChild size="sm" className="mt-5 rounded-lg">
+            <Link href={customerStory.href}>
               Xem chi tiết <ArrowRight aria-hidden="true" />
-            </Button>
-          )}
+            </Link>
+          </Button>
           <dl className="mt-6 grid grid-cols-2 gap-3">
             {customerStory.results.map(({ value, label }) => (
               <div key={label} className="rounded-lg border border-white/70 bg-white/95 p-3">
@@ -61,7 +55,7 @@ export function CustomerStories() {
           </dl>
         </article>
 
-        <Card className="min-w-0 gap-0 border-white/80 py-0 shadow-xs">
+        <Card className="min-w-0 border-white/80 shadow-xs">
           <CardContent className="flex h-full flex-col p-6 sm:p-7">
             <figure className="flex flex-1 flex-col">
               <Quote aria-hidden="true" className="mb-4 size-8 text-primary/20" />

@@ -30,10 +30,7 @@ export function Hero() {
     >
       <Container className="grid items-center gap-6 pt-10 pb-6 sm:pt-14 lg:grid-cols-[1fr_1.15fr] lg:gap-0 lg:py-8">
         <div className="relative z-10 lg:py-8">
-          <Badge
-            variant="outline"
-            className="max-w-full border-primary/25 bg-white/50 px-3 py-1 text-[10px] font-semibold tracking-wide whitespace-normal text-primary sm:text-xs"
-          >
+          <Badge variant="eyebrow" className="max-w-full whitespace-normal sm:text-xs">
             PHẦN MỀM KẾ TOÁN ONLINE MAXV
           </Badge>
 

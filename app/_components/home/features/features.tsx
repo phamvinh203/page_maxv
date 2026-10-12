@@ -17,10 +17,7 @@ export function Features() {
     >
       <Container className="grid items-center gap-8 lg:grid-cols-[0.9fr_1.7fr] lg:gap-12">
         <div>
-          <Badge
-            variant="outline"
-            className="border-primary/25 bg-white/50 px-3 py-1 text-[10px] font-semibold tracking-wide text-primary"
-          >
+          <Badge variant="eyebrow">
             VÌ SAO CHỌN MAXV?
           </Badge>
           <SectionHeading
@@ -46,7 +43,7 @@ export function Features() {
         <ul className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 xl:grid-cols-3">
           {features.map(({ id, title, description, Icon }) => (
             <li key={id} className="min-w-0">
-              <Card className="h-full rounded-xl border-white/80 bg-white/90 py-0 shadow-xs">
+              <Card className="h-full border-white/80 bg-white/90 shadow-xs">
                 <CardContent className="flex items-start gap-3 p-5">
                   <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/10 bg-secondary text-primary">
                     <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />

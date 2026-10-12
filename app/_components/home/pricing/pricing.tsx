@@ -7,7 +7,7 @@ import { pricing } from "@/app/_data/pricing";
 
 export function Pricing() {
   return (
-    <Card id="bang-gia" className="min-w-0 gap-0 border-white/80 py-0 shadow-xs">
+    <Card id="bang-gia" className="min-w-0 border-white/80 shadow-xs">
       <CardContent className="flex h-full flex-col p-6 sm:p-7">
         <h2 className="text-base leading-6 font-semibold">{pricing.title}</h2>
         <p className="mt-2 text-xs leading-6 text-muted-foreground">
@@ -30,17 +30,11 @@ export function Pricing() {
             </p>
           </div>
         </div>
-        {pricing.href ? (
-          <Button asChild variant="link" className="h-auto self-start px-0 py-0 text-xs">
-            <Link href={pricing.href}>
-              Xem bảng giá chi tiết <ArrowRight aria-hidden="true" className="size-3.5" />
-            </Link>
-          </Button>
-        ) : (
-          <Button disabled variant="link" className="h-auto self-start px-0 py-0 text-xs disabled:opacity-100">
+        <Button asChild variant="link" className="h-auto self-start px-0 py-0 text-xs">
+          <Link href={pricing.href}>
             Xem bảng giá chi tiết <ArrowRight aria-hidden="true" className="size-3.5" />
-          </Button>
-        )}
+          </Link>
+        </Button>
       </CardContent>
     </Card>
   );
