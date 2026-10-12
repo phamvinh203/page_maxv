@@ -1,15 +1,7 @@
-import { Container } from "@/app/_components/ui/container";
-import { createPlaceholderMetadata } from "@/app/_lib/seo";
+import { PlaceholderPage } from "@/app/_components/ui/placeholder-page";
 
-export const metadata = createPlaceholderMetadata(
-  "Tự động lấy hóa đơn",
-  "/tinh-nang/tu-dong-lay-hoa-don",
-);
+export const metadata = { title: "Tự động lấy hóa đơn" };
 
 export default function Page() {
-  return (
-    <Container className="py-12 sm:py-16">
-      <h1 className="text-3xl font-bold sm:text-4xl">Tự động lấy hóa đơn</h1>
-    </Container>
-  );
+  return <PlaceholderPage title="Tự động lấy hóa đơn" />;
 }

@@ -16,23 +16,14 @@ export const metadata: Metadata = {
   applicationName: site.name,
   title: {
     default: site.title,
-    template: "%s | MaxV",
+    template: `%s | ${site.name}`,
   },
   description: site.description,
-  openGraph: {
-    type: "website",
-    locale: "vi_VN",
-    siteName: site.name,
-    title: site.title,
-    description: site.description,
-    url: site.url,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: site.title,
-    description: site.description,
-    images: [{ url: "/opengraph-image", alt: site.title }],
-  },
+  // Pages are noindex until they opt in (robots index: true here and in sitemap.ts); a forgotten opt-in fails safe.
+  robots: { index: false, follow: true },
+  // Title, description and images are inherited from the metadata above and from app/opengraph-image.tsx.
+  openGraph: { type: "website", locale: "vi_VN", siteName: site.name, url: "./" },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-
 export const site = {
   // shortcut: fallback is the current staging domain; set NEXT_PUBLIC_SITE_URL to the real one in production.
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.vinhlab.site").replace(/\/$/, ""),
@@ -39,33 +37,3 @@ export const homeJsonLd = {
     },
   ],
 };
-
-// shortcut: placeholder pages stay out of search; replace this metadata and add them to the sitemap when their content is ready.
-export function createPlaceholderMetadata(
-  title: string,
-  path: string,
-  description = `${title} | ${site.title}.`,
-): Metadata {
-  const shareTitle = `${title} | ${site.name}`;
-
-  return {
-    title,
-    description,
-    robots: { index: false, follow: true },
-    openGraph: {
-      type: "website",
-      locale: "vi_VN",
-      siteName: site.name,
-      title: shareTitle,
-      description,
-      url: path,
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: site.title }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: shareTitle,
-      description,
-      images: [{ url: "/opengraph-image", alt: site.title }],
-    },
-  };
-}

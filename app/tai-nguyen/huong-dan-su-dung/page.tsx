@@ -1,15 +1,7 @@
-import { Container } from "@/app/_components/ui/container";
-import { createPlaceholderMetadata } from "@/app/_lib/seo";
+import { PlaceholderPage } from "@/app/_components/ui/placeholder-page";
 
-export const metadata = createPlaceholderMetadata(
-  "Hướng dẫn sử dụng",
-  "/tai-nguyen/huong-dan-su-dung",
-);
+export const metadata = { title: "Hướng dẫn sử dụng" };
 
 export default function Page() {
-  return (
-    <Container className="py-12 sm:py-16">
-      <h1 className="text-3xl font-bold sm:text-4xl">Hướng dẫn sử dụng</h1>
-    </Container>
-  );
+  return <PlaceholderPage title="Hướng dẫn sử dụng" />;
 }
