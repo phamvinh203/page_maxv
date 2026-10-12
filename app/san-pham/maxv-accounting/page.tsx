@@ -1,5 +1,6 @@
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Quote } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
@@ -15,6 +16,7 @@ import {
   accountingModules,
   accountingReasons,
   accountingSolutions,
+  accountingTestimonials,
   maxvAccounting,
 } from "@/app/_data/maxv-accounting";
 import { pricing } from "@/app/_data/pricing";
@@ -110,6 +112,41 @@ export default function Page() {
                         </li>
                       ))}
                     </ul>
+                  </CardContent>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      <section aria-labelledby="accounting-testimonials-heading" className="py-12 sm:py-14">
+        <Container>
+          <SectionHeading id="accounting-testimonials-heading" className="text-center">
+            Khách hàng nói gì về MaxV?
+          </SectionHeading>
+          <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+            {accountingTestimonials.map(({ id, quote, name, role, initial, avatar }) => (
+              <li key={id} className="min-w-0">
+                <Card className="h-full shadow-xs">
+                  <CardContent className="h-full p-6">
+                    <figure className="flex h-full flex-col">
+                      <Quote aria-hidden="true" className="size-7 text-primary" strokeWidth={1.75} />
+                      <blockquote className="mt-4 flex-1 text-sm leading-7 text-foreground">{quote}</blockquote>
+                      <figcaption className="mt-6 flex items-center gap-3">
+                        {avatar ? (
+                          <Image src={avatar} alt="" width={44} height={44} className="size-11 shrink-0 rounded-full object-cover" />
+                        ) : (
+                          <span aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary text-base font-semibold text-secondary-foreground">
+                            {initial}
+                          </span>
+                        )}
+                        <span className="min-w-0">
+                          <span className="block text-sm leading-5 font-semibold text-foreground">{name}</span>
+                          <span className="block text-xs leading-5 text-muted-foreground">{role}</span>
+                        </span>
+                      </figcaption>
+                    </figure>
                   </CardContent>
                 </Card>
               </li>
