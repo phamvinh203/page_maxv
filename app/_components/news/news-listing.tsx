@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ArrowRight, Check, ChevronRight, LayoutGrid } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,25 +8,25 @@ import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
 import { Pagination } from "@/app/_components/ui/pagination";
-import { newsCategories, newsOverview, newsPosts, type NewsCategorySlug } from "@/app/_data/news";
+import { categoryOf, newsCategories, newsOverview, newsPosts, postHref, type NewsCategorySlug, type NewsPost } from "@/app/_data/news";
 import { heroImage } from "@/app/_lib/assets";
 import { cn } from "@/app/_lib/utils";
 
 const trialPerks = ["Dùng thử miễn phí 15 ngày", "Không cần thanh toán", "Không ràng buộc"];
+
+type SearchParams = Promise<{ page?: string | string[] }>;
 
 const tabs = [
   { slug: undefined, label: "Tất cả", href: "/tin-tuc", Icon: LayoutGrid },
   ...newsCategories.map(({ slug, label, Icon }) => ({ slug, label, href: `/tin-tuc/${slug}`, Icon })),
 ];
 
-const categoryOf = (slug: NewsCategorySlug) => newsCategories.find((category) => category.slug === slug)!;
-
-function PostThumb({
+export function PostThumb({
   post,
   sizes,
   className,
 }: {
-  post: (typeof newsPosts)[number];
+  post: NewsPost;
   sizes: string;
   className?: string;
 }) {
@@ -41,14 +42,50 @@ function PostThumb({
   );
 }
 
-export function NewsListing({ category, page }: { category?: NewsCategorySlug; page?: string | string[] }) {
+export function Breadcrumbs({
+  items,
+  className,
+}: {
+  items: { label: string; href?: string }[];
+  className?: string;
+}) {
+  return (
+    <nav aria-label="Breadcrumb">
+      <ol className={cn("flex flex-wrap items-center gap-1.5 text-xs", className)}>
+        {items.map((item, index) => (
+          <li key={item.label} className="flex items-center gap-1.5">
+            {index > 0 && <ChevronRight aria-hidden="true" className="size-3" />}
+            {item.href ? (
+              <Link href={item.href} className={cn("hover:underline", className)}>{item.label}</Link>
+            ) : (
+              <span aria-current="page">{item.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
+export function SidebarPostItem({ post, showCategory }: { post: NewsPost; showCategory?: boolean }) {
+  return (
+    <li className="group relative flex items-start gap-3 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-primary">
+      <PostThumb post={post} sizes="80px" className="aspect-[7/5] w-20 rounded-md" />
+      <div className="min-w-0">
+        <h3 className="text-xs leading-5 font-semibold text-foreground group-hover:text-primary">
+          <Link href={postHref(post)} className="outline-none after:absolute after:inset-0">{post.title}</Link>
+        </h3>
+        {showCategory && (
+          <p className="mt-1 text-[10px] font-medium tracking-wide text-primary uppercase">{categoryOf(post.category).label}</p>
+        )}
+      </div>
+    </li>
+  );
+}
+
+export function NewsListing({ category, searchParams }: { category?: NewsCategorySlug; searchParams: SearchParams }) {
   const current = category ? categoryOf(category) : undefined;
   const heading = current ?? newsOverview;
-  const posts = category ? newsPosts.filter((post) => post.category === category) : newsPosts;
-  const totalPages = Math.max(1, Math.ceil(posts.length / 9));
-  const requestedPage = typeof page === "string" && /^\d+$/.test(page) ? Number(page) : 1;
-  const currentPage = Math.min(Math.max(1, requestedPage), totalPages);
-  const visiblePosts = posts.slice((currentPage - 1) * 9, currentPage * 9);
   const featured = newsPosts.filter((post) => post.featured);
 
   return (
@@ -61,21 +98,14 @@ export function NewsListing({ category, page }: { category?: NewsCategorySlug; p
         <div aria-hidden="true" className="pointer-events-none absolute -right-16 -bottom-48 -z-10 size-96 rounded-full border-[50px] border-white/5" />
         <Container className="grid items-center gap-8 py-10 sm:py-12 lg:grid-cols-[1fr_auto]">
           <div>
-            <nav aria-label="Breadcrumb">
-              <ol className="flex flex-wrap items-center gap-1.5 text-xs text-blue-50">
-                <li><Link href="/" className="hover:underline">Trang chủ</Link></li>
-                <ChevronRight aria-hidden="true" className="size-3" />
-                <li>
-                  {current ? <Link href="/tin-tuc" className="hover:underline">{newsOverview.label}</Link> : <span aria-current="page">{newsOverview.label}</span>}
-                </li>
-                {current && (
-                  <>
-                    <ChevronRight aria-hidden="true" className="size-3" />
-                    <li><span aria-current="page">{current.label}</span></li>
-                  </>
-                )}
-              </ol>
-            </nav>
+            <Breadcrumbs
+              className="text-blue-50"
+              items={[
+                { label: "Trang chủ", href: "/" },
+                current ? { label: newsOverview.label, href: "/tin-tuc" } : { label: newsOverview.label },
+                ...(current ? [{ label: current.label }] : []),
+              ]}
+            />
             <h1 id="news-heading" className="mt-5 text-3xl leading-tight font-bold tracking-tight uppercase sm:text-4xl">
               {heading.label}
             </h1>
@@ -126,56 +156,28 @@ export function NewsListing({ category, page }: { category?: NewsCategorySlug; p
         <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_20rem] lg:items-start">
           <section aria-labelledby="news-list-heading">
             <h2 id="news-list-heading" className="sr-only">Danh sách bài viết</h2>
-            {posts.length > 0 ? (
-              <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {visiblePosts.map((post) => (
-                  <li key={post.id} className="min-w-0">
-                    <Card className="h-full overflow-hidden shadow-xs">
-                      <PostThumb post={post} sizes="(min-width: 1280px) 280px, (min-width: 640px) 45vw, 100vw" className="aspect-[7/5]" />
-                      <CardContent className="p-4">
-                        <h3 className="text-sm leading-6 font-semibold text-foreground">{post.title}</h3>
-                        {post.href && (
-                          <Link href={post.href} className="mt-2 inline-block text-xs text-primary hover:underline">
-                            Đọc thêm...<span className="sr-only"> {post.title}</span>
-                          </Link>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </li>
-                ))}
-              </ul>
-            ) : (
+            <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">Đang tải bài viết...</p>}>
+              <PostList category={category} searchParams={searchParams} />
+            </Suspense>
+          </section>
+          <aside aria-label="Thông tin thêm" className="space-y-5">
+            {featured.length > 0 && (
               <Card className="shadow-xs">
-                <CardContent className="p-8 text-center text-sm leading-7 text-muted-foreground">
-                  Chưa có bài viết trong mục này. Vui lòng quay lại sau.
+                <CardContent className="p-5">
+                  <h2 className="text-sm font-semibold text-foreground">Bài viết nổi bật</h2>
+                  <ul className="mt-4 space-y-4">
+                    {featured.map((post) => (
+                      <SidebarPostItem key={post.id} post={post} showCategory />
+                    ))}
+                  </ul>
+                  {current && (
+                    <Button asChild variant="outline" className="mt-5 h-9 w-full rounded-md border-primary text-xs text-primary">
+                      <Link href="/tin-tuc">Xem tất cả bài viết</Link>
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             )}
-            <Pagination currentPage={currentPage} totalPages={totalPages} basePath={category ? `/tin-tuc/${category}` : "/tin-tuc"} />
-          </section>
-
-          <aside aria-label="Thông tin thêm" className="space-y-5">
-            <Card className="shadow-xs">
-              <CardContent className="p-5">
-                <h2 className="text-sm font-semibold text-foreground">Bài viết nổi bật</h2>
-                <ul className="mt-4 space-y-4">
-                  {featured.map((post) => (
-                    <li key={post.id} className="flex items-start gap-3">
-                      <PostThumb post={post} sizes="80px" className="aspect-[7/5] w-20 rounded-md" />
-                      <div className="min-w-0">
-                        <h3 className="text-xs leading-5 font-semibold text-foreground">{post.title}</h3>
-                        <p className="mt-1 text-[10px] font-medium tracking-wide text-primary uppercase">{categoryOf(post.category).label}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                {current && (
-                  <Button asChild variant="outline" className="mt-5 h-9 w-full rounded-md border-primary text-xs text-primary">
-                    <Link href="/tin-tuc">Xem tất cả bài viết</Link>
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
 
             <Card className="border-0 bg-secondary shadow-none">
               <CardContent className="p-5">
@@ -208,6 +210,36 @@ export function NewsListing({ category, page }: { category?: NewsCategorySlug; p
           </aside>
         </div>
       </Container>
+    </>
+  );
+}
+
+async function PostList({ category, searchParams }: { category?: NewsCategorySlug; searchParams: SearchParams }) {
+  const { page } = await searchParams;
+  const posts = category ? newsPosts.filter((post) => post.category === category) : newsPosts;
+  const totalPages = Math.max(1, Math.ceil(posts.length / 9));
+  const requestedPage = typeof page === "string" && /^\d+$/.test(page) ? Number(page) : 1;
+  const currentPage = Math.min(Math.max(1, requestedPage), totalPages);
+  const visiblePosts = posts.slice((currentPage - 1) * 9, currentPage * 9);
+  if (posts.length === 0) return <p className="text-sm text-muted-foreground">Chưa có bài viết nào.</p>;
+  return (
+    <>
+      <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {visiblePosts.map((post) => (
+          <li key={post.id} className="min-w-0">
+            <Card className="group relative h-full overflow-hidden shadow-xs transition-shadow hover:shadow-md has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-primary">
+              <PostThumb post={post} sizes="(min-width: 1280px) 280px, (min-width: 640px) 45vw, 100vw" className="aspect-[7/5]" />
+              <CardContent className="p-4">
+                <h3 className="text-sm leading-6 font-semibold text-foreground group-hover:text-primary">
+                  {/* stretched link: the whole card is clickable */}
+                  <Link href={postHref(post)} className="outline-none after:absolute after:inset-0">{post.title}</Link>
+                </h3>
+              </CardContent>
+            </Card>
+          </li>
+        ))}
+      </ul>
+      <Pagination currentPage={currentPage} totalPages={totalPages} basePath={category ? `/tin-tuc/${category}` : "/tin-tuc"} />
     </>
   );
 }
