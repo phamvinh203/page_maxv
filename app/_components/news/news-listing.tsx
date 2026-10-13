@@ -6,6 +6,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
+import { Pagination } from "@/app/_components/ui/pagination";
 import { newsCategories, newsOverview, newsPosts, type NewsCategorySlug } from "@/app/_data/news";
 import { heroImage } from "@/app/_lib/assets";
 import { cn } from "@/app/_lib/utils";
@@ -40,10 +41,14 @@ function PostThumb({
   );
 }
 
-export function NewsListing({ category }: { category?: NewsCategorySlug }) {
+export function NewsListing({ category, page }: { category?: NewsCategorySlug; page?: string | string[] }) {
   const current = category ? categoryOf(category) : undefined;
   const heading = current ?? newsOverview;
   const posts = category ? newsPosts.filter((post) => post.category === category) : newsPosts;
+  const totalPages = Math.max(1, Math.ceil(posts.length / 9));
+  const requestedPage = typeof page === "string" && /^\d+$/.test(page) ? Number(page) : 1;
+  const currentPage = Math.min(Math.max(1, requestedPage), totalPages);
+  const visiblePosts = posts.slice((currentPage - 1) * 9, currentPage * 9);
   const featured = newsPosts.filter((post) => post.featured);
 
   return (
@@ -123,7 +128,7 @@ export function NewsListing({ category }: { category?: NewsCategorySlug }) {
             <h2 id="news-list-heading" className="sr-only">Danh sách bài viết</h2>
             {posts.length > 0 ? (
               <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {posts.map((post) => (
+                {visiblePosts.map((post) => (
                   <li key={post.id} className="min-w-0">
                     <Card className="h-full overflow-hidden shadow-xs">
                       <PostThumb post={post} sizes="(min-width: 1280px) 280px, (min-width: 640px) 45vw, 100vw" className="aspect-[7/5]" />
@@ -146,6 +151,7 @@ export function NewsListing({ category }: { category?: NewsCategorySlug }) {
                 </CardContent>
               </Card>
             )}
+            <Pagination currentPage={currentPage} totalPages={totalPages} basePath={category ? `/tin-tuc/${category}` : "/tin-tuc"} />
           </section>
 
           <aside aria-label="Thông tin thêm" className="space-y-5">
