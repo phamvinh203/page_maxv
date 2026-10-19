@@ -21,8 +21,8 @@ const socials = [
 export function Footer() {
   return (
     <footer className="bg-[#032544] text-white">
-      <Container className="pt-10 pb-24 lg:pt-12">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-9 md:grid-cols-4 xl:grid-cols-[1.6fr_1fr_1.2fr_1.2fr_0.9fr_1.3fr] xl:gap-6">
+      <Container className="pt-7 pb-5 lg:pt-8">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-4 xl:grid-cols-[1.6fr_1fr_1.2fr_1.2fr_0.9fr_1.3fr] xl:gap-6">
           <div className="col-span-2 md:col-span-4 xl:col-span-1">
             <Link
               href="/"
@@ -32,11 +32,11 @@ export function Footer() {
               <Image
                 src={maxvLogo}
                 alt="MaxV"
-                className="h-auto w-28 mix-blend-screen [filter:grayscale(1)_invert(1)_brightness(4)]"
-                sizes="112px"
+                className="h-auto w-24 mix-blend-screen [filter:grayscale(1)_invert(1)_brightness(4)]"
+                sizes="96px"
               />
             </Link>
-            <p className="mt-3 text-xs leading-6 text-blue-100/90">
+            <p className="mt-2 text-xs leading-5 text-blue-100/90">
               Phần mềm kế toán Việt Nam
               <br />
               Đồng hành cùng doanh nghiệp
@@ -44,8 +44,8 @@ export function Footer() {
           </div>
           {footerNavigation.map((group) => (
             <nav key={group.title} aria-label={group.title}>
-              <h2 className="mb-3 text-sm font-semibold">{group.title}</h2>
-              <ul className="space-y-2">
+              <h2 className="mb-2 text-sm font-semibold">{group.title}</h2>
+              <ul className="space-y-1.5">
                 {group.items.map((item) => (
                   <li key={item.href}>
                     <Link
@@ -60,7 +60,7 @@ export function Footer() {
             </nav>
           ))}
           <div className="col-span-2 md:col-span-4 xl:col-span-1">
-            <h2 className="mb-3 text-sm font-semibold">
+            <h2 className="mb-2 text-sm font-semibold">
               Kết nối với chúng tôi
             </h2>
             <div className="flex gap-2">
@@ -69,7 +69,7 @@ export function Footer() {
                   <Image
                     src={icon}
                     alt=""
-                    className="size-9 rounded-full object-cover"
+                    className="size-8 rounded-full object-cover"
                   />
                 );
                 return href ? (
@@ -98,7 +98,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-9 flex flex-col gap-4 border-t border-white/10 pt-5 text-[11px] text-blue-100/75 md:flex-row md:items-center md:justify-between">
+        <div className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-4 text-[11px] text-blue-100/75 md:flex-row md:items-center md:justify-between">
           <p>Copyright 2013 © maxv.vn . All Rights Reserved</p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <span className="inline-flex items-center gap-2">

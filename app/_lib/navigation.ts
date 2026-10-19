@@ -15,14 +15,6 @@ const solutionLinks = [
   { label: "Kế toán dịch vụ", href: "/giai-phap/ke-toan-dich-vu" },
 ];
 
-const featureLinks = [
-  { label: "Tự động lấy hóa đơn", href: "/tinh-nang/tu-dong-lay-hoa-don" },
-  { label: "Tự động hạch toán", href: "/tinh-nang/tu-dong-hach-toan" },
-  { label: "Quản lý công nợ – tồn kho", href: "/tinh-nang/quan-ly-cong-no-ton-kho" },
-  { label: "Báo cáo tài chính & quản trị", href: "/tinh-nang/bao-cao-tai-chinh-quan-tri" },
-  { label: "Bảo mật dữ liệu", href: "/tinh-nang/bao-mat-du-lieu" },
-];
-
 const customerLinks = [
   { label: "Câu chuyện khách hàng", href: "/khach-hang/cau-chuyen-khach-hang" },
   { label: "Khách hàng tiêu biểu", href: "/khach-hang/khach-hang-tieu-bieu" },
@@ -44,13 +36,14 @@ const companyLinks = [
 ];
 
 export const headerNavigation = [
+  { title: "Giới thiệu", href: "/ve-maxv/gioi-thieu" },
   { title: "Sản phẩm", items: productLinks },
-  { title: "Giải pháp", items: solutionLinks },
-  { title: "Tính năng", items: featureLinks },
-  { title: "Bảng giá", href: "/bang-gia" },
-  { title: "Khách hàng", items: customerLinks },
+  { title: "Báo giá", href: "/bang-gia" },
+  { title: "Hỗ trợ", items: supportLinks },
   { title: "Tin tức", items: newsLinks },
-  { title: "Tài nguyên", items: supportLinks },
+  { title: "Khách hàng", items: customerLinks },
+  { title: "Tra cứu MST", href: "/tra-cuu-mst" },
+  { title: "Liên hệ", href: "/ve-maxv/lien-he" },
 ];
 
 export const footerNavigation = [
