@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 import { site } from "@/app/_lib/seo";
@@ -5,6 +7,8 @@ import { site } from "@/app/_lib/seo";
 export const alt = site.title;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+const logo = `data:image/png;base64,${await readFile(join(process.cwd(), "public/images/logo/Logo-Maxv-02.png"), "base64")}`;
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -21,9 +25,7 @@ export default function OpenGraphImage() {
           color: "#12395b",
         }}
       >
-        <div style={{ display: "flex", fontSize: 48, fontWeight: 700, color: "#0068d9", marginBottom: 36 }}>
-          MaxV
-        </div>
+        <div style={{ width: 240, height: 72, marginBottom: 36, backgroundImage: `url(${logo})`, backgroundSize: "contain", backgroundRepeat: "no-repeat" }} />
         <div style={{ display: "flex", fontSize: 62, fontWeight: 700, lineHeight: 1.25 }}>
           Kế toán nhanh hơn.
         </div>

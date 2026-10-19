@@ -1,2 +1,8 @@
-export { default as maxvLogo } from "@/public/images/logo_maxv.png";
+export { default as maxvLogo } from "@/public/images/logo/Logo-Maxv-02.png";
+export { default as maxvEmblem } from "@/public/images/logo/Logo-Maxv-01.png";
 export { default as heroImage } from "@/public/images/hero/laptop_mobile.webp";
+export { default as zaloIcon } from "@/public/icons/Icon_of_Zalo.svg";
+export { default as phoneIcon } from "@/public/icons/phone.svg";
+export { default as facebookIcon } from "@/public/icons/Facebook.svg";
+export { default as youtubeIcon } from "@/public/icons/YouTube.svg";
+export { default as googleIcon } from "@/public/icons/Google.svg";

@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
@@ -6,6 +7,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
 import { trialSignup } from "@/app/_data/trial-signup";
+import { googleIcon } from "@/app/_lib/assets";
 
 export function TrialSignup() {
   return (
@@ -49,17 +51,8 @@ export function TrialSignup() {
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <p className="w-full text-xs text-blue-50 sm:w-auto">Hoặc đăng ký nhanh qua</p>
             <Button type="button" disabled variant="outline" className="h-9 min-w-28 rounded-lg border-white/70 bg-white text-xs text-muted-foreground disabled:opacity-100">
-              <span aria-hidden="true" className="text-base font-bold text-[#4285f4]">G</span>
+              <Image src={googleIcon} alt="" className="size-4" />
               Google
-            </Button>
-            <Button type="button" disabled variant="outline" className="h-9 min-w-28 rounded-lg border-white/70 bg-white text-xs text-muted-foreground disabled:opacity-100">
-              <span aria-hidden="true" className="grid size-4 grid-cols-2 gap-0.5">
-                <span className="bg-[#f25022]" />
-                <span className="bg-[#7fba00]" />
-                <span className="bg-[#00a4ef]" />
-                <span className="bg-[#ffb900]" />
-              </span>
-              Microsoft
             </Button>
           </div>
         </div>
