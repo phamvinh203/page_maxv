@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { Plans } from "@/app/_components/sections/plans";
-import { FeatureGrid } from "@/app/san-pham/_components/feature-grid";
+import { FeatureGrid } from "@/app/_components/sections/feature-grid";
 import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Badge } from "@/app/_components/ui/badge";
 import { ButtonLink } from "@/app/_components/ui/button-link";

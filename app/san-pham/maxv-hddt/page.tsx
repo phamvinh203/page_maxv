@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { FeatureGrid } from "@/app/san-pham/_components/feature-grid";
+import { FeatureGrid } from "@/app/_components/sections/feature-grid";
 import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
