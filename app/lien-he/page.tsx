@@ -20,6 +20,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
 import { contact } from "@/app/_lib/contact";
+import { productLinks } from "@/app/_lib/navigation";
 
 export const metadata: Metadata = {
   title: "Liên hệ",
@@ -171,10 +172,7 @@ export default function Page() {
               <label htmlFor="product" className={labelClass}>Sản phẩm quan tâm</label>
               <select id="product" name="product" defaultValue="" className={`${fieldClass} w-full border border-input px-3 text-sm text-muted-foreground`}>
                 <option value="" disabled>Chọn sản phẩm hoặc dịch vụ</option>
-                <option>MaxV Accounting</option>
-                <option>MaxV HĐĐT</option>
-                <option>Hóa đơn điện tử</option>
-                <option>Chữ ký số</option>
+                {productLinks.map(({ label }) => <option key={label}>{label}</option>)}
               </select>
             </div>
 

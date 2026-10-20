@@ -1,19 +1,14 @@
+import { industrySolutions } from "@/app/_data/industry-solutions";
 import { newsCategories } from "@/app/_data/news";
 
-const productLinks = [
+export const productLinks = [
   { label: "MaxV Accounting", href: "/san-pham/maxv-accounting" },
   { label: "MaxV HĐĐT", href: "/san-pham/maxv-hddt" },
   { label: "Hóa đơn điện tử", href: "/san-pham/hoa-don-dien-tu" },
   { label: "Chữ ký số", href: "/san-pham/chu-ky-so" },
 ];
 
-const solutionLinks = [
-  { label: "Thương mại – Dịch vụ", href: "/giai-phap/thuong-mai-dich-vu" },
-  { label: "Xây dựng – Xây lắp", href: "/giai-phap/xay-dung-xay-lap" },
-  { label: "Sản xuất", href: "/giai-phap/san-xuat" },
-  { label: "Hộ kinh doanh", href: "/giai-phap/ho-kinh-doanh" },
-  { label: "Kế toán dịch vụ", href: "/giai-phap/ke-toan-dich-vu" },
-];
+const solutionLinks = industrySolutions.map(({ title, href }) => ({ label: title, href }));
 
 const customerLinks = [
   { label: "Câu chuyện khách hàng", href: "/khach-hang/cau-chuyen-khach-hang" },
