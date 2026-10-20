@@ -1,4 +1,16 @@
-import { ArrowRight, BookOpen, Box, Clock, ExternalLink, Handshake, Headphones, Mail, MapPin, Phone, Plus } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Box,
+  Clock,
+  ExternalLink,
+  Handshake,
+  Headphones,
+  Mail,
+  MapPin,
+  Phone,
+  Plus,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -212,12 +224,12 @@ export default function Page() {
             <p className="mt-3 text-sm text-muted-foreground">Dưới đây là những câu hỏi thường gặp khi liên hệ với MaxV.</p>
           </div>
           <div className="divide-y rounded-2xl border bg-white px-6">
-            {faqs.map((f) => (
-              <details key={f.q} className="group py-4">
+            {faqs.map(({ q, a }) => (
+              <details key={q} className="group py-4">
                 <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-medium [&::-webkit-details-marker]:hidden">
-                  {f.q}<Plus className="size-4 text-primary transition-transform group-open:rotate-45" aria-hidden="true" />
+                  {q}<Plus className="size-4 text-primary transition-transform group-open:rotate-45 motion-reduce:transition-none" aria-hidden="true" />
                 </summary>
-                <p className="mt-3 text-sm text-muted-foreground">{f.a}</p>
+                <p className="mt-3 text-sm text-muted-foreground">{a}</p>
               </details>
             ))}
           </div>

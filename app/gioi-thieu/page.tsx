@@ -61,7 +61,14 @@ export default function Page() {
             width={1586}
             height={992}
             preload
-            className="pointer-events-none h-auto w-full [mask-image:linear-gradient(to_right,transparent,black_12%,black_90%,transparent),linear-gradient(to_bottom,transparent,black_10%,black_87%,transparent)] [mask-composite:intersect] lg:absolute lg:top-1/2 lg:-right-16 lg:w-[64%] lg:max-w-none lg:-translate-y-1/2"
+            style={{
+              maskImage: [
+                "linear-gradient(to right, transparent, black 12%, black 90%, transparent)",
+                "linear-gradient(to bottom, transparent, black 10%, black 87%, transparent)",
+              ].join(", "),
+              maskComposite: "intersect",
+            }}
+            className="pointer-events-none h-auto w-full lg:absolute lg:top-1/2 lg:-right-16 lg:w-[64%] lg:max-w-none lg:-translate-y-1/2"
           />
         </Container>
       </section>

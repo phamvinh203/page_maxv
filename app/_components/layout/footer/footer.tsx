@@ -22,7 +22,7 @@ export function Footer() {
   return (
     <footer className="bg-[#032544] text-white">
       <Container className="pt-3 pb-2 lg:pt-4">
-        <div className="grid grid-cols-2 gap-x-5 gap-y-5 md:grid-cols-4 xl:grid-cols-[1.6fr_1fr_1.2fr_1.2fr_0.9fr_1.3fr] xl:gap-5">
+        <div className="grid grid-cols-2 gap-5 md:grid-cols-4 xl:grid-cols-[1.6fr_1fr_1.2fr_1.2fr_0.9fr_1.3fr]">
           <div className="col-span-2 md:col-span-4 xl:col-span-1">
             <Link
               href="/"
