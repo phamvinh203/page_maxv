@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320">
+            <defs>
+              <linearGradient id="contact-depth"><stop stop-color="#9cdfff"/><stop offset="0.65" stop-color="#1689f8"/><stop offset="1" stop-color="#0765dc"/></linearGradient>
+              <radialGradient id="contact-light" cx="0.15" cy="0.1" r="0.95"><stop stop-color="white" stop-opacity="0.2"/><stop offset="0.6" stop-color="white" stop-opacity="0"/><stop offset="1" stop-color="#006de0" stop-opacity="0.2"/></radialGradient>
+              <filter id="contact-soft"><feGaussianBlur stdDeviation="3"/></filter>
+              <linearGradient id="contact-bubble" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#63c7ff" /><stop offset="0.42" stop-color="#35a8f8" /><stop offset="0.8" stop-color="#218cf2" /><stop offset="1" stop-color="#0872df" /></linearGradient>
+              <linearGradient id="contact-glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bce4ff" stop-opacity="0.85" /><stop offset="1" stop-color="#e1f3ff" stop-opacity="0.5" /></linearGradient>
+              <linearGradient id="contact-orbit"><stop stop-color="#74c8ff" stop-opacity="0.4" /><stop offset="0.5" stop-color="white" /><stop offset="1" stop-color="#1680ff" /></linearGradient>
+              <radialGradient id="contact-pearl" cx="0.3" cy="0.2"><stop stop-color="white" /><stop offset="0.7" stop-color="#e3f4ff" /><stop offset="1" stop-color="#8dcfff" /></radialGradient>
+              <radialGradient id="contact-sphere" cx="0.25" cy="0.2" r="0.9"><stop stop-color="#60d4ff" /><stop offset="0.5" stop-color="#039ae9" /><stop offset="1" stop-color="#006ac4" /></radialGradient>
+              <filter id="contact-shadow" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="4" dy="7" stdDeviation="6" flood-color="#398ee0" flood-opacity="0.22" /></filter>
+              <filter id="contact-dot-shadow"><feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#0069c9" flood-opacity="0.25" /></filter>
+            </defs>
+            <ellipse cx="310" cy="169" rx="290" ry="85" transform="rotate(-20 310 169)" fill="none" stroke="url(#contact-orbit)" stroke-width="2.5" />
+            <path d="M310 141 Q312 112 343 117 L439 132 Q470 136 470 164 L469 244 Q469 268 445 264 L438 264 L442 285 Q443 295 433 288 L403 262 L337 254 Q310 251 310 225Z" fill="url(#contact-glass)" stroke="#acdafa" stroke-width="3" />
+            <g fill="url(#contact-pearl)" opacity="0.55"><circle cx="357" cy="202" r="10" /><circle cx="388" cy="206" r="10" /><circle cx="419" cy="210" r="10" /></g>
+            <g filter="url(#contact-shadow)">
+              <path d="M106 116 Q105 77 143 72 L283 57 Q321 54 326 94 L328 190 Q329 224 296 228 L172 239 L147 261 Q137 271 137 257 L137 239 Q105 239 105 207Z" fill="url(#contact-depth)" stroke="#70c5ff" stroke-width="1" />
+              <path d="M103 111 Q103 78 139 74 L278 60 Q311 57 314 92 L316 186 Q317 215 289 220 L165 232 L141 254 L141 230 Q104 232 103 200Z" fill="url(#contact-bubble)" stroke="#86d7ff" stroke-width="1.5" />
+              <path d="M110 111 Q110 83 140 80 L276 66 Q307 62 309 94 L310 185 Q311 210 287 215 L162 227 L145 246 L145 226 Q109 229 109 199Z" fill="url(#contact-light)" />
+              <path d="M307 91 L310 184 Q311 211 287 216" fill="none" stroke="#87dcff" stroke-opacity="0.6" stroke-width="6" filter="url(#contact-soft)"/>
+              <path d="M113 112 Q113 86 141 83 L277 69 Q304 67 305 94" fill="none" stroke="white" stroke-opacity="0.65" stroke-width="1.5" />
+              <g fill="url(#contact-pearl)" filter="url(#contact-dot-shadow)"><circle cx="162" cy="151" r="12" /><circle cx="202" cy="148" r="12" /><circle cx="242" cy="145" r="12" /></g>
+            </g>
+            <!-- Embedded from /images/logo/Logo-Maxv-01.svg: standalone SVG images cannot load external image resources. -->
+            <image x="393" y="5" width="82" height="82" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiB2aWV3Qm94PSIwIDAgMTkyIDE5MiIgZmlsbD0ibm9uZSI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Im1heHYtYmx1ZSIgeDE9IjAiIHkxPSI5NiIgeDI9IjE5MiIgeTI9Ijk2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiMyNmFmZTAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIwLjQ4IiBzdG9wLWNvbG9yPSIjMTk5OGQwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwNzViYiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxjbGlwUGF0aCBpZD0ibWF4di1jaXJjbGUiPgogICAgICA8Y2lyY2xlIGN4PSI5NiIgY3k9Ijk2IiByPSI5NiIvPgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CiAgPGcgY2xpcC1wYXRoPSJ1cmwoI21heHYtY2lyY2xlKSI+CiAgICA8Y2lyY2xlIGN4PSI5NiIgY3k9Ijk2IiByPSI5NiIgZmlsbD0idXJsKCNtYXh2LWJsdWUpIi8+CiAgICA8cGF0aCBkPSJNNzYgMEM1MyAyNyAzMiA2OSAzMCAxMDZDMjggMTM1IDQxIDE1MCA2OCAxNTFDMTA4IDE1NCAxNTEgMTMxIDE5MiA5OFYxMzZDMTY1IDE2NiAxMTQgMTg0IDcwIDE4M0MzMyAxODIgMTMgMTYyIDEwIDEzMEM2IDg5IDMxIDM1IDY4IDRaIiBmaWxsPSJ3aGl0ZSIvPgogIDwvZz4KPC9zdmc+Cg==" filter="url(#contact-shadow)" />
+            <circle cx="488" cy="154" r="12" fill="url(#contact-sphere)" opacity="0.65" />
+            <circle cx="173" cy="25" r="6" fill="url(#contact-sphere)" opacity="0.35" />
+          
+</svg>
