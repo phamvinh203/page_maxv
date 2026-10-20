@@ -203,7 +203,7 @@ export function NewsListing({ category, searchParams }: { category?: NewsCategor
                   Chúng tôi luôn sẵn sàng hỗ trợ và giải đáp mọi thắc mắc của bạn.
                 </p>
                 <Button asChild variant="outline" className="mt-4 h-9 rounded-md border-primary text-xs text-primary">
-                  <Link href="/ve-maxv/lien-he">Liên hệ MaxV</Link>
+                  <Link href="/lien-he">Liên hệ MaxV</Link>
                 </Button>
               </CardContent>
             </Card>

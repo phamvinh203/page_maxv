@@ -6,13 +6,13 @@ import Link from "next/link";
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
-import { heroImage, maxvLogo } from "@/app/_lib/assets";
+import { maxvLogo } from "@/app/_lib/assets";
 import { contact } from "@/app/_lib/contact";
 
 export const metadata: Metadata = {
   title: "Giới thiệu",
   description: "Từ năm 2013, MaxV phát triển phần mềm kế toán và giải pháp quản trị phù hợp với doanh nghiệp Việt.",
-  alternates: { canonical: "/ve-maxv/gioi-thieu" },
+  alternates: { canonical: "/gioi-thieu" },
 };
 
 const values = [
@@ -38,15 +38,15 @@ const company = [
 export default function Page() {
   return (
     <>
-      <section className="bg-linear-to-b from-sky-50 to-white py-10 lg:py-16">
-        <Container className="grid items-center gap-10 lg:grid-cols-2">
-          <div>
+      <section className="relative isolate overflow-hidden bg-linear-to-b from-sky-50 to-white py-10 lg:py-16">
+        <Container className="relative grid items-center gap-6 lg:min-h-[440px] lg:grid-cols-[1.15fr_1fr] lg:gap-0">
+          <div className="relative z-10">
             <nav aria-label="Breadcrumb" className="mb-8 text-xs text-muted-foreground">
               <Link href="/" className="hover:text-primary">Trang chủ</Link> / <span className="text-foreground">Giới thiệu</span>
             </nav>
             <Badge variant="eyebrow" className="mb-4">VỀ MAXV VIỆT NAM</Badge>
-            <h1 className="text-3xl font-bold leading-tight text-primary lg:text-5xl">
-              Đồng hành cùng kế toán. Phát triển cùng doanh nghiệp.
+            <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#08285d] lg:text-[42px] xl:text-[44px]">
+              Đồng hành cùng kế toán.<br className="hidden lg:block" /> Phát triển cùng doanh nghiệp.
             </h1>
             <p className="mt-6 max-w-xl text-muted-foreground">
               Từ năm 2013, MaxV phát triển phần mềm kế toán và giải pháp quản trị phù hợp với doanh nghiệp Việt.
@@ -55,7 +55,14 @@ export default function Page() {
               Tìm hiểu về MaxV <ArrowDown className="size-4" aria-hidden="true" />
             </Link>
           </div>
-          <Image src={heroImage} alt="Phần mềm kế toán MaxV trên laptop" priority className="h-auto w-full" />
+          <Image
+            src="/images/hero/about-maxv.svg"
+            alt="Phần mềm kế toán MaxV trên laptop"
+            width={1586}
+            height={992}
+            preload
+            className="pointer-events-none h-auto w-full [mask-image:linear-gradient(to_right,transparent,black_12%,black_90%,transparent),linear-gradient(to_bottom,transparent,black_10%,black_87%,transparent)] [mask-composite:intersect] lg:absolute lg:top-1/2 lg:-right-16 lg:w-[64%] lg:max-w-none lg:-translate-y-1/2"
+          />
         </Container>
       </section>
 
@@ -144,7 +151,7 @@ export default function Page() {
             <p className="mt-1 text-sm opacity-90">Chúng tôi sẵn sàng lắng nghe và tư vấn giải pháp phù hợp cho doanh nghiệp của bạn.</p>
           </div>
           <Button asChild variant="secondary" size="lg">
-            <Link href="/ve-maxv/lien-he">Liên hệ tư vấn <ArrowRight aria-hidden="true" /></Link>
+            <Link href="/lien-he">Liên hệ tư vấn <ArrowRight aria-hidden="true" /></Link>
           </Button>
         </Container>
       </section>

@@ -22,7 +22,7 @@ export default function NotFound() {
           <Link href="/">Trở về trang chủ</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/ve-maxv/lien-he">Liên hệ hỗ trợ</Link>
+          <Link href="/lien-he">Liên hệ hỗ trợ</Link>
         </Button>
       </div>
     </section>

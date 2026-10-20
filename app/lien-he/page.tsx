@@ -7,13 +7,12 @@ import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
-import { globeIcon } from "@/app/_lib/assets";
 import { contact } from "@/app/_lib/contact";
 
 export const metadata: Metadata = {
   title: "Liên hệ",
   description: "Trao đổi nhu cầu, nhận tư vấn hoặc kết nối với đội ngũ hỗ trợ MaxV.",
-  alternates: { canonical: "/ve-maxv/lien-he" },
+  alternates: { canonical: "/lien-he" },
 };
 
 const topics = [
@@ -39,30 +38,29 @@ const labelClass = "text-sm font-medium";
 export default function Page() {
   return (
     <>
-      <section className="relative overflow-hidden bg-linear-to-b from-sky-100/70 to-white py-10 lg:py-14">
-        <div aria-hidden="true" className="pointer-events-none absolute top-1/2 right-[6%] hidden h-64 w-[26rem] -translate-y-1/2 lg:block">
-          <div className="absolute -inset-x-2 top-8 bottom-0 -rotate-12 rounded-[50%] border border-primary/25" />
-          <div className="absolute top-20 right-6 h-28 w-40 rounded-3xl bg-white/50 shadow-lg shadow-sky-200/60 backdrop-blur-sm" />
-          <div className="absolute top-12 left-12 h-28 w-44 rounded-3xl bg-linear-to-br from-[#5db6ff] to-[#1a7cf5] shadow-xl shadow-blue-500/30">
-            <div className="flex h-full items-center justify-center gap-3">
-              <span className="size-4 rounded-full bg-white" /><span className="size-4 rounded-full bg-white" /><span className="size-4 rounded-full bg-white" />
-            </div>
-            <div className="absolute -bottom-3 left-6 size-8 rotate-45 rounded-sm bg-[#2a86f7]" />
+      <section className="relative isolate overflow-hidden rounded-lg bg-[#eaf7ff] bg-[radial-gradient(ellipse_at_35%_90%,white_0%,transparent_65%),linear-gradient(115deg,#e4f5ff_0%,#f4fbff_48%,#cceaff_100%)]">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-48 right-[-8%] -z-10 h-[36rem] w-[55rem] -rotate-12 rounded-[50%] border-[45px] border-white/25" />
+        <Container className="relative grid items-center gap-2 py-7 sm:py-8 lg:min-h-80 lg:grid-cols-[1.2fr_1fr] lg:gap-0">
+          <div className="relative z-10">
+            <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-3 text-sm text-muted-foreground">
+              <Link href="/" className="rounded-sm hover:text-primary">Trang chủ</Link>
+              <span aria-hidden="true">/</span><span aria-current="page" className="font-semibold text-foreground">Liên hệ</span>
+            </nav>
+            <Badge variant="eyebrow" className="mb-4 border-sky-300 bg-white/60 px-3 py-0.5 text-xs font-bold text-primary shadow-[inset_0_0_0_2px_white]">KẾT NỐI VỚI MAXV</Badge>
+            <h1 className="text-3xl font-extrabold leading-[1.18] tracking-tight text-[#08285d] sm:text-4xl lg:text-[46px] xl:text-[50px]">
+              Bạn cần giải pháp.<br />
+              <span className="text-[#0073ed] lg:whitespace-nowrap">MaxV sẵn sàng lắng nghe.</span>
+            </h1>
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-[#657fa5] lg:text-lg">Trao đổi nhu cầu, nhận tư vấn hoặc kết nối với đội ngũ hỗ trợ.</p>
           </div>
-          <Image src={globeIcon} alt="" className="absolute top-0 right-12 size-16 rounded-full shadow-lg shadow-blue-400/40" />
-          <span className="absolute top-8 left-24 size-2 rounded-full bg-sky-400" />
-          <span className="absolute top-36 right-0 size-4 rounded-full bg-linear-to-br from-sky-300 to-primary" />
-        </div>
-        <Container className="relative">
-          <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-primary">Trang chủ</Link> / <span className="font-semibold text-foreground">Liên hệ</span>
-          </nav>
-          <Badge variant="eyebrow" className="mb-4">KẾT NỐI VỚI MAXV</Badge>
-          <h1 className="text-3xl font-extrabold leading-tight text-[#0b2a63] lg:text-5xl">
-            Bạn cần giải pháp.<br />
-            <span className="text-primary">MaxV sẵn sàng lắng nghe.</span>
-          </h1>
-          <p className="mt-4 text-muted-foreground">Trao đổi nhu cầu, nhận tư vấn hoặc kết nối với đội ngũ hỗ trợ.</p>
+          <Image
+            src="/images/hero/contact-conversation.svg"
+            alt=""
+            aria-hidden="true"
+            width={600}
+            height={320}
+            className="pointer-events-none mx-auto -mt-2 h-auto w-full max-w-[440px] lg:absolute lg:inset-y-0 lg:-right-5 lg:my-auto lg:w-[46%] lg:max-w-none"
+          />
         </Container>
       </section>
 
@@ -101,9 +99,9 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="flex items-start gap-4 rounded-2xl border bg-sky-50/60 p-6">
+            <div className="relative isolate flex items-start gap-4 overflow-hidden rounded-2xl border bg-sky-50/60 p-6">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-primary"><MapPin className="size-5" aria-hidden="true" /></span>
-              <div>
+              <div className="relative z-10 min-w-0 flex-1 sm:pr-28">
                 <h3 className="font-semibold">Văn phòng MaxV</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{contact.address}</p>
                 <Button asChild variant="outline" className="mt-4 text-primary">
@@ -112,6 +110,14 @@ export default function Page() {
                   </a>
                 </Button>
               </div>
+              <Image
+                src="/images/customers/office-location.svg"
+                alt=""
+                aria-hidden="true"
+                width={180}
+                height={220}
+                className="pointer-events-none absolute right-0 bottom-0 -z-10 h-auto w-28 opacity-40 sm:w-36 sm:opacity-100"
+              />
             </div>
           </div>
 
@@ -218,10 +224,25 @@ export default function Page() {
         </Container>
       </section>
 
-      <section className="bg-sky-50 py-8">
-        <Container className="flex flex-wrap items-center justify-between gap-4">
-          <h2 className="text-2xl font-bold text-primary">Cùng tìm giải pháp phù hợp<br />với doanh nghiệp bạn.</h2>
-          <Button asChild variant="outline" size="lg" className="bg-white text-primary">
+      <section className="relative isolate overflow-hidden rounded-t-xl bg-[linear-gradient(110deg,#d9f0ff_0%,#edf8ff_65%,#c9eaff_100%)]">
+        <div aria-hidden="true" className="pointer-events-none absolute top-0 right-0 h-28 w-44 sm:w-80 lg:w-96">
+          <svg viewBox="0 0 360 112" fill="none" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMaxYMin slice">
+            <ellipse cx="183" cy="87" rx="181" ry="42" transform="rotate(-20 183 87)" stroke="white" strokeOpacity="0.9" strokeWidth="1.5" />
+            <path d="M73 113C123 72 194 45 266 27" stroke="#3b97ff" strokeWidth="1.5" />
+            <path d="M-8 91C89 42 215 6 344 0" stroke="white" strokeOpacity="0.35" />
+            <circle cx="127" cy="33" r="4" fill="#65baff" />
+          </svg>
+          <Image
+            src="/images/logo/Logo-Maxv-01.svg"
+            alt=""
+            width={80}
+            height={80}
+            className="absolute top-3 right-10 size-16 drop-shadow-[0_6px_8px_#349bdb33] sm:right-20 sm:size-20"
+          />
+        </div>
+        <Container className="relative flex min-h-28 flex-wrap items-center justify-between gap-5 py-5 pr-24 sm:pr-40 lg:pr-72">
+          <h2 className="text-xl font-bold leading-tight tracking-tight text-primary sm:text-2xl">Cùng tìm giải pháp phù hợp<br />với doanh nghiệp bạn.</h2>
+          <Button asChild variant="outline" size="lg" className="rounded-lg border-primary bg-white text-primary hover:bg-sky-50">
             <Link href="/san-pham/maxv-accounting">Khám phá sản phẩm <ArrowRight aria-hidden="true" /></Link>
           </Button>
         </Container>

@@ -30,20 +30,20 @@ const supportLinks = [
 ];
 
 const companyLinks = [
-  { label: "Giới thiệu", href: "/ve-maxv/gioi-thieu" },
-  { label: "Tuyển dụng", href: "/ve-maxv/tuyen-dung" },
-  { label: "Liên hệ", href: "/ve-maxv/lien-he" },
+  { label: "Giới thiệu", href: "/gioi-thieu" },
+  { label: "Tuyển dụng", href: "/tuyen-dung" },
+  { label: "Liên hệ", href: "/lien-he" },
 ];
 
 export const headerNavigation = [
-  { title: "Giới thiệu", href: "/ve-maxv/gioi-thieu" },
+  { title: "Giới thiệu", href: "/gioi-thieu" },
   { title: "Sản phẩm", items: productLinks },
   { title: "Báo giá", href: "/bang-gia" },
   { title: "Hỗ trợ", items: supportLinks },
   { title: "Tin tức", items: newsLinks },
   { title: "Khách hàng", items: customerLinks },
   { title: "Tra cứu MST", href: "/tra-cuu-mst" },
-  { title: "Liên hệ", href: "/ve-maxv/lien-he" },
+  { title: "Liên hệ", href: "/lien-he" },
 ];
 
 export const footerNavigation = [

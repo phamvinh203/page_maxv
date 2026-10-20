@@ -24,7 +24,7 @@ export default function Page() {
       <ProductHero
         {...chuKySo}
         primary={{ label: "Xem MaxV HĐĐT", href: "/san-pham/maxv-hddt" }}
-        secondary={{ label: "Liên hệ MaxV", href: "/ve-maxv/lien-he" }}
+        secondary={{ label: "Liên hệ MaxV", href: "/lien-he" }}
       />
 
       <section aria-labelledby="signature-topics-heading" className="py-12 sm:py-14">
