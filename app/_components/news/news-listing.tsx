@@ -126,7 +126,6 @@ export function NewsListing({ category, searchParams }: { category?: NewsCategor
             src={heroImage}
             alt=""
             sizes="340px"
-            loading="eager"
             className="hidden h-auto w-85 rounded-2xl shadow-2xl ring-1 ring-white/30 lg:block"
           />
         </Container>
