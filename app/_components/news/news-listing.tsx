@@ -1,8 +1,9 @@
 import { Suspense } from "react";
-import { ArrowRight, Check, ChevronRight, LayoutGrid } from "lucide-react";
+import { ArrowRight, Check, LayoutGrid } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
@@ -39,31 +40,6 @@ export function PostThumb({
         <Icon aria-hidden="true" className="absolute inset-0 m-auto size-1/3 text-primary/30" strokeWidth={1.25} />
       )}
     </div>
-  );
-}
-
-export function Breadcrumbs({
-  items,
-  className,
-}: {
-  items: { label: string; href?: string }[];
-  className?: string;
-}) {
-  return (
-    <nav aria-label="Breadcrumb">
-      <ol className={cn("flex flex-wrap items-center gap-1.5 text-xs", className)}>
-        {items.map((item, index) => (
-          <li key={item.label} className="flex items-center gap-1.5">
-            {index > 0 && <ChevronRight aria-hidden="true" className="size-3" />}
-            {item.href ? (
-              <Link href={item.href} className={cn("hover:underline", className)}>{item.label}</Link>
-            ) : (
-              <span aria-current="page">{item.label}</span>
-            )}
-          </li>
-        ))}
-      </ol>
-    </nav>
   );
 }
 
