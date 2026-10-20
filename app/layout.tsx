@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { Header } from "@/app/_components/layout/header/header";
-import { Footer } from "@/app/_components/layout/footer/footer";
+import { Header } from "@/app/_components/layout/header";
+import { Footer } from "@/app/_components/layout/footer";
+import { ContactWidget } from "@/app/_components/layout/contact-widget";
 import { site } from "@/app/_lib/seo";
 import "./globals.css";
 
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description: site.description,
+  icons: { icon: { url: "/images/logo/Logo-Maxv-01.svg", type: "image/svg+xml" } },
   // Pages are noindex until they opt in (robots index: true here and in sitemap.ts); a forgotten opt-in fails safe.
   robots: { index: false, follow: true },
   // Title, description and images are inherited from the metadata above and from app/opengraph-image.tsx.
@@ -30,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="vi"
+      suppressHydrationWarning
       className={`${geistSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
@@ -37,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
         <Footer />
+        <ContactWidget />
       </body>
     </html>
   );

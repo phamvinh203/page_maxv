@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192" fill="none">
+  <defs>
+    <linearGradient id="maxv-blue" x1="0" y1="96" x2="192" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#26afe0"/>
+      <stop offset="0.48" stop-color="#1998d0"/>
+      <stop offset="1" stop-color="#0075bb"/>
+    </linearGradient>
+    <clipPath id="maxv-circle">
+      <circle cx="96" cy="96" r="96"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#maxv-circle)">
+    <circle cx="96" cy="96" r="96" fill="url(#maxv-blue)"/>
+    <path d="M76 0C53 27 32 69 30 106C28 135 41 150 68 151C108 154 151 131 192 98V136C165 166 114 184 70 183C33 182 13 162 10 130C6 89 31 35 68 4Z" fill="white"/>
+  </g>
+</svg>

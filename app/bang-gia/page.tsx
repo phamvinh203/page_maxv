@@ -1,6 +1,6 @@
-import { Features } from "@/app/_components/home/features/features";
-import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
-import { Plans } from "@/app/_components/pricing/plans/plans";
+import { Features } from "@/app/_components/sections/features";
+import { TrialSignup } from "@/app/_components/sections/trial-signup";
+import { Plans } from "@/app/_components/sections/plans";
 import { Badge } from "@/app/_components/ui/badge";
 import { Container } from "@/app/_components/ui/container";
 import { plans, pricing } from "@/app/_data/pricing";

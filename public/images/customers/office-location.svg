@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="220" viewBox="0 0 180 220" fill="none">
+  <defs>
+    <linearGradient id="office-front" x1="56" y1="30" x2="112" y2="186" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#eff9ff"/>
+      <stop offset="1" stop-color="#e0f2ff"/>
+    </linearGradient>
+    <linearGradient id="office-side" x1="96" y1="38" x2="151" y2="183" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d9edff"/>
+      <stop offset="1" stop-color="#e7f6ff"/>
+    </linearGradient>
+    <linearGradient id="office-annex" x1="12" y1="106" x2="59" y2="182" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f0faff"/>
+      <stop offset="1" stop-color="#e5f4ff"/>
+    </linearGradient>
+    <linearGradient id="office-pin" x1="107" y1="145" x2="151" y2="198" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d8efff"/>
+      <stop offset="0.55" stop-color="#b5e1ff"/>
+      <stop offset="1" stop-color="#dff3ff"/>
+    </linearGradient>
+    <linearGradient id="office-pin-edge" x1="136" y1="143" x2="155" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d2ecff"/>
+      <stop offset="1" stop-color="#a8d8fb"/>
+    </linearGradient>
+    <radialGradient id="office-ground">
+      <stop stop-color="#d9eeff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#eaf7ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="95" cy="188" rx="83" ry="17" fill="url(#office-ground)"/>
+  <path d="M16 119 39 108 58 115V183L16 180Z" fill="url(#office-annex)"/>
+  <path d="m39 108 19 7v68l-19-2Z" fill="#deeffe" fill-opacity="0.7"/>
+  <path d="M55 58 99 39V186L55 182Z" fill="url(#office-front)"/>
+  <path d="m99 39 44 17-1 129-43 1Z" fill="url(#office-side)"/>
+  <path d="m55 58 44-19 44 17-44-15Z" fill="#f5fbff" fill-opacity="0.8"/>
+  <g fill="#d5edff" fill-opacity="0.85">
+    <path d="m63 72 9-4v16l-9 4Z"/>
+    <path d="m79 65 9-4v16l-9 4Z"/>
+    <path d="m63 98 9-3v16l-9 3Z"/>
+    <path d="m79 92 9-3v16l-9 3Z"/>
+    <path d="m63 124 9-2v16l-9 2Z"/>
+    <path d="m79 120 9-2v16l-9 2Z"/>
+  </g>
+  <path d="m68 152 14-1v33l-14-1Z" fill="#d6edff"/>
+  <path d="M128 143c15 0 25 10 25 23 0 14-16 32-24 41-7-9-24-27-24-41 0-13 10-23 23-23Z" fill="url(#office-pin-edge)"/>
+  <path d="M124 143c14 0 24 10 24 23 0 14-16 32-24 41-7-9-24-27-24-41 0-13 10-23 24-23Z" fill="url(#office-pin)"/>
+  <path d="M104 158c3-8 10-12 19-12" stroke="#ebf8ff" stroke-width="2" stroke-linecap="round" stroke-opacity="0.65"/>
+  <circle cx="124" cy="165" r="10" fill="#f7fcff"/>
+  <path d="M125 155a10 10 0 0 1 0 20" stroke="white" stroke-width="1.5" stroke-opacity="0.8"/>
+</svg>

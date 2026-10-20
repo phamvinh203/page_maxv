@@ -3,10 +3,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
-import { Plans } from "@/app/_components/pricing/plans/plans";
-import { FeatureGrid } from "@/app/_components/product/feature-grid";
-import { ProductHero } from "@/app/_components/product/product-hero";
+import { Plans } from "@/app/_components/sections/plans";
+import { FeatureGrid } from "@/app/san-pham/_components/feature-grid";
+import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
@@ -158,8 +157,6 @@ export default function Page() {
       <div className="bg-linear-to-b from-white to-[#f6fbff] pt-12 sm:pt-14">
         <Plans heading={{ title: "Gói phần mềm phù hợp với doanh nghiệp", description: pricing.description }} />
       </div>
-
-      <TrialSignup />
     </>
   );
 }

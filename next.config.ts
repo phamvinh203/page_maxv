@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   // Dev only: without this, opening the dev server through the LAN IP blocks HMR and hydration, so menus never open.
   allowedDevOrigins: ["192.168.1.9"],
   cacheComponents: true,

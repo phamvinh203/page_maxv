@@ -1,12 +1,8 @@
-import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
-import { FeatureGrid } from "@/app/_components/product/feature-grid";
-import { ProductHero } from "@/app/_components/product/product-hero";
-import { Button } from "@/app/_components/ui/button";
-import { Card, CardContent } from "@/app/_components/ui/card";
+import { FeatureGrid } from "@/app/san-pham/_components/feature-grid";
+import { ProductCtaCard } from "@/app/san-pham/_components/product-cta-card";
+import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
 import { hoaDonDienTu, hoaDonTopics } from "@/app/_data/hoa-don-dien-tu";
@@ -38,27 +34,11 @@ export default function Page() {
         </Container>
       </section>
 
-      <section aria-labelledby="hddt-cta-heading" className="bg-linear-to-b from-white to-[#f6fbff] pb-12 sm:pb-14">
-        <Container>
-          <Card className="shadow-xs">
-            <CardContent className="flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
-              <div className="min-w-0">
-                <h2 id="hddt-cta-heading" className="text-base leading-6 font-semibold text-foreground">
-                  MaxV HĐĐT là công cụ quản lý hóa đơn điện tử của MaxV
-                </h2>
-                <p className="mt-1 text-xs leading-6 text-muted-foreground">
-                  Xem đầy đủ tính năng đồng bộ, tải file, xuất Excel và quản lý nhiều công ty.
-                </p>
-              </div>
-              <Button asChild className="h-10 shrink-0 rounded-lg">
-                <Link href="/san-pham/maxv-hddt">Tìm hiểu MaxV HĐĐT <ArrowRight aria-hidden="true" /></Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </Container>
-      </section>
-
-      <TrialSignup />
+      <ProductCtaCard
+        id="hddt-cta-heading"
+        title="MaxV HĐĐT là công cụ quản lý hóa đơn điện tử của MaxV"
+        description="Xem đầy đủ tính năng đồng bộ, tải file, xuất Excel và quản lý nhiều công ty."
+      />
     </>
   );
 }

@@ -15,7 +15,8 @@ export const homeJsonLd = {
       "@id": `${site.url}/#organization`,
       name: site.name,
       url: site.url,
-      logo: `${site.url}/images/logo_maxv.png`,
+      // Google wants a logo of at least 112x112; the 200x60 wordmark is too short, so use the square emblem.
+      logo: `${site.url}/images/logo/Logo-Maxv-01.png`,
     },
     {
       "@type": "WebSite",

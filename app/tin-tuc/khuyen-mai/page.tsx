@@ -1,7 +1,7 @@
-import { NewsListing } from "@/app/_components/news/news-listing";
+import { NewsListing } from "@/app/tin-tuc/_components/news-listing";
 
 export const metadata = { title: "Khuyến mãi" };
 
-export default function Page() {
-  return <NewsListing category="khuyen-mai" />;
+export default function Page({ searchParams }: PageProps<"/tin-tuc/khuyen-mai">) {
+  return <NewsListing searchParams={searchParams} category="khuyen-mai" />;
 }
