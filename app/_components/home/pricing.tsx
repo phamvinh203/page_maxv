@@ -1,7 +1,6 @@
-import { ArrowRight, ChartNoAxesCombined, Check } from "lucide-react";
-import Link from "next/link";
+import { ChartNoAxesCombined, Check } from "lucide-react";
 
-import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { pricing } from "@/app/_data/pricing";
 
@@ -30,11 +29,9 @@ export function Pricing() {
             </p>
           </div>
         </div>
-        <Button asChild variant="link" className="h-auto self-start px-0 py-0 text-xs">
-          <Link href={pricing.href}>
-            Xem bảng giá chi tiết <ArrowRight aria-hidden="true" className="size-3.5" />
-          </Link>
-        </Button>
+        <ButtonLink href={pricing.href} variant="link" iconClassName="size-3.5" className="h-auto self-start px-0 py-0 text-xs">
+          Xem bảng giá chi tiết
+        </ButtonLink>
       </CardContent>
     </Card>
   );

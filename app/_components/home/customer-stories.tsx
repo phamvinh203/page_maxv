@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Building2, Quote, UserRound } from "lucide-react";
+import { Building2, Quote, UserRound } from "lucide-react";
 
 import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { customerStory, customerTestimonial } from "@/app/_data/customer-stories";
@@ -41,11 +40,7 @@ export function CustomerStories({ children }: { children: ReactNode }) {
           <p className="mt-2 text-sm leading-6 text-white/90">
             {customerStory.description}
           </p>
-          <Button asChild size="sm" className="mt-5 rounded-lg">
-            <Link href={customerStory.href}>
-              Xem chi tiết <ArrowRight aria-hidden="true" />
-            </Link>
-          </Button>
+          <ButtonLink href={customerStory.href} size="sm" className="mt-5 rounded-lg">Xem chi tiết</ButtonLink>
           <dl className="mt-6 grid grid-cols-2 gap-3">
             {customerStory.results.map(({ value, label }) => (
               <div key={label} className="rounded-lg border border-white/70 bg-white/95 p-3">

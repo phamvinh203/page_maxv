@@ -1,9 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
 import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
@@ -83,16 +80,15 @@ export function IndustrySolutions() {
                   <p className="mt-2 mb-5 text-xs leading-6 text-muted-foreground">
                     {description}
                   </p>
-                  <Button
+                  <ButtonLink
+                    href={href}
                     variant="link"
-                    asChild
+                    aria-label={`Tìm hiểu thêm về ${title}`}
+                    iconClassName="size-3.5"
                     className="mt-auto h-auto self-start px-0 py-0 text-xs"
                   >
-                    <Link href={href} aria-label={`Tìm hiểu thêm về ${title}`}>
-                      Tìm hiểu thêm
-                      <ArrowRight aria-hidden="true" className="size-3.5" />
-                    </Link>
-                  </Button>
+                    Tìm hiểu thêm
+                  </ButtonLink>
                 </CardContent>
               </Card>
             </li>

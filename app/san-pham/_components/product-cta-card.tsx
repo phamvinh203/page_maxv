@@ -4,7 +4,7 @@ import { Container } from "@/app/_components/ui/container";
 
 export function ProductCtaCard({ id, title, description }: { id: string; title: string; description: string }) {
   return (
-    <section aria-labelledby={id} className="bg-linear-to-b from-white to-[#f6fbff] pb-12 sm:pb-14">
+    <section aria-labelledby={id} className="bg-section-fade pb-12 sm:pb-14">
       <Container>
         <Card className="shadow-xs">
           <CardContent className="flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
