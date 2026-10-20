@@ -17,7 +17,7 @@ export const features = [
   {
     id: "tu-dong-hach-toan",
     title: "Tự động hạch toán",
-    description: "Giảm 80% thời gian nhập liệu, hạn chế sai sót.",
+    description: "Giảm 70% thời gian nhập liệu, hạn chế sai sót.",
     Icon: WandSparkles,
   },
   {

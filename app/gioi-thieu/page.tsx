@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
+import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import { maxvLogo } from "@/app/_lib/assets";
@@ -24,7 +25,7 @@ const values = [
 const solutions = [
   { title: "Phần mềm kế toán doanh nghiệp", text: "Giải pháp kế toán toàn diện, đáp ứng đầy đủ nghiệp vụ cho doanh nghiệp vừa và nhỏ.", href: "/san-pham/maxv-accounting" },
   { title: "Kế toán hộ kinh doanh", text: "Giải pháp kế toán đơn giản, dễ sử dụng, phù hợp với hộ kinh doanh.", href: "/giai-phap/ho-kinh-doanh" },
-  { title: "Hóa đơn điện tử & chữ ký số", text: "Hỗ trợ phát hành hóa đơn điện tử và tích hợp chữ ký số, đáp ứng quy định hiện hành.", href: "/san-pham/hoa-don-dien-tu" },
+  { title: "Hóa đơn điện tử", text: "Đồng bộ hóa đơn mua vào, bán ra từ Thuế điện tử, tải XML, PDF gốc, xuất Excel và lập tờ khai GTGT.", href: "/san-pham/hoa-don-dien-tu" },
   { title: "Giải pháp bán hàng & dịch vụ IT", text: "Quản lý bán hàng, tồn kho và các dịch vụ IT hỗ trợ cho hoạt động của doanh nghiệp.", href: "/giai-phap" },
 ];
 
@@ -41,9 +42,7 @@ export default function Page() {
       <section className="relative isolate overflow-hidden bg-linear-to-b from-sky-50 to-white py-10 lg:py-16">
         <Container className="relative grid items-center gap-6 lg:min-h-[440px] lg:grid-cols-[1.15fr_1fr] lg:gap-0">
           <div className="relative z-10">
-            <nav aria-label="Breadcrumb" className="mb-8 text-xs text-muted-foreground">
-              <Link href="/" className="hover:text-primary">Trang chủ</Link> / <span className="text-foreground">Giới thiệu</span>
-            </nav>
+            <Breadcrumbs className="mb-8 text-muted-foreground" items={[{ label: "Trang chủ", href: "/" }, { label: "Giới thiệu" }]} />
             <Badge variant="eyebrow" className="mb-4">VỀ MAXV VIỆT NAM</Badge>
             <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#08285d] lg:text-[42px] xl:text-[44px]">
               Đồng hành cùng kế toán.<br className="hidden lg:block" /> Phát triển cùng doanh nghiệp.

@@ -16,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
+import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { Button } from "@/app/_components/ui/button";
 import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
@@ -56,10 +57,7 @@ export default function Page() {
         <div aria-hidden="true" className="pointer-events-none absolute -top-48 right-[-8%] -z-10 h-[36rem] w-[55rem] -rotate-12 rounded-[50%] border-[45px] border-white/25" />
         <Container className="relative grid items-center gap-2 py-7 sm:py-8 lg:min-h-80 lg:grid-cols-[1.2fr_1fr] lg:gap-0">
           <div className="relative z-10">
-            <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-3 text-sm text-muted-foreground">
-              <Link href="/" className="rounded-sm hover:text-primary">Trang chủ</Link>
-              <span aria-hidden="true">/</span><span aria-current="page" className="font-semibold text-foreground">Liên hệ</span>
-            </nav>
+            <Breadcrumbs className="mb-6 text-sm text-muted-foreground" items={[{ label: "Trang chủ", href: "/" }, { label: "Liên hệ" }]} />
             <Badge variant="eyebrow" className="mb-4 border-sky-300 bg-white/60 px-3 py-0.5 text-xs font-bold text-primary shadow-[inset_0_0_0_2px_white]">KẾT NỐI VỚI MAXV</Badge>
             <h1 className="text-3xl font-extrabold leading-[1.18] tracking-tight text-[#08285d] sm:text-4xl lg:text-[46px] xl:text-[50px]">
               Bạn cần giải pháp.<br />
