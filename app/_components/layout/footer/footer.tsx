@@ -21,8 +21,8 @@ const socials = [
 export function Footer() {
   return (
     <footer className="bg-[#032544] text-white">
-      <Container className="pt-7 pb-5 lg:pt-8">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-4 xl:grid-cols-[1.6fr_1fr_1.2fr_1.2fr_0.9fr_1.3fr] xl:gap-6">
+      <Container className="pt-3 pb-2 lg:pt-4">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-5 md:grid-cols-4 xl:grid-cols-[1.6fr_1fr_1.2fr_1.2fr_0.9fr_1.3fr] xl:gap-5">
           <div className="col-span-2 md:col-span-4 xl:col-span-1">
             <Link
               href="/"
@@ -45,7 +45,7 @@ export function Footer() {
           {footerNavigation.map((group) => (
             <nav key={group.title} aria-label={group.title}>
               <h2 className="mb-2 text-sm font-semibold">{group.title}</h2>
-              <ul className="space-y-1.5">
+              <ul className="space-y-1">
                 {group.items.map((item) => (
                   <li key={item.href}>
                     <Link
@@ -98,7 +98,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-4 text-[11px] text-blue-100/75 md:flex-row md:items-center md:justify-between">
+        <div className="mt-3 flex flex-col gap-1 border-t border-white/10 pt-3 text-[11px] text-blue-100/75 md:flex-row md:items-center md:justify-between">
           <p>Copyright 2013 © maxv.vn . All Rights Reserved</p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <span className="inline-flex items-center gap-2">
