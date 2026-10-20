@@ -63,3 +63,15 @@
     @apply bg-primary text-primary-foreground;
   }
 }
+
+@utility bg-section-fade {
+  background-image: linear-gradient(to bottom, #fff, #f6fbff);
+}
+
+@utility bg-hero-tint {
+  background-image: linear-gradient(to bottom right, #f1fbff, #e3f3ff);
+}
+
+@utility bg-brand-banner {
+  background-image: linear-gradient(to right, #0073df, #0053bc);
+}

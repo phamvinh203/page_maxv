@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
+import { StepCard } from "@/app/_components/sections/step-card";
 import { FeatureGrid } from "@/app/_components/sections/feature-grid";
 import { ProductHero } from "@/app/san-pham/_components/product-hero";
-import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
 import { hddtFeatures, hddtSteps, maxvHddt } from "@/app/_data/maxv-hddt";
@@ -36,7 +36,7 @@ export default function Page() {
 
       <section
         aria-labelledby="hddt-steps-heading"
-        className="bg-linear-to-b from-white to-[#f6fbff] py-12 sm:py-14"
+        className="bg-section-fade py-12 sm:py-14"
       >
         <Container>
           <SectionHeading id="hddt-steps-heading" className="lg:text-3xl">
@@ -45,20 +45,7 @@ export default function Page() {
           <ol className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {hddtSteps.map(({ id, title, description }, index) => (
               <li key={id} className="min-w-0">
-                <Card className="h-full border-border/70 shadow-xs">
-                  <CardContent className="flex items-start gap-3 p-5">
-                    <span
-                      aria-hidden="true"
-                      className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground shadow-sm shadow-primary/20"
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <div className="min-w-0">
-                      <h3 className="text-sm leading-6 font-semibold text-secondary-foreground">{title}</h3>
-                      <p className="mt-1 text-xs leading-6 text-muted-foreground">{description}</p>
-                    </div>
-                  </CardContent>
-                </Card>
+                <StepCard index={index} title={title} description={description} />
               </li>
             ))}
           </ol>

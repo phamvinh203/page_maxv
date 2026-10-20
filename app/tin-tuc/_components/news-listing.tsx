@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { Button } from "@/app/_components/ui/button";
 import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
+import { BannerCircles } from "@/app/_components/ui/banner-circles";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
 import { Pagination } from "@/app/_components/ui/pagination";
@@ -34,7 +35,7 @@ export function PostThumb({
 }) {
   const { Icon } = categoryOf(post.category);
   return (
-    <div className={cn("relative shrink-0 overflow-hidden bg-linear-to-br from-[#f1fbff] to-[#e3f3ff]", className)}>
+    <div className={cn("relative shrink-0 overflow-hidden bg-hero-tint", className)}>
       {post.image ? (
         <Image src={post.image} alt="" fill sizes={sizes} className="object-cover" />
       ) : (
@@ -69,10 +70,9 @@ export function NewsListing({ category, searchParams }: { category?: NewsCategor
     <>
       <section
         aria-labelledby="news-heading"
-        className="relative isolate overflow-hidden bg-linear-to-r from-[#0073df] to-[#0053bc] text-white"
+        className="relative isolate overflow-hidden bg-brand-banner text-white"
       >
-        <div aria-hidden="true" className="pointer-events-none absolute -top-28 -left-20 -z-10 size-80 rounded-full border-[40px] border-white/5" />
-        <div aria-hidden="true" className="pointer-events-none absolute -right-16 -bottom-48 -z-10 size-96 rounded-full border-[50px] border-white/5" />
+        <BannerCircles />
         <Container className="grid items-center gap-8 py-10 sm:py-12 lg:grid-cols-[1fr_auto]">
           <div>
             <Breadcrumbs

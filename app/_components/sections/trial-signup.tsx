@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import { ButtonLink } from "@/app/_components/ui/button-link";
+import { BannerCircles } from "@/app/_components/ui/banner-circles";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
 import { trialSignup } from "@/app/_data/trial-signup";
@@ -13,10 +14,9 @@ export function TrialSignup() {
     <section
       id="dung-thu"
       aria-labelledby="trial-signup-heading"
-      className="relative isolate overflow-hidden border-y border-white/20 bg-linear-to-r from-[#0073df] to-[#0053bc] py-9 text-white sm:py-10"
+      className="relative isolate overflow-hidden border-y border-white/20 bg-brand-banner py-9 text-white sm:py-10"
     >
-      <div aria-hidden="true" className="pointer-events-none absolute -top-28 -left-20 -z-10 size-80 rounded-full border-[40px] border-white/5" />
-      <div aria-hidden="true" className="pointer-events-none absolute -right-16 -bottom-48 -z-10 size-96 rounded-full border-[50px] border-white/5" />
+      <BannerCircles />
 
       <Container className="grid items-center gap-7 lg:grid-cols-[1.2fr_1fr] lg:gap-10">
         <div>

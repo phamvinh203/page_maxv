@@ -55,7 +55,7 @@ export default function Page() {
 
       <section
         aria-labelledby="accounting-reasons-heading"
-        className="bg-linear-to-b from-white to-[#f6fbff] py-12 sm:py-14"
+        className="bg-section-fade py-12 sm:py-14"
       >
         <Container className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
           <div>
@@ -156,7 +156,7 @@ export default function Page() {
         </Container>
       </section>
 
-      <div className="bg-linear-to-b from-white to-[#f6fbff] pt-12 sm:pt-14">
+      <div className="bg-section-fade pt-12 sm:pt-14">
         <Plans heading={{ title: "Gói phần mềm phù hợp với doanh nghiệp", description: pricing.description }} />
       </div>
     </>
