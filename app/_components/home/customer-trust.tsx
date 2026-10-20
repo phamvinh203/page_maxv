@@ -1,16 +1,48 @@
 import { ArrowRight, Award, Building2, ThumbsUp } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/app/_components/ui/button";
 import { Container } from "@/app/_components/ui/container";
-import { customers } from "@/app/_data/customers";
-import { CustomerLogos } from "./customer-logos";
+import { customers, type Customer } from "@/app/_data/customers";
+import { cn } from "@/app/_lib/utils";
 
 const statistics = [
   { value: "5.000+", label: "Doanh nghiệp tin dùng", Icon: Building2 },
   { value: "98%", label: "Khách hàng hài lòng", Icon: ThumbsUp },
   { value: "12+", label: "Năm đồng hành", Icon: Award },
 ];
+
+function CustomerLogo({ customer }: { customer: Customer }) {
+  const content = customer.logo ? (
+    <Image
+      src={customer.logo}
+      alt={customer.name}
+      width={112}
+      height={40}
+      className="h-10 w-28 object-contain"
+      // Small logos load directly, including remote URLs without an optimization allowlist.
+      unoptimized
+    />
+  ) : (
+    <span className={cn("text-xl leading-7 font-extrabold whitespace-nowrap", customer.className)}>
+      {customer.name}
+    </span>
+  );
+
+  return (
+    <li className="flex h-12 items-center">
+      {customer.href ? (
+        <a
+          href={customer.href}
+          className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          {content}
+        </a>
+      ) : content}
+    </li>
+  );
+}
 
 export function CustomerTrust() {
   return (
@@ -27,7 +59,11 @@ export function CustomerTrust() {
             Được tin dùng bởi 5.000+ doanh nghiệp
           </h2>
           <div className="mt-4 flex items-start gap-4">
-            <CustomerLogos customers={customers} />
+            <ul aria-label="Khách hàng tiêu biểu" className="flex min-w-0 flex-1 flex-wrap items-center gap-x-6">
+              {customers.map((customer) => (
+                <CustomerLogo key={customer.name} customer={customer} />
+              ))}
+            </ul>
             <Button
               variant="link"
               size="sm"

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { Hero } from "@/app/_components/home/hero";
-import { CustomerTrust } from "@/app/_components/home/customer-trust/customer-trust";
+import { CustomerTrust } from "@/app/_components/home/customer-trust";
 import { IndustrySolutions } from "@/app/_components/home/industry-solutions";
 import { Features } from "@/app/_components/sections/features";
 import { Workflow } from "@/app/_components/home/workflow";
