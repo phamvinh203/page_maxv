@@ -1,8 +1,7 @@
-import { ArrowRight, Award, Building2, ThumbsUp } from "lucide-react";
+import { Award, Building2, ThumbsUp } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
-import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import { customers, type Customer } from "@/app/_data/customers";
 import { cn } from "@/app/_lib/utils";
@@ -64,14 +63,15 @@ export function CustomerTrust() {
                 <CustomerLogo key={customer.name} customer={customer} />
               ))}
             </ul>
-            <Button
+            <ButtonLink
+              href="/khach-hang/khach-hang-tieu-bieu"
               variant="link"
               size="sm"
-              asChild
+              iconClassName="size-3"
               className="mt-4 h-auto gap-1 px-0 py-0 text-xs font-medium"
             >
-              <Link href="/khach-hang/khach-hang-tieu-bieu">Xem thêm <ArrowRight aria-hidden="true" className="size-3" /></Link>
-            </Button>
+              Xem thêm
+            </ButtonLink>
           </div>
         </div>
 
