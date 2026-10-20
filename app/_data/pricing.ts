@@ -11,12 +11,12 @@ export const pricing = {
 // Module keys mirror MODULES in maxv_v2/be_maxv/src/constants/modules.ts (hddt is always on in the product).
 type ModuleKey = "hddt" | "tokhai" | "dvc" | "accounting" | "hrm";
 
-export const modules: { key: ModuleKey; label: string; soon?: boolean }[] = [
-  { key: "hddt", label: "Hóa đơn điện tử – đồng bộ từ Thuế điện tử" },
-  { key: "tokhai", label: "Tờ khai thuế GTGT 01" },
-  { key: "dvc", label: "Dịch vụ công – tờ khai, giấy nộp tiền" },
-  { key: "accounting", label: "Kế toán – bán hàng, tồn kho, tổng hợp", soon: true },
-  { key: "hrm", label: "Nhân sự – chấm công, tiền lương, thuế TNCN" },
+export const modules: { key: ModuleKey; label: string; short: string; soon?: boolean }[] = [
+  { key: "hddt", label: "Hóa đơn điện tử – đồng bộ từ Thuế điện tử", short: "Hóa đơn điện tử" },
+  { key: "tokhai", label: "Tờ khai thuế GTGT 01", short: "Tờ khai thuế GTGT" },
+  { key: "dvc", label: "Dịch vụ công – tờ khai, giấy nộp tiền", short: "Dịch vụ công" },
+  { key: "accounting", label: "Kế toán – bán hàng, tồn kho, tổng hợp", short: "Kế toán", soon: true },
+  { key: "hrm", label: "Nhân sự – chấm công, tiền lương, thuế TNCN", short: "Nhân sự" },
 ];
 
 type Plan = {
