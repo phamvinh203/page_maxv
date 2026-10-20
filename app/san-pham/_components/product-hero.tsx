@@ -1,9 +1,10 @@
-import { ArrowRight, type LucideIcon } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import { heroImage } from "@/app/_lib/assets";
 import { cn } from "@/app/_lib/utils";
@@ -56,9 +57,13 @@ export function ProductHero({
             {description}
           </p>
           <div className="mt-6 flex flex-col gap-3 min-[360px]:flex-row sm:mt-7">
-            <Button size="lg" asChild className="h-12 rounded-lg px-5 shadow-md shadow-primary/15 sm:px-6">
-              <Link href={primary.href}>{primary.label} <ArrowRight aria-hidden="true" /></Link>
-            </Button>
+            <ButtonLink
+              href={primary.href}
+              size="lg"
+              className="h-12 rounded-lg px-5 shadow-md shadow-primary/15 sm:px-6"
+            >
+              {primary.label}
+            </ButtonLink>
             <Button variant="outline" size="lg" asChild className="h-12 rounded-lg border-primary/40 bg-white/40 px-6 text-primary">
               <Link href={secondary.href}>{secondary.label}</Link>
             </Button>

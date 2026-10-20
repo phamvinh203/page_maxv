@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
@@ -37,13 +38,13 @@ export function IndustrySolutions() {
               hiệu quả hơn.
             </p>
           </div>
-          <Button
+          <ButtonLink
+            href="/giai-phap"
             variant="link"
-            asChild
             className="h-auto shrink-0 px-0 py-0 text-sm lg:mb-2"
           >
-            <Link href="/giai-phap">Xem tất cả giải pháp <ArrowRight aria-hidden="true" /></Link>
-          </Button>
+            Xem tất cả giải pháp
+          </ButtonLink>
         </div>
 
         <ul className="mt-7 grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">

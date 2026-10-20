@@ -1,8 +1,5 @@
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-
 import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
@@ -31,13 +28,13 @@ export function Features() {
             doanh nghiệp tối ưu quy trình, tiết kiệm chi phí và nâng cao hiệu
             quả quản trị.
           </p>
-          <Button
+          <ButtonLink
+            href="/tinh-nang"
             size="lg"
-            asChild
             className="mt-6 h-11 rounded-lg shadow-sm shadow-primary/15"
           >
-            <Link href="/tinh-nang">Khám phá tính năng <ArrowRight aria-hidden="true" /></Link>
-          </Button>
+            Khám phá tính năng
+          </ButtonLink>
         </div>
 
         <ul className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 xl:grid-cols-3">

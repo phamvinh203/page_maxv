@@ -1,9 +1,8 @@
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
 import { trialSignup } from "@/app/_data/trial-signup";
@@ -44,9 +43,7 @@ export function TrialSignup() {
               placeholder="Nhập số điện thoại hoặc email của bạn"
               className="h-11 flex-1 border-0 bg-white text-foreground shadow-none placeholder:text-xs disabled:opacity-100"
             />
-            <Button asChild className="h-11 rounded-lg px-5 text-xs">
-              <Link href="/dung-thu">Đăng ký dùng thử <ArrowRight aria-hidden="true" /></Link>
-            </Button>
+            <ButtonLink href="/dung-thu" className="h-11 rounded-lg px-5 text-xs">Đăng ký dùng thử</ButtonLink>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <p className="w-full text-xs text-blue-50 sm:w-auto">Hoặc đăng ký nhanh qua</p>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronDown, Menu, Search } from "lucide-react";
 
 import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import {
   NavigationMenu, NavigationMenuContent, NavigationMenuItem,
@@ -97,7 +98,7 @@ export function Header() {
                   <Button variant="outline" asChild><Link href="/dang-nhap">Đăng nhập</Link></Button>
                 </SheetClose>
                 <SheetClose asChild>
-                  <Button asChild><Link href="/dung-thu">Dùng thử miễn phí <ArrowRight aria-hidden="true" /></Link></Button>
+                  <ButtonLink href="/dung-thu">Dùng thử miễn phí</ButtonLink>
                 </SheetClose>
               </div>
             </SheetContent>

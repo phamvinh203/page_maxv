@@ -1,10 +1,11 @@
 import { Suspense } from "react";
-import { ArrowRight, Check, LayoutGrid } from "lucide-react";
+import { Check, LayoutGrid } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
@@ -165,9 +166,7 @@ export function NewsListing({ category, searchParams }: { category?: NewsCategor
                     </li>
                   ))}
                 </ul>
-                <Button asChild className="mt-4 h-9 rounded-md text-xs">
-                  <Link href="/dung-thu">Đăng ký dùng thử <ArrowRight aria-hidden="true" /></Link>
-                </Button>
+                <ButtonLink href="/dung-thu" className="mt-4 h-9 rounded-md text-xs">Đăng ký dùng thử</ButtonLink>
               </CardContent>
             </Card>
 
