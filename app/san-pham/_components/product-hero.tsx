@@ -1,4 +1,5 @@
 import { type LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,6 +15,7 @@ type Chip = { label: string; hint: string; Icon: LucideIcon };
 
 export function ProductHero({
   eyebrow = "SẢN PHẨM",
+  eyebrowClassName,
   title,
   highlight,
   description,
@@ -22,8 +24,11 @@ export function ProductHero({
   imageAlt,
   primary,
   secondary,
+  below,
+  overlay,
 }: {
   eyebrow?: string;
+  eyebrowClassName?: string;
   title: string;
   highlight: string;
   description: string;
@@ -32,11 +37,14 @@ export function ProductHero({
   imageAlt?: string;
   primary: Cta;
   secondary: Cta;
+  // below: replaces chips/benefits under the buttons; overlay: floats over the image.
+  below?: ReactNode;
+  overlay?: ReactNode;
 }) {
   return (
     <section
       aria-labelledby="product-heading"
-      className="overflow-hidden bg-linear-to-br from-[#f1fbff] to-[#e3f3ff]"
+      className="overflow-hidden bg-hero-tint"
     >
       <Container
         className={cn(
@@ -45,7 +53,7 @@ export function ProductHero({
         )}
       >
         <div className="relative z-10 lg:py-8">
-          <Badge variant="eyebrow">{eyebrow}</Badge>
+          <Badge variant="eyebrow" className={eyebrowClassName}>{eyebrow}</Badge>
           <h1
             id="product-heading"
             className="mt-4 text-[2rem] leading-[1.18] font-bold tracking-tight text-foreground sm:text-[2.625rem] xl:text-5xl"
@@ -68,7 +76,7 @@ export function ProductHero({
               <Link href={secondary.href}>{secondary.label}</Link>
             </Button>
           </div>
-          {chips ? (
+          {below ?? (chips ? (
             <ul className="mt-7 flex flex-wrap gap-3 sm:mt-9">
               {chips.map(({ label, hint, Icon }) => (
                 <li key={label} className="flex items-center gap-2 rounded-lg border border-white/80 bg-white/70 px-3 py-2">
@@ -88,7 +96,7 @@ export function ProductHero({
                 ))}
               </ul>
             )
-          )}
+          ))}
         </div>
 
         {imageAlt && (
@@ -101,6 +109,7 @@ export function ProductHero({
               fetchPriority="high"
               className="h-auto w-full [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)] lg:[mask-image:linear-gradient(to_right,transparent,black_12%)]"
             />
+            {overlay}
           </div>
         )}
       </Container>
