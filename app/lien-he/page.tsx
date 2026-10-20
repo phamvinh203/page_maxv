@@ -17,6 +17,7 @@ import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import { Input } from "@/app/_components/ui/input";
 import { contact } from "@/app/_lib/contact";
@@ -252,9 +253,14 @@ export default function Page() {
         </div>
         <Container className="relative flex min-h-28 flex-wrap items-center justify-between gap-5 py-5 pr-24 sm:pr-40 lg:pr-72">
           <h2 className="text-xl font-bold leading-tight tracking-tight text-primary sm:text-2xl">Cùng tìm giải pháp phù hợp<br />với doanh nghiệp bạn.</h2>
-          <Button asChild variant="outline" size="lg" className="rounded-lg border-primary bg-white text-primary hover:bg-sky-50">
-            <Link href="/san-pham/maxv-accounting">Khám phá sản phẩm <ArrowRight aria-hidden="true" /></Link>
-          </Button>
+          <ButtonLink
+            href="/san-pham/maxv-accounting"
+            variant="outline"
+            size="lg"
+            className="rounded-lg border-primary bg-white text-primary hover:bg-sky-50"
+          >
+            Khám phá sản phẩm
+          </ButtonLink>
         </Container>
       </section>
     </>

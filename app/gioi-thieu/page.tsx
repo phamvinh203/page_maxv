@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import { maxvLogo } from "@/app/_lib/assets";
 import { contact } from "@/app/_lib/contact";
@@ -157,9 +157,7 @@ export default function Page() {
             <h2 className="text-2xl font-bold">Trao đổi cùng MaxV về nhu cầu của bạn</h2>
             <p className="mt-1 text-sm opacity-90">Chúng tôi sẵn sàng lắng nghe và tư vấn giải pháp phù hợp cho doanh nghiệp của bạn.</p>
           </div>
-          <Button asChild variant="secondary" size="lg">
-            <Link href="/lien-he">Liên hệ tư vấn <ArrowRight aria-hidden="true" /></Link>
-          </Button>
+          <ButtonLink href="/lien-he" variant="secondary" size="lg">Liên hệ tư vấn</ButtonLink>
         </Container>
       </section>
     </>

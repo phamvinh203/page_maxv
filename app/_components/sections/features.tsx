@@ -1,9 +1,6 @@
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-
+import { FeatureGrid } from "@/app/_components/sections/feature-grid";
 import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
-import { Card, CardContent } from "@/app/_components/ui/card";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
 import { features } from "@/app/_data/features";
@@ -31,36 +28,16 @@ export function Features() {
             doanh nghiệp tối ưu quy trình, tiết kiệm chi phí và nâng cao hiệu
             quả quản trị.
           </p>
-          <Button
+          <ButtonLink
+            href="/tinh-nang"
             size="lg"
-            asChild
             className="mt-6 h-11 rounded-lg shadow-sm shadow-primary/15"
           >
-            <Link href="/tinh-nang">Khám phá tính năng <ArrowRight aria-hidden="true" /></Link>
-          </Button>
+            Khám phá tính năng
+          </ButtonLink>
         </div>
 
-        <ul className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 xl:grid-cols-3">
-          {features.map(({ id, title, description, Icon }) => (
-            <li key={id} className="min-w-0">
-              <Card className="h-full border-white/80 bg-white/90 shadow-xs">
-                <CardContent className="flex items-start gap-3 p-5">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/10 bg-secondary text-primary">
-                    <Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />
-                  </span>
-                  <div className="min-w-0">
-                    <h3 className="text-xs leading-5 font-semibold text-foreground">
-                      {title}
-                    </h3>
-                    <p className="mt-2 text-xs leading-6 text-muted-foreground">
-                      {description}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </li>
-          ))}
-        </ul>
+        <FeatureGrid items={features} tinted className="min-[480px]:grid-cols-2 xl:grid-cols-3" />
       </Container>
     </section>
   );

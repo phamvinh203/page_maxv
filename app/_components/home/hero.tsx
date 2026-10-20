@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowRight,
   FileCheck2,
   Headphones,
   MonitorSmartphone,
@@ -12,6 +11,7 @@ import {
 
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
 import { heroImage } from "@/app/_lib/assets";
 
@@ -50,13 +50,13 @@ export function Hero() {
           </p>
 
           <div className="mt-6 flex flex-col gap-3 min-[360px]:flex-row sm:mt-7">
-            <Button
+            <ButtonLink
+              href="/dung-thu"
               size="lg"
-              asChild
               className="h-12 rounded-lg px-5 shadow-md shadow-primary/15 sm:px-6"
             >
-              <Link href="/dung-thu">Dùng thử miễn phí <ArrowRight aria-hidden="true" /></Link>
-            </Button>
+              Dùng thử miễn phí
+            </ButtonLink>
             <Button
               variant="outline"
               size="lg"

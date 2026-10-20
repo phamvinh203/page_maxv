@@ -1,8 +1,7 @@
-import { ArrowRight, Check, Minus } from "lucide-react";
-import Link from "next/link";
+import { Check, Minus } from "lucide-react";
 
 import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
@@ -35,9 +34,13 @@ export function Plans({ heading }: { heading?: { title: string; description: str
                     {plan.period && <span className="text-sm font-semibold">{plan.period}</span>}
                   </p>
 
-                  <Button asChild variant={plan.featured ? "default" : "outline"} className="mt-5 h-10 rounded-lg">
-                    <Link href={plan.cta.href}>{plan.cta.label} <ArrowRight aria-hidden="true" /></Link>
-                  </Button>
+                  <ButtonLink
+                    href={plan.cta.href}
+                    variant={plan.featured ? "default" : "outline"}
+                    className="mt-5 h-10 rounded-lg"
+                  >
+                    {plan.cta.label}
+                  </ButtonLink>
 
                   <ul className="mt-6 space-y-3 border-t pt-6">
                     {modules.map((m) => {

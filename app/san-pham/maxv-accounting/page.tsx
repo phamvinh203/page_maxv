@@ -1,13 +1,12 @@
-import { ArrowRight, Check, Quote } from "lucide-react";
+import { Check, Quote } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 
 import { Plans } from "@/app/_components/sections/plans";
-import { FeatureGrid } from "@/app/san-pham/_components/feature-grid";
+import { FeatureGrid } from "@/app/_components/sections/feature-grid";
 import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
+import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
@@ -66,9 +65,12 @@ export default function Page() {
             <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground">
               Một nền tảng web cho kế toán tổng hợp, tiền, bán hàng, mua hàng, tồn kho và giá thành.
             </p>
-            <Button asChild className="mt-6 h-11 rounded-lg">
-              <Link href="/bang-gia/tu-van-goi-phu-hop">Tư vấn gói phù hợp <ArrowRight aria-hidden="true" /></Link>
-            </Button>
+            <ButtonLink
+              href="/bang-gia/tu-van-goi-phu-hop"
+              className="mt-6 h-11 rounded-lg"
+            >
+              Tư vấn gói phù hợp
+            </ButtonLink>
           </div>
           <Card className="shadow-xs">
             <CardContent className="p-6">
