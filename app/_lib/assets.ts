@@ -6,4 +6,3 @@ export { default as phoneIcon } from "@/public/icons/phone.svg";
 export { default as facebookIcon } from "@/public/icons/Facebook.svg";
 export { default as youtubeIcon } from "@/public/icons/YouTube.svg";
 export { default as googleIcon } from "@/public/icons/Google.svg";
-export { default as globeIcon } from "@/app/apple-icon.png";

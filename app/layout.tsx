@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description: site.description,
+  icons: { icon: { url: "/images/logo/Logo-Maxv-01.svg", type: "image/svg+xml" } },
   // Pages are noindex until they opt in (robots index: true here and in sitemap.ts); a forgotten opt-in fails safe.
   robots: { index: false, follow: true },
   // Title, description and images are inherited from the metadata above and from app/opengraph-image.tsx.
