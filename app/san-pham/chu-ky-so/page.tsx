@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { FeatureGrid } from "@/app/_components/product/feature-grid";
-import { ProductCtaCard } from "@/app/_components/product/product-cta-card";
-import { ProductHero } from "@/app/_components/product/product-hero";
+import { FeatureGrid } from "@/app/san-pham/_components/feature-grid";
+import { ProductCtaCard } from "@/app/san-pham/_components/product-cta-card";
+import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
 import { chuKySo, chuKySoTopics } from "@/app/_data/chu-ky-so";

@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-import { PostThumb, SidebarPostItem } from "@/app/_components/news/news-listing";
+import { PostThumb, SidebarPostItem } from "@/app/tin-tuc/_components/news-listing";
 import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";

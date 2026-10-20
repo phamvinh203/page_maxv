@@ -1,4 +1,4 @@
-import { NewsListing } from "@/app/_components/news/news-listing";
+import { NewsListing } from "@/app/tin-tuc/_components/news-listing";
 
 export const metadata = { title: "Doanh nghiệp" };
 

@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Plans } from "@/app/_components/sections/plans";
-import { FeatureGrid } from "@/app/_components/product/feature-grid";
-import { ProductHero } from "@/app/_components/product/product-hero";
+import { FeatureGrid } from "@/app/san-pham/_components/feature-grid";
+import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
