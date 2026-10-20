@@ -1,8 +1,9 @@
-import { ChevronDown, Menu } from "lucide-react";
+import { ChevronDown, Menu, Search } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/app/_components/ui/button";
 import { ButtonLink } from "@/app/_components/ui/button-link";
+import { Input } from "@/app/_components/ui/input";
 import {
   Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetClose,
 } from "@/app/_components/ui/sheet";
@@ -19,6 +20,18 @@ export function MobileNav() {
           <SheetTitle className="text-xl text-primary">Menu MaxV</SheetTitle>
           <SheetDescription>Sản phẩm, giải pháp và hỗ trợ doanh nghiệp.</SheetDescription>
         </SheetHeader>
+        {/* Same target as the desktop HeaderSearch; a full-page GET also closes the sheet. */}
+        <form action="/tin-tuc" role="search" className="relative px-6 pt-4">
+          <Search aria-hidden="true" className="pointer-events-none absolute top-1/2 left-9.5 mt-2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <label htmlFor="mobile-search" className="sr-only">Tìm kiếm</label>
+          <Input
+            id="mobile-search"
+            name="q"
+            type="search"
+            placeholder="Tìm kiếm sản phẩm, bài viết..."
+            className="h-10 rounded-full border-transparent bg-secondary/60 pl-10 shadow-none focus-visible:border-input focus-visible:bg-white focus-visible:ring-0 [&::-webkit-search-cancel-button]:hidden"
+          />
+        </form>
         <nav aria-label="Điều hướng di động" className="px-6 py-3">
           {headerNavigation.map((group) => group.items ? (
             <details key={group.title} className="group border-b last:border-0">
