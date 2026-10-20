@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { TrialSignup } from "@/app/_components/sections/trial-signup";
 import { Plans } from "@/app/_components/sections/plans";
 import { FeatureGrid } from "@/app/_components/product/feature-grid";
 import { ProductHero } from "@/app/_components/product/product-hero";
@@ -158,8 +157,6 @@ export default function Page() {
       <div className="bg-linear-to-b from-white to-[#f6fbff] pt-12 sm:pt-14">
         <Plans heading={{ title: "Gói phần mềm phù hợp với doanh nghiệp", description: pricing.description }} />
       </div>
-
-      <TrialSignup />
     </>
   );
 }

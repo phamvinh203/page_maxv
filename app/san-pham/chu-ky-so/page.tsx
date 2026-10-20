@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { TrialSignup } from "@/app/_components/sections/trial-signup";
 import { FeatureGrid } from "@/app/_components/product/feature-grid";
 import { ProductCtaCard } from "@/app/_components/product/product-cta-card";
 import { ProductHero } from "@/app/_components/product/product-hero";
@@ -38,8 +37,6 @@ export default function Page() {
         title="MaxV HĐĐT lưu và tải XML hóa đơn gốc đã ký số"
         description="Tải file XML đã ký số của từng hóa đơn từ Thuế điện tử để lưu trữ và đối chiếu."
       />
-
-      <TrialSignup />
     </>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { TrialSignup } from "@/app/_components/sections/trial-signup";
 import { FeatureGrid } from "@/app/_components/product/feature-grid";
 import { ProductCtaCard } from "@/app/_components/product/product-cta-card";
 import { ProductHero } from "@/app/_components/product/product-hero";
@@ -40,8 +39,6 @@ export default function Page() {
         title="MaxV HĐĐT là công cụ quản lý hóa đơn điện tử của MaxV"
         description="Xem đầy đủ tính năng đồng bộ, tải file, xuất Excel và quản lý nhiều công ty."
       />
-
-      <TrialSignup />
     </>
   );
 }
