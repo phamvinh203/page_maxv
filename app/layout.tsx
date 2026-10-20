@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import { Header } from "@/app/_components/layout/header/header";
-import { Footer } from "@/app/_components/layout/footer/footer";
-import { ContactWidget } from "@/app/_components/layout/contact-widget/contact-widget";
+import { Header } from "@/app/_components/layout/header";
+import { Footer } from "@/app/_components/layout/footer";
+import { ContactWidget } from "@/app/_components/layout/contact-widget";
 import { site } from "@/app/_lib/seo";
 import "./globals.css";
 

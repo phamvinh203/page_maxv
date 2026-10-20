@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
+import { TrialSignup } from "@/app/_components/sections/trial-signup";
 import { FeatureGrid } from "@/app/_components/product/feature-grid";
 import { ProductCtaCard } from "@/app/_components/product/product-cta-card";
 import { ProductHero } from "@/app/_components/product/product-hero";

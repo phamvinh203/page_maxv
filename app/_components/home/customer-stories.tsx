@@ -1,15 +1,16 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Building2, Quote, UserRound } from "lucide-react";
 
-import { Pricing } from "@/app/_components/home/pricing/pricing";
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { customerStory, customerTestimonial } from "@/app/_data/customer-stories";
 
-export function CustomerStories() {
+// children: the third grid cell (the home page passes <Pricing />).
+export function CustomerStories({ children }: { children: ReactNode }) {
   return (
     <section
       id="khach-hang"
@@ -87,7 +88,7 @@ export function CustomerStories() {
         </Card>
 
         <div className="grid min-w-0 md:col-span-2 xl:col-span-1">
-          <Pricing />
+          {children}
         </div>
       </Container>
     </section>

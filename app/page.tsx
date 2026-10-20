@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 
-import { Hero } from "@/app/_components/home/hero/hero";
+import { Hero } from "@/app/_components/home/hero";
 import { CustomerTrust } from "@/app/_components/home/customer-trust/customer-trust";
-import { IndustrySolutions } from "@/app/_components/home/industry-solutions/industry-solutions";
-import { Features } from "@/app/_components/home/features/features";
-import { Workflow } from "@/app/_components/home/workflow/workflow";
-import { CustomerStories } from "@/app/_components/home/customer-stories/customer-stories";
-import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
+import { IndustrySolutions } from "@/app/_components/home/industry-solutions";
+import { Features } from "@/app/_components/sections/features";
+import { Workflow } from "@/app/_components/home/workflow";
+import { CustomerStories } from "@/app/_components/home/customer-stories";
+import { Pricing } from "@/app/_components/home/pricing";
+import { TrialSignup } from "@/app/_components/sections/trial-signup";
 import { homeJsonLd } from "@/app/_lib/seo";
 
 export const metadata: Metadata = {
@@ -26,7 +27,9 @@ export default function Home() {
       <IndustrySolutions />
       <Features />
       <Workflow />
-      <CustomerStories />
+      <CustomerStories>
+        <Pricing />
+      </CustomerStories>
       <TrialSignup />
     </>
   );

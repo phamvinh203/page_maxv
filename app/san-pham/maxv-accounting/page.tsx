@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { TrialSignup } from "@/app/_components/home/trial-signup/trial-signup";
-import { Plans } from "@/app/_components/pricing/plans/plans";
+import { TrialSignup } from "@/app/_components/sections/trial-signup";
+import { Plans } from "@/app/_components/sections/plans";
 import { FeatureGrid } from "@/app/_components/product/feature-grid";
 import { ProductHero } from "@/app/_components/product/product-hero";
 import { Badge } from "@/app/_components/ui/badge";
