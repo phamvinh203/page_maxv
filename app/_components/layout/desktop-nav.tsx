@@ -8,7 +8,7 @@ import { headerNavigation } from "@/app/_lib/navigation";
 
 export function DesktopNav() {
   return (
-    <NavigationMenu aria-label="Điều hướng chính" viewport={false} className="hidden xl:flex">
+    <NavigationMenu aria-label="Điều hướng chính" className="hidden xl:flex">
       <NavigationMenuList className="gap-0">
         {headerNavigation.map((group) => (
           <NavigationMenuItem key={group.title}>
