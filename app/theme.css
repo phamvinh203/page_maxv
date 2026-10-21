@@ -1,0 +1,80 @@
+/*
+ * MaxV theme: the one place for site-wide colors, font stack, radius and brand gradients.
+ * Change a value here and every Tailwind class built on it (bg-primary, text-foreground, rounded-lg...) follows.
+ *
+ * Font: the typeface file is loaded by next/font in app/layout.tsx, which exposes it as --font-brand.
+ * To switch typeface, change that import; the fallback stack lives in --font-sans below.
+ */
+
+/* ---------- Colors & radius (raw values) ---------- */
+:root {
+  color-scheme: light;
+
+  /* Surfaces & text */
+  --background: #ffffff;
+  --foreground: #12395b;
+  --card: #ffffff;
+  --card-foreground: #12395b;
+  --popover: #ffffff;
+  --popover-foreground: #12395b;
+
+  /* Brand */
+  --primary: #0068d9;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf7ff;
+  --secondary-foreground: #07599a;
+  --accent: #e0f2fe;
+  --accent-foreground: #07599a;
+
+  /* Neutral & state */
+  --muted: #f4f9fc;
+  --muted-foreground: #526b7e;
+  --destructive: #c62828;
+  --border: #e2edf4;
+  --input: #91b1c8;
+  --ring: #0068d9;
+
+  --radius: 0.75rem;
+}
+
+/* ---------- Tailwind tokens (map raw values to utility classes) ---------- */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-brand), Arial, Helvetica, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ---------- Brand gradients ---------- */
+@utility bg-section-fade {
+  background-image: linear-gradient(to bottom, #fff, #f6fbff);
+}
+
+@utility bg-hero-tint {
+  background-image: linear-gradient(to bottom right, #f1fbff, #e3f3ff);
+}
+
+@utility bg-brand-banner {
+  background-image: linear-gradient(to right, #0073df, #0053bc);
+}
