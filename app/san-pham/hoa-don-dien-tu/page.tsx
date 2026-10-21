@@ -22,7 +22,7 @@ export default function Page() {
         {...hoaDonDienTu}
         imageAlt="Giao diện MaxV trên laptop và điện thoại, có màn hình danh sách hóa đơn."
         primary={{ label: "Xem MaxV HĐĐT", href: "/san-pham/maxv-hddt" }}
-        secondary={{ label: "Dùng thử miễn phí", href: "/dung-thu" }}
+        secondary={{ label: "Dùng thử miễn phí", href: "/dang-ky" }}
       />
 
       <section aria-labelledby="hddt-topics-heading" className="py-12 sm:py-14">

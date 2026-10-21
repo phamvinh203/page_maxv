@@ -21,7 +21,7 @@ export default function Page() {
       <ProductHero
         {...maxvHddt}
         imageAlt="Giao diện MaxV trên laptop và điện thoại, có màn hình danh sách hóa đơn."
-        primary={{ label: "Dùng thử miễn phí", href: "/dung-thu" }}
+        primary={{ label: "Dùng thử miễn phí", href: "/dang-ky" }}
         secondary={{ label: "Xem bảng giá", href: "/bang-gia" }}
       />
 

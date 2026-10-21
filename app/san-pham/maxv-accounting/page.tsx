@@ -74,7 +74,7 @@ export default function Page() {
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-7 text-foreground/85 sm:text-base sm:leading-8">{description}</p>
             <div className="mt-7 flex flex-col gap-3 min-[360px]:flex-row">
-              <ButtonLink href="/dung-thu" size="lg" className="h-12 rounded-lg px-6 shadow-md shadow-primary/15">
+              <ButtonLink href="/dang-ky" size="lg" className="h-12 rounded-lg px-6 shadow-md shadow-primary/15">
                 Dùng thử miễn phí
               </ButtonLink>
               <Button variant="outline" size="lg" asChild className="h-12 rounded-lg border-primary/40 bg-white/60 px-6 text-primary">

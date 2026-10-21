@@ -10,7 +10,7 @@ const paths = [
   "/san-pham/hoa-don-dien-tu",
   "/gioi-thieu",
   "/lien-he",
-  "/dung-thu",
+  "/dang-ky",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
