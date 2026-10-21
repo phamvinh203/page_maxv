@@ -7,7 +7,7 @@ import { site } from "@/app/_lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
+  variable: "--font-brand",
   subsets: ["latin", "vietnamese"],
   display: "swap",
 });
