@@ -34,10 +34,10 @@ export const headerNavigation = [
   { title: "Giới thiệu", href: "/gioi-thieu" },
   { title: "Sản phẩm", items: productLinks },
   { title: "Báo giá", href: "/bang-gia" },
-  { title: "Hỗ trợ", items: supportLinks },
   { title: "Tin tức", items: newsLinks },
   { title: "Khách hàng", items: customerLinks },
   { title: "Tra cứu MST", href: "/tra-cuu-mst" },
+  { title: "Hỗ trợ", items: supportLinks },
   { title: "Liên hệ", href: "/lien-he" },
 ];
 
