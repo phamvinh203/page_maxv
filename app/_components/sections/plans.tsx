@@ -4,22 +4,14 @@ import { Badge } from "@/app/_components/ui/badge";
 import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
-import { SectionHeading } from "@/app/_components/ui/section-heading";
 import { modules, plans } from "@/app/_data/pricing";
 import { cn } from "@/app/_lib/utils";
 
-export function Plans({ heading }: { heading?: { title: string; description: string } }) {
+export function Plans() {
   return (
     <section aria-labelledby="plans-heading" className="pb-12 sm:pb-16">
       <Container>
-        {heading ? (
-          <div className="mb-8 text-center">
-            <SectionHeading id="plans-heading">{heading.title}</SectionHeading>
-            <p className="mt-3 text-sm leading-7 text-muted-foreground">{heading.description}</p>
-          </div>
-        ) : (
-          <h2 id="plans-heading" className="sr-only">Các gói phần mềm MaxV</h2>
-        )}
+        <h2 id="plans-heading" className="sr-only">Các gói phần mềm MaxV</h2>
         <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => (
             <li key={plan.id} className="min-w-0">

@@ -6,6 +6,7 @@ export const pricing = {
   currency: "đ",
   period: "/tháng",
   href: "/bang-gia",
+  consultHref: "/bang-gia/tu-van-goi-phu-hop",
 };
 
 // Module keys mirror MODULES in maxv_v2/be_maxv/src/constants/modules.ts (hddt is always on in the product).
@@ -58,7 +59,7 @@ export const plans: Plan[] = [
     audience: "Kế toán dịch vụ, quản lý nhiều MST",
     price: null,
     modules: ["hddt", "tokhai", "dvc"],
-    cta: { label: "Tư vấn gói phù hợp", href: "/bang-gia/tu-van-goi-phu-hop" },
+    cta: { label: "Tư vấn gói phù hợp", href: pricing.consultHref },
   },
   {
     id: "toan-dien",
@@ -66,6 +67,6 @@ export const plans: Plan[] = [
     audience: "Doanh nghiệp vừa, cần kế toán và nhân sự",
     price: null,
     modules: ["hddt", "tokhai", "dvc", "accounting", "hrm"],
-    cta: { label: "Tư vấn gói phù hợp", href: "/bang-gia/tu-van-goi-phu-hop" },
+    cta: { label: "Tư vấn gói phù hợp", href: pricing.consultHref },
   },
 ];
