@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Dùng thử miễn phí",
   description: trialSignup.description,
   alternates: { canonical: "/dung-thu" },
+  robots: { index: true, follow: true },
 };
 
 const required = <span className="text-red-500">*</span>;

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   title: "Giới thiệu",
   description: "Từ năm 2013, MaxV phát triển phần mềm kế toán và giải pháp quản trị phù hợp với doanh nghiệp Việt.",
   alternates: { canonical: "/gioi-thieu" },
+  robots: { index: true, follow: true },
 };
 
 const values = [

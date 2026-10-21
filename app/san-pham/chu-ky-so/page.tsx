@@ -9,6 +9,7 @@ import { chuKySo, chuKySoTopics } from "@/app/_data/chu-ky-so";
 
 // shortcut: inherits noindex from the root layout until the digital signature offer (provider, packages) is confirmed; then set robots index: true and add the page to the sitemap.
 export const metadata: Metadata = {
+  alternates: { canonical: "/san-pham/chu-ky-so" },
   title: "Chữ ký số – Xác thực cho hóa đơn và tờ khai điện tử",
   description:
     "Chữ ký số giúp doanh nghiệp xác thực người ký khi dùng hóa đơn điện tử, nộp tờ khai thuế điện tử và giao dịch với cơ quan nhà nước.",

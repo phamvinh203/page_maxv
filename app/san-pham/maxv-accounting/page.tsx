@@ -10,6 +10,7 @@ import { Button } from "@/app/_components/ui/button";
 import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
+import { JsonLd } from "@/app/_components/ui/json-ld";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
 import {
   accountingFaqs,
@@ -27,6 +28,7 @@ import {
   postingSteps,
   reportHighlights,
 } from "@/app/_data/maxv-accounting";
+import { breadcrumbJsonLd, faqJsonLd, softwareJsonLd } from "@/app/_lib/seo";
 import heroImage from "@/public/images/products/product_1.webp";
 import onlineImage from "@/public/images/products/product_2.webp";
 import invoiceImage from "@/public/images/products/product_3.webp";
@@ -41,16 +43,22 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+const path = "/san-pham/maxv-accounting";
+const breadcrumbs = [{ label: "Trang chủ", href: "/" }, { label: "Sản phẩm" }, { label: maxvAccounting.name }];
+
 const { eyebrow, name, title, highlight, description, highlights } = maxvAccounting;
 
 export default function Page() {
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd(breadcrumbs, path)} />
+      <JsonLd data={faqJsonLd(accountingFaqs)} />
+      <JsonLd data={softwareJsonLd({ name, description, path })} />
       <section aria-labelledby="product-heading" className="overflow-hidden bg-hero-tint">
         <Container className="pt-6">
           <Breadcrumbs
             className="text-muted-foreground"
-            items={[{ label: "Trang chủ", href: "/" }, { label: "Sản phẩm" }, { label: name }]}
+            items={breadcrumbs}
           />
         </Container>
         <Container className="grid items-center gap-8 pt-8 pb-10 lg:grid-cols-[1.1fr_1fr] lg:gap-6 lg:pb-14">

@@ -8,6 +8,7 @@ import { plans, pricing } from "@/app/_data/pricing";
 // shortcut: inherits noindex from the root layout until plan prices in _data/pricing.ts are confirmed; then set robots index: true, add /bang-gia to the sitemap and offers to the JSON-LD.
 export const metadata = {
   title: "Bảng giá phần mềm kế toán",
+  alternates: { canonical: "/bang-gia" },
   description: `Các gói phần mềm kế toán MaxV linh hoạt theo quy mô doanh nghiệp: ${plans.map((p) => p.name).join(", ")}. Dùng thử miễn phí, không cần thanh toán.`,
 };
 
