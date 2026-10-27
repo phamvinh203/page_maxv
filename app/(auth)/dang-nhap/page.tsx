@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-import { AuthShell, GoogleAuthButton, fieldClass, labelClass } from "@/app/_components/sections/auth-shell";
+import { AuthShell, GoogleAuthButton, fieldClass, labelClass } from "@/app/(auth)/_components/auth-shell";
 import { Button } from "@/app/_components/ui/button";
 import { Input } from "@/app/_components/ui/input";
 
@@ -44,7 +44,7 @@ export default function Page() {
       <GoogleAuthButton label="Đăng nhập bằng Google" />
 
       <p className="mt-8 text-center text-sm text-muted-foreground">
-        Chưa có tài khoản? <Link href="/dung-thu" className="font-semibold text-primary hover:underline">Dùng thử miễn phí 15 ngày</Link>
+        Chưa có tài khoản? <Link href="/dang-ky" className="font-semibold text-primary hover:underline">Đăng ký</Link>
       </p>
     </AuthShell>
   );

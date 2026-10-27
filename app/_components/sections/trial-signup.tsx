@@ -43,7 +43,7 @@ export function TrialSignup() {
               placeholder="Nhập số điện thoại hoặc email của bạn"
               className="h-11 flex-1 border-0 bg-white text-foreground shadow-none placeholder:text-xs disabled:opacity-100"
             />
-            <ButtonLink href="/dung-thu" className="h-11 rounded-lg px-5 text-xs">Đăng ký dùng thử</ButtonLink>
+            <ButtonLink href="/dang-ky" className="h-11 rounded-lg px-5 text-xs">Đăng ký dùng thử</ButtonLink>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <p className="w-full text-xs text-blue-50 sm:w-auto">Hoặc đăng ký nhanh qua</p>

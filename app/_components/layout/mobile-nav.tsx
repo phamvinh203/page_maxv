@@ -61,7 +61,7 @@ export function MobileNav() {
             <Button variant="outline" asChild><Link href="/dang-nhap">Đăng nhập</Link></Button>
           </SheetClose>
           <SheetClose asChild>
-            <ButtonLink href="/dung-thu">Dùng thử miễn phí</ButtonLink>
+            <ButtonLink href="/dang-ky">Dùng thử miễn phí</ButtonLink>
           </SheetClose>
         </div>
       </SheetContent>

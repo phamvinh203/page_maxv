@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-import { AuthShell, fieldClass, labelClass } from "@/app/_components/sections/auth-shell";
+import { AuthShell, fieldClass, labelClass } from "@/app/(auth)/_components/auth-shell";
 import { Button } from "@/app/_components/ui/button";
 import { Input } from "@/app/_components/ui/input";
 import { contact } from "@/app/_lib/contact";

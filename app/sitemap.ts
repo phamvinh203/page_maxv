@@ -7,10 +7,11 @@ const paths = [
   "/",
   "/san-pham/maxv-hddt",
   "/san-pham/maxv-accounting",
+  "/san-pham/maxv-hkd",
   "/san-pham/hoa-don-dien-tu",
   "/gioi-thieu",
   "/lien-he",
-  "/dung-thu",
+  "/dang-ky",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

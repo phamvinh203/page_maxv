@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { PlanAccounting } from "@/app/_components/sections/plan-accounting";
+import { PlanAccounting } from "./_components/plan-accounting";
 import { Badge } from "@/app/_components/ui/badge";
 import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { Button } from "@/app/_components/ui/button";
@@ -27,7 +27,7 @@ import {
   onboardingSteps,
   postingSteps,
   reportHighlights,
-} from "@/app/_data/maxv-accounting";
+} from "@/app/san-pham/maxv-accounting/data";
 import { breadcrumbJsonLd, faqJsonLd, softwareJsonLd } from "@/app/_lib/seo";
 import heroImage from "@/public/images/products/product_1.webp";
 import onlineImage from "@/public/images/products/product_2.webp";
@@ -74,7 +74,7 @@ export default function Page() {
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-7 text-foreground/85 sm:text-base sm:leading-8">{description}</p>
             <div className="mt-7 flex flex-col gap-3 min-[360px]:flex-row">
-              <ButtonLink href="/dung-thu" size="lg" className="h-12 rounded-lg px-6 shadow-md shadow-primary/15">
+              <ButtonLink href="/dang-ky" size="lg" className="h-12 rounded-lg px-6 shadow-md shadow-primary/15">
                 Dùng thử miễn phí
               </ButtonLink>
               <Button variant="outline" size="lg" asChild className="h-12 rounded-lg border-primary/40 bg-white/60 px-6 text-primary">

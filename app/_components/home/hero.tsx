@@ -25,7 +25,7 @@ export function Hero() {
       highlight="Quản trị tài chính dễ hơn."
       description="Tự động lấy hóa đơn, hạch toán, quản lý công nợ – tồn kho – giá thành và lập báo cáo trên một nền tảng."
       imageAlt="Phần mềm kế toán MaxV trên laptop và điện thoại, hiển thị tổng quan doanh thu, công nợ, tồn kho và hóa đơn."
-      primary={{ label: "Dùng thử miễn phí", href: "/dung-thu" }}
+      primary={{ label: "Dùng thử miễn phí", href: "/dang-ky" }}
       secondary={{ label: "Xem bảng giá", href: "/bang-gia" }}
       below={
         <ul className="mt-7 grid grid-cols-2 gap-x-3 gap-y-4 sm:mt-9 sm:flex sm:flex-wrap sm:gap-x-5">

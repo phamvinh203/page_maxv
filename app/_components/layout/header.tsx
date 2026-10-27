@@ -24,7 +24,7 @@ export function Header() {
         <div className="flex items-center gap-2 sm:gap-3">
           <Button variant="outline" asChild className="hidden h-10 rounded-lg border-input px-5 text-primary sm:inline-flex"><Link href="/dang-nhap">Đăng nhập</Link></Button>
           <Button asChild className="h-10 rounded-lg px-3 text-xs shadow-sm shadow-primary/20 sm:px-5 sm:text-sm">
-            <Link href="/dung-thu" aria-label="Dùng thử miễn phí"><span className="sm:hidden">Dùng thử</span><span className="hidden sm:inline">Dùng thử miễn phí</span> <ArrowRight aria-hidden="true" /></Link>
+            <Link href="/dang-ky" aria-label="Dùng thử miễn phí"><span className="sm:hidden">Dùng thử</span><span className="hidden sm:inline">Đăng ký</span> <ArrowRight aria-hidden="true" /></Link>
           </Button>
           <MobileNav />
         </div>

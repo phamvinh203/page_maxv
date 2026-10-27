@@ -40,7 +40,7 @@ export const plans: Plan[] = [
     audience: "Trải nghiệm MaxV trước khi quyết định",
     price: "Miễn phí",
     modules: ["hddt", "tokhai", "dvc"],
-    cta: { label: "Đăng ký dùng thử", href: "/dung-thu" },
+    cta: { label: "Đăng ký dùng thử", href: "/dang-ky" },
   },
   {
     id: "co-ban",
@@ -51,7 +51,7 @@ export const plans: Plan[] = [
     featured: true,
     period: pricing.period,
     modules: ["hddt", "tokhai"],
-    cta: { label: "Dùng thử miễn phí", href: "/dung-thu" },
+    cta: { label: "Dùng thử miễn phí", href: "/dang-ky" },
   },
   {
     id: "chuyen-nghiep",

@@ -166,7 +166,7 @@ export function NewsListing({ category, searchParams }: { category?: NewsCategor
                     </li>
                   ))}
                 </ul>
-                <ButtonLink href="/dung-thu" className="mt-4 h-9 rounded-md text-xs">Đăng ký dùng thử</ButtonLink>
+                <ButtonLink href="/dang-ky" className="mt-4 h-9 rounded-md text-xs">Đăng ký dùng thử</ButtonLink>
               </CardContent>
             </Card>
 
