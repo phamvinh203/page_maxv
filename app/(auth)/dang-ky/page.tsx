@@ -7,7 +7,7 @@ import {
   GoogleAuthButton,
   fieldClass,
   labelClass,
-} from "@/app/_components/sections/auth-shell";
+} from "@/app/(auth)/_components/auth-shell";
 import { Button } from "@/app/_components/ui/button";
 import { Input } from "@/app/_components/ui/input";
 import { modules } from "@/app/_data/pricing";
