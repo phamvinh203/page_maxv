@@ -4,8 +4,9 @@ import { newsCategories } from "@/app/_data/news";
 export const productLinks = [
   { label: "MaxV Accounting", href: "/san-pham/maxv-accounting" },
   { label: "MaxV HĐĐT", href: "/san-pham/maxv-hddt" },
-  { label: "Hóa đơn điện tử", href: "/san-pham/hoa-don-dien-tu" },
+  { label: "MaxV HKD", href: "/san-pham/maxv-hkd" },
   { label: "Chữ ký số", href: "/san-pham/chu-ky-so" },
+  { label: "Hóa đơn điện tử", href: "/san-pham/hoa-don-dien-tu" },
 ];
 
 const solutionLinks = industrySolutions.map(({ title, href }) => ({ label: title, href }));
