@@ -1,76 +1,154 @@
 import {
+  Banknote,
+  BookOpen,
+  Box,
+  Building2,
+  ChartColumn,
+  Cog,
+  Construction,
+  Factory,
+  FileSpreadsheet,
+  Headset,
+  HardDrive,
+  House,
+  LaptopMinimal,
+  Lock,
+  ShoppingCart,
+  UserCog,
+  UserRound,
   ChartNoAxesCombined,
-  FileCheck2,
-  LayoutGrid,
-  MonitorSmartphone,
-  RefreshCw,
-  ShieldCheck,
+  ClipboardList,
+  Database,
+  FileSearch,
+  FileText,
+  FolderOpen,
+  Globe,
+  Link2,
+  Search,
+  Settings,
   Users,
-  WandSparkles,
 } from "lucide-react";
 
-// Scope mirrors the 7 accounting modules in hdđt_maxv (features/accounting/_shared/config).
-// status reflects what is built today (13 pages: some catalogs, sales invoice); update it as modules ship.
-// Copy only claims the product supports; customer counts and circular support from maxv.vn are left out until confirmed.
 export const maxvAccounting = {
   eyebrow: "PHẦN MỀM KẾ TOÁN ONLINE",
-  title: "Phần mềm kế toán online",
-  highlight: "MaxV Accounting",
-  description:
-    "Giải pháp kế toán cho doanh nghiệp: tổng hợp, tiền, bán hàng, mua hàng, tồn kho và giá thành trên một nền tảng web, làm việc ở mọi nơi.",
-  chips: [
-    { label: "Thuế điện tử", hint: "Đồng bộ hóa đơn", Icon: FileCheck2 },
-    { label: "Làm việc mọi nơi", hint: "Trên nền tảng web", Icon: MonitorSmartphone },
-    { label: "Bảo mật", hint: "Dữ liệu tách riêng", Icon: ShieldCheck },
-    { label: "7 phân hệ", hint: "Ra mắt dần", Icon: LayoutGrid },
+  name: "MaxV Accounting",
+  title: "Kế toán trực tuyến.",
+  highlight: "Hạch toán ngay từ hóa đơn.",
+  description: "Kết nối hóa đơn từ cơ quan thuế, xử lý chứng từ và quản lý tài chính trên một nền tảng.",
+  highlights: [
+    { title: "Làm việc qua trình duyệt", text: "Không cần cài đặt, truy cập mọi nơi", Icon: Globe },
+    { title: "Lấy hóa đơn TCT", text: "Lấy hóa đơn điện tử từ cơ quan thuế", Icon: FileText },
+    { title: "Đáp ứng TT99/2025/TT-BTC", text: "Hỗ trợ chế độ kế toán theo quy định hiện hành", Icon: Settings },
   ],
 };
 
-export const accountingSolutions = [
+export const accountingTabs = [
+  { label: "Tổng quan", href: "#tong-quan", Icon: Globe },
+  { label: "Hóa đơn & hạch toán", href: "#hoa-don-hach-toan", Icon: FileText },
+  { label: "Tính năng", href: "#tinh-nang", Icon: Settings },
+  { label: "Báo giá", href: "#bao-gia", Icon: FolderOpen },
+  { label: "Đánh giá", href: "#danh-gia", Icon: ClipboardList },
+  { label: "Câu hỏi", href: "#cau-hoi", Icon: Search },
+];
+
+export const accountingOnline = [
   {
-    id: "hach-toan",
-    title: "Tự động hạch toán",
-    description: "Bút toán kết chuyển, phân bổ tự động và đối chiếu số liệu giữa các sổ.",
-    Icon: WandSparkles,
+    title: "Truy cập qua Internet",
+    text: "Làm việc trên trình duyệt web, không cần cài đặt phần mềm. Truy cập dễ dàng từ văn phòng, tại nhà hoặc khi đi công tác.",
+    Icon: Globe,
   },
   {
-    id: "thue-dien-tu",
-    title: "Kết nối Thuế điện tử",
-    description: "Đồng bộ hóa đơn mua vào, bán ra từ Thuế điện tử bằng MaxV HĐĐT.",
-    Icon: RefreshCw,
+    title: "Dữ liệu tập trung",
+    text: "Dữ liệu kế toán được lưu trữ tập trung, giúp theo dõi, tra cứu và chia sẻ thông tin nhanh chóng, đồng bộ giữa các bộ phận.",
+    Icon: Database,
   },
   {
-    id: "bao-cao",
-    title: "Báo cáo đa dạng",
-    description: "Báo cáo theo từng phân hệ: tổng hợp, bán hàng, mua hàng, tồn kho, giá thành.",
-    Icon: ChartNoAxesCombined,
-  },
-  {
-    id: "quan-ly",
-    title: "Quản lý linh hoạt",
-    description: "Phân quyền theo chứng từ, quản lý theo phòng ban và nhiều công ty.",
+    title: "Phân quyền người dùng",
+    text: "Phân quyền theo vai trò, đơn vị, chức năng. Kế toán, quản lý có thể cùng làm việc trên một hệ thống với phạm vi truy cập phù hợp.",
     Icon: Users,
-  },
-  {
-    id: "moi-noi",
-    title: "Làm việc mọi nơi",
-    description: "Truy cập mọi lúc, mọi nơi chỉ cần trình duyệt web.",
-    Icon: MonitorSmartphone,
-  },
-  {
-    id: "an-toan",
-    title: "Dữ liệu an toàn",
-    description: "Dữ liệu từng công ty được tách riêng, hỗ trợ sao lưu và khôi phục.",
-    Icon: ShieldCheck,
   },
 ];
 
-export const accountingReasons = [
-  "Giao diện hiện đại, dễ sử dụng trên nền tảng web",
-  "Đồng bộ hóa đơn từ Thuế điện tử, giảm nhập liệu thủ công",
-  "Dữ liệu từng công ty tách riêng, có sao lưu và khôi phục",
-  "Phân quyền chi tiết cho từng nhân viên và chứng từ",
-  "Đội ngũ hỗ trợ trực tiếp, phản hồi nhanh chóng",
+export const invoiceBenefits = [
+  { title: "Theo dõi hóa đơn mua vào – bán ra", text: "Lấy dữ liệu hóa đơn từ cơ quan thuế để theo dõi, tra cứu và đối chiếu." },
+  { title: "Hạn chế nhập lại dữ liệu", text: "Tự động lấy thông tin hóa đơn, giảm thao tác nhập liệu thủ công." },
+  { title: "Kiểm tra trước khi ghi sổ", text: "Kế toán kiểm tra, đối chiếu và xử lý trước khi lập chứng từ hạch toán." },
+];
+
+export const invoiceSteps = [
+  { title: "Kết nối tài khoản", text: "Thiết lập kết nối với cổng hóa đơn điện tử của cơ quan thuế.", Icon: Link2 },
+  { title: "Lấy hóa đơn", text: "Lấy hóa đơn mua vào, bán ra theo kỳ.", Icon: FileText },
+  { title: "Kiểm tra dữ liệu", text: "Kế toán kiểm tra, đối chiếu thông tin hóa đơn.", Icon: FileSearch },
+  { title: "Lập chứng từ hạch toán", text: "Lập chứng từ kế toán sau khi đã kiểm tra.", Icon: ClipboardList },
+];
+
+export const circularSupport = [
+  { title: "Hệ thống tài khoản", text: "Cập nhật hệ thống tài khoản theo Thông tư 99/2025/TT-BTC.", Icon: BookOpen },
+  { title: "Sổ kế toán", text: "Đáp ứng các sổ kế toán theo quy định.", Icon: FolderOpen },
+  { title: "Báo cáo tài chính", text: "Hỗ trợ lập các báo cáo tài chính theo chế độ kế toán.", Icon: ChartNoAxesCombined },
+];
+
+export const accountingFeatures = [
+  { title: "Kế toán tổng hợp", text: "Hạch toán chứng từ, tự động kết chuyển, lập báo cáo tài chính theo chế độ kế toán hiện hành.", Icon: FileSpreadsheet },
+  { title: "Tiền mặt – Ngân hàng", text: "Quản lý thu chi tiền mặt, tiền gửi, đối chiếu và hạch toán tự động từ sao kê ngân hàng.", Icon: Banknote },
+  { title: "Mua hàng – Bán hàng", text: "Quản lý đơn mua, đơn bán, hóa đơn, chứng từ liên quan và theo dõi doanh thu, chi phí.", Icon: ShoppingCart },
+  { title: "Công nợ", text: "Theo dõi công nợ phải thu, phải trả, đối chiếu và nhắc hạn thanh toán.", Icon: Users },
+  { title: "Quản lý tồn kho", text: "Quản lý nhập – xuất – tồn, kiểm soát số lượng, giá trị theo kho và theo vật tư, hàng hóa.", Icon: House },
+  { title: "Tài sản – Công cụ dụng cụ", text: "Theo dõi tăng giảm, khấu hao tài sản cố định và quản lý công cụ dụng cụ.", Icon: Cog },
+  { title: "Giá thành công trình", text: "Tập hợp chi phí theo từng công trình, hạng mục, theo dõi chi phí và hiệu quả thực hiện.", Icon: Construction },
+  { title: "Giá thành sản xuất", text: "Tập hợp chi phí sản xuất, tính giá thành theo phương pháp phù hợp với đặc thù doanh nghiệp.", Icon: Factory },
+  { title: "Thuế & Báo cáo tài chính", text: "Lập tờ khai thuế, quản lý chứng từ thuế và tự động tổng hợp các báo cáo tài chính, báo cáo quản trị.", Icon: ChartColumn },
+];
+
+export const postingSteps = [
+  { title: "Chọn hóa đơn cần xử lý", text: "Lựa chọn hóa đơn đầu vào, đầu ra đã phát hành hoặc nhận từ nhà cung cấp." },
+  { title: "Kiểm tra thông tin và tài khoản", text: "Đối chiếu thông tin hóa đơn, kiểm tra tài khoản hạch toán phù hợp." },
+  { title: "Lập chứng từ liên quan", text: "Tự động đề xuất bút toán, có thể chỉnh sửa theo thực tế nghiệp vụ." },
+  { title: "Rà soát và ghi sổ", text: "Kiểm tra lại thông tin, sau đó ghi sổ để cập nhật vào sổ sách và báo cáo." },
+];
+
+export const reportHighlights = [
+  { title: "Theo dõi hạn thanh toán", text: "Cập nhật công nợ phải thu, phải trả, theo dõi hạn thanh toán và chủ động kế hoạch dòng tiền.", Icon: FileText },
+  { title: "Tra cứu nhập – xuất – tồn", text: "Xem số liệu tồn kho theo thời gian thực, chi tiết theo kho, vật tư, hàng hóa.", Icon: Box },
+  { title: "Tổng hợp chi phí theo đối tượng", text: "Tập hợp và phân tích chi phí theo công trình, dự án, bộ phận hoặc đơn hàng.", Icon: ChartColumn },
+];
+
+export const businessModels = [
+  { title: "Thương mại – Dịch vụ", text: "Quản lý mua bán hàng hóa, dịch vụ, công nợ và doanh thu theo từng khách hàng, kênh bán.", Icon: ShoppingCart },
+  { title: "Xây dựng – Xây lắp", text: "Theo dõi chi phí, giá thành theo công trình, hạng mục và tiến độ thực hiện.", Icon: Building2 },
+  { title: "Sản xuất", text: "Quản lý nguyên vật liệu, sản xuất, tính giá thành theo phương pháp phù hợp với doanh nghiệp.", Icon: Factory },
+  { title: "Kế toán dịch vụ", text: "Phù hợp với đơn vị cung cấp dịch vụ kế toán, quản lý nhiều doanh nghiệp trên cùng hệ thống.", Icon: LaptopMinimal },
+];
+
+export const onboardingSteps = [
+  { title: "Trao đổi nhu cầu", text: "Tìm hiểu đặc thù hoạt động, quy mô và các nghiệp vụ cần triển khai.", Icon: Headset },
+  { title: "Thiết lập và hướng dẫn", text: "Cấu hình hệ thống, hướng dẫn sử dụng phù hợp với từng bộ phận.", Icon: Settings },
+  { title: "Hỗ trợ trong quá trình sử dụng", text: "Giải đáp vướng mắc, tư vấn nghiệp vụ khi phát sinh.", Icon: UserRound },
+];
+
+export const dataControls = [
+  { title: "Phân quyền theo người dùng", text: "Thiết lập quyền truy cập theo từng người dùng, bộ phận và chức năng.", Icon: UserCog },
+  { title: "Quản lý quyền truy cập", text: "Kiểm soát dữ liệu theo đơn vị, kho, chứng từ và từng phân hệ.", Icon: Lock },
+  { title: "Trao đổi chính sách sao lưu khi triển khai", text: "Tư vấn và trao đổi phương án sao lưu dữ liệu phù hợp với hạ tầng và quy định của doanh nghiệp.", Icon: HardDrive },
+];
+
+export const accountingFaqs = [
+  {
+    q: "MaxV Accounting có cần cài đặt không?",
+    a: "Không. Phần mềm chạy trên trình duyệt web, chỉ cần kết nối Internet là có thể làm việc ở văn phòng, tại nhà hoặc khi đi công tác.",
+  },
+  {
+    q: "Phần mềm lấy hóa đơn từ cơ quan thuế như thế nào?",
+    a: "Sau khi thiết lập kết nối với cổng hóa đơn điện tử của cơ quan thuế, bạn chọn kỳ và loại hóa đơn để lấy hóa đơn mua vào, bán ra về hệ thống.",
+  },
+  {
+    q: "Nhiều người có thể cùng làm việc trên một dữ liệu không?",
+    a: "Có. Dữ liệu được lưu tập trung và phân quyền theo vai trò, đơn vị, chức năng cho từng người dùng.",
+  },
+  {
+    q: "Các phân hệ đã sẵn sàng chưa?",
+    a: "MaxV Accounting đang được hoàn thiện và ra mắt dần. Liên hệ MaxV để biết các nghiệp vụ đã sẵn sàng cho doanh nghiệp của bạn.",
+  },
 ];
 
 type Testimonial = {
@@ -114,54 +192,15 @@ export const accountingTestimonials: Testimonial[] = [
   },
 ];
 
-export const accountingModules = [
-  {
-    id: "he-thong",
-    title: "Hệ thống",
-    description: "Thiết lập và kiểm soát số liệu kế toán.",
-    items: ["Năm tài chính, thông tin công ty", "Khóa số liệu", "Phân quyền theo chứng từ"],
-    status: "Sắp ra mắt",
-  },
-  {
-    id: "tong-hop",
-    title: "Tổng hợp",
-    description: "Hạch toán tổng hợp và hệ thống tài khoản.",
-    items: ["Phiếu kế toán", "Bút toán kết chuyển, phân bổ tự động", "Danh mục tài khoản, tiền tệ, phòng ban"],
-    status: "Đang hoàn thiện",
-  },
-  {
-    id: "tien",
-    title: "Tiền",
-    description: "Thu chi tiền mặt và ngân hàng.",
-    items: ["Phiếu thu, phiếu chi", "Giấy báo có, giấy báo nợ", "Tỷ giá ghi sổ, khế ước"],
-    status: "Sắp ra mắt",
-  },
-  {
-    id: "ban-hang",
-    title: "Bán hàng",
-    description: "Từ hóa đơn bán hàng đến công nợ khách hàng.",
-    items: ["Hóa đơn bán hàng, hóa đơn dịch vụ", "Phân bổ tiền thu, bù trừ công nợ", "Danh mục khách hàng, hợp đồng"],
-    status: "Đang hoàn thiện",
-  },
-  {
-    id: "mua-hang",
-    title: "Mua hàng",
-    description: "Mua hàng trong nước, nhập khẩu và công nợ nhà cung cấp.",
-    items: ["Hóa đơn mua hàng trong nước, nhập khẩu", "Phiếu xuất trả lại nhà cung cấp", "Phân bổ tiền trả, bù trừ công nợ"],
-    status: "Sắp ra mắt",
-  },
-  {
-    id: "ton-kho",
-    title: "Tồn kho",
-    description: "Nhập xuất kho và tính giá tồn kho.",
-    items: ["Phiếu nhập kho, xuất kho, điều chuyển", "Tính giá trung bình, nhập trước xuất trước", "Danh mục hàng hóa, kho, đơn vị tính"],
-    status: "Đang hoàn thiện",
-  },
-  {
-    id: "gia-thanh",
-    title: "Giá thành",
-    description: "Tính giá thành sản phẩm cho doanh nghiệp sản xuất.",
-    items: ["Định mức nguyên vật liệu", "Lệnh sản xuất", "Phân bổ chi phí, tính giá thành"],
-    status: "Sắp ra mắt",
-  },
-];
+// Display price from the design; confirm before publishing.
+export const accountingPricing = {
+  title: "Gói phần mềm phù hợp với doanh nghiệp",
+  description: "Linh hoạt theo quy mô doanh nghiệp, chi phí tối ưu.",
+  features: ["Đầy đủ các phân hệ nghiệp vụ", "Hỗ trợ triển khai và hướng dẫn sử dụng"],
+  extraDataset: "800.000đ/năm",
+  plans: [
+    { name: "MV01", users: "02", price: "1.650.000", scale: "nhỏ" },
+    { name: "MV02", users: "05", price: "2.500.000", scale: "vừa" },
+    { name: "MV03", users: "10", price: "3.000.000", scale: "lớn" },
+  ],
+};

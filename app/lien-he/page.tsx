@@ -28,6 +28,7 @@ export const metadata: Metadata = {
   title: "Liên hệ",
   description: "Trao đổi nhu cầu, nhận tư vấn hoặc kết nối với đội ngũ hỗ trợ MaxV.",
   alternates: { canonical: "/lien-he" },
+  robots: { index: true, follow: true },
 };
 
 const topics = [

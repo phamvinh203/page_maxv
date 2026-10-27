@@ -7,9 +7,12 @@ export type Customer = {
 
 // logo accepts /images/customers/brand.svg or an https:// image URL; href is the brand website.
 export const customers: Customer[] = [
-  { name: "VNPT", logo: "", href: "", className: "text-[#008bcf] italic" },
-  { name: "THACO", logo: "", href: "", className: "text-[#12447c] tracking-tight" },
-  { name: "TNG", logo: "", href: "", className: "text-[#d42045] italic" },
-  { name: "HÒA PHÁT", logo: "", href: "", className: "text-[#075a88] text-base" },
-  { name: "GEMALINK", logo: "", href: "", className: "text-[#113c65] text-base" },
+  { name: "TanKeToan", logo: "/images/customers/tan_ke_toan_logo.webp", href: "https://tanketoan.vn/" },
+  { name: "Office360", logo: "/images/customers/office360_logo.webp", href: "https://office360.vn/" },
+  { name: "Mitasp", logo: "/images/customers/mitasp_logo.webp", href: "https://mitasp.com/" },
+  { name: "Bkav", logo: "/images/customers/bkav_logo.svg", href: "https://bkav.com/" },
+  { name: "AzTax", logo: "/images/customers/tax_solution_logo.webp", href: "https://aztax.vn/" },
+  { name: "PwC", logo: "/images/customers/pwc_logo.webp", href: "https://www.pwc.com/vn/vn.html" },
+  { name: "J&T Express", logo: "/images/customers/J&T_Express_logo.svg", href: "https://jtexpress.vn/" },
+  { name: "Hoanghamobile", logo: "/images/customers/hoanghamobile_logo.webp", href: "https://hoanghamobile.com/" },
 ];

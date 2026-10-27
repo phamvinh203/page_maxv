@@ -7,9 +7,8 @@ import { PlaceholderPage } from "@/app/_components/ui/placeholder-page";
 const titles = new Map(
   Object.entries({
     "bang-gia/tu-van-goi-phu-hop": "Tư vấn gói phù hợp",
-    "dang-nhap": "Đăng nhập",
-    "dung-thu": "Dùng thử miễn phí",
     "tuyen-dung": "Tuyển dụng",
+    "chinh-sach-bao-mat": "Chính sách bảo mật",
     "giai-phap": "Giải pháp",
     "giai-phap/ho-kinh-doanh": "Hộ kinh doanh",
     "giai-phap/ke-toan-dich-vu": "Kế toán dịch vụ",
