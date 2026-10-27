@@ -5,7 +5,7 @@ import { FeatureGrid } from "@/app/_components/sections/feature-grid";
 import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
-import { hddtFeatures, hddtSteps, maxvHddt } from "@/app/_data/maxv-hddt";
+import { hddtFeatures, hddtSteps, maxvHddt } from "@/app/san-pham/maxv-hddt/data";
 
 export const metadata: Metadata = {
   title: "MaxV HĐĐT – Đồng bộ và quản lý hóa đơn điện tử",

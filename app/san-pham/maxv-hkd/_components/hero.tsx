@@ -4,7 +4,7 @@ import { ArrowDown, BookOpen, FileText, ThumbsUp } from "lucide-react";
 import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
-import { hkdBreadcrumbs } from "@/app/_data/maxv-hkd";
+import { hkdBreadcrumbs } from "@/app/san-pham/maxv-hkd/data";
 
 const benefits = [
   { icon: ThumbsUp, title: "Dễ sử dụng", description: "Giao diện thân thiện, dễ làm quen" },

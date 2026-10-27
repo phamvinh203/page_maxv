@@ -5,7 +5,7 @@ import { ProductCtaCard } from "@/app/san-pham/_components/product-cta-card";
 import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
-import { hoaDonDienTu, hoaDonTopics } from "@/app/_data/hoa-don-dien-tu";
+import { hoaDonDienTu, hoaDonTopics } from "@/app/san-pham/hoa-don-dien-tu/data";
 
 export const metadata: Metadata = {
   title: "Hóa đơn điện tử – Quản lý hóa đơn mua vào, bán ra",

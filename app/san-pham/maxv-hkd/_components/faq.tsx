@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { Heading } from "./heading";
-import { hkdFaqs } from "@/app/_data/maxv-hkd";
+import { hkdFaqs } from "@/app/san-pham/maxv-hkd/data";
 import { Container } from "@/app/_components/ui/container";
 
 export function Faq() {

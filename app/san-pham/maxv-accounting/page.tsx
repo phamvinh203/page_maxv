@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { PlanAccounting } from "@/app/_components/sections/plan-accounting";
+import { PlanAccounting } from "./_components/plan-accounting";
 import { Badge } from "@/app/_components/ui/badge";
 import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { Button } from "@/app/_components/ui/button";
@@ -27,7 +27,7 @@ import {
   onboardingSteps,
   postingSteps,
   reportHighlights,
-} from "@/app/_data/maxv-accounting";
+} from "@/app/san-pham/maxv-accounting/data";
 import { breadcrumbJsonLd, faqJsonLd, softwareJsonLd } from "@/app/_lib/seo";
 import heroImage from "@/public/images/products/product_1.webp";
 import onlineImage from "@/public/images/products/product_2.webp";

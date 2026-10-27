@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { Container } from "@/app/_components/ui/container";
 import { JsonLd } from "@/app/_components/ui/json-ld";
-import { hkdBreadcrumbs, hkdFaqs, maxvHkd } from "@/app/_data/maxv-hkd";
+import { hkdBreadcrumbs, hkdFaqs, maxvHkd } from "@/app/san-pham/maxv-hkd/data";
 import { breadcrumbJsonLd, faqJsonLd, softwareJsonLd } from "@/app/_lib/seo";
 import { Hero } from "./_components/hero";
 import { SectionNav } from "./_components/section-nav";

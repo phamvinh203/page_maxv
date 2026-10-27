@@ -5,7 +5,7 @@ import { ProductCtaCard } from "@/app/san-pham/_components/product-cta-card";
 import { ProductHero } from "@/app/san-pham/_components/product-hero";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
-import { chuKySo, chuKySoTopics } from "@/app/_data/chu-ky-so";
+import { chuKySo, chuKySoTopics } from "@/app/san-pham/chu-ky-so/data";
 
 // shortcut: inherits noindex from the root layout until the digital signature offer (provider, packages) is confirmed; then set robots index: true and add the page to the sitemap.
 export const metadata: Metadata = {

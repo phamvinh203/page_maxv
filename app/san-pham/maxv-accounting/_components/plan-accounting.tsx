@@ -4,7 +4,7 @@ import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Container } from "@/app/_components/ui/container";
 import { SectionHeading } from "@/app/_components/ui/section-heading";
-import { accountingPricing } from "@/app/_data/maxv-accounting";
+import { accountingPricing } from "../data";
 import { pricing } from "@/app/_data/pricing";
 
 const [baseFeature, supportFeature] = accountingPricing.features;
