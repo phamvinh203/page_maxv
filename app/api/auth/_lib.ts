@@ -1,19 +1,9 @@
 import type { NextResponse } from "next/server";
 
-// Required, no hardcoded fallback: a missing env must fail loudly here,
-// not silently route dev traffic at the production API.
-function env(name: string): string {
-  const value = process.env[name];
-  if (!value) throw new Error(`Thiếu biến môi trường ${name} — khai báo trong .env(.local).`);
-  return value;
-}
+import { env } from "@/app/_lib/env";
 
 export const API_BASE = env("API_BASE_URL");
 export const APP_URL = env("APP_URL");
-
-// Cookie scope derives from APP_URL so deploying to any domain is env-only:
-// "https://hddt.maxv.vn/..." → shared cookie ".maxv.vn" (hddt + api cùng đọc),
-// Secure; single-label hosts (localhost) stay host-only, insecure.
 const APP_ORIGIN = new URL(APP_URL);
 const COOKIE_DOMAIN = APP_ORIGIN.hostname.includes(".")
   ? `.${APP_ORIGIN.hostname.split(".").slice(-2).join(".")}`
