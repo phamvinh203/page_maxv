@@ -4,28 +4,39 @@
 
 **Goal:** Vận hành nội dung website MaxV, xuất bản tin tức, tiếp nhận yêu cầu khách hàng và quản lý thông tin giới thiệu bằng admin có xác thực và dữ liệu lưu bền vững.
 
-**Architecture:** Đề xuất admin cùng ứng dụng Next.js, API cùng origin tại `/api/v1`, database PostgreSQL và object storage cho ảnh. Server Components gọi service phía server trực tiếp; trình duyệt gọi Route Handlers; không gọi vòng HTTP vào chính ứng dụng. Website sản phẩm kế toán và hệ thống tài khoản sử dụng phần mềm là hệ thống bên ngoài, chỉ tích hợp khi có hợp đồng API thực tế.
+**Architecture:** 3 phần tách repo/triển khai, chi tiết ở mục 3:
 
-**Tech Stack:** Next.js 16.4.0, React 19.3.0, TypeScript, Tailwind và UI components hiện có; PostgreSQL/object storage là hạ tầng đề xuất mới. Chưa chọn thư viện auth, database client hay nhà cung cấp storage vì cần đối chiếu hạ tầng đang vận hành trước khi cài dependency.
+| Phần | Công nghệ | Trách nhiệm |
+|---|---|---|
+| **API** (`maxv-api`) | Node.js + TypeScript, PostgreSQL, ảnh lưu trên ổ đĩa server | Sở hữu toàn bộ dữ liệu và nghiệp vụ: auth admin, phân quyền, bài viết, media, lead, giá cả. Expose `/api/v1/admin/*` cho dashboard và `/api/v1/public/*` cho website |
+| **Dashboard admin** (`maxv-admin`) | React SPA (TypeScript) | Chỉ là giao diện quản trị, gọi `/api/v1/admin/*`; không có DB, không chứa nghiệp vụ |
+| **Website** (repo này, `page_maxv`) | Next.js 16.4.3 | Chỉ gọi `/api/v1/public/*`: đọc bài/giá để render, gửi lead từ form. Không có admin, không có DB, không có Route Handler nghiệp vụ |
+
+Website sản phẩm và hệ thống tài khoản khách hàng (`be_maxv`) là hệ thống bên ngoài; đăng ký/đăng nhập khách hàng đã gọi thẳng `be_maxv`.
+
+**Tech Stack:** API: Node.js LTS + TypeScript, PostgreSQL, chạy trên Windows Server 2019 + IIS, ảnh trên ổ đĩa server do IIS phục vụ (chốt 27/10/2026, mục 3.5); ORM/migration: Prisma 6 (chốt 27/10/2026, schema ở `docs/TASK/prisma/`); framework HTTP và auth/session library chốt ở Task 0. Admin: React + TypeScript (đề xuất Vite + React Router), Tailwind + radix-ui giống website để dùng lại kiểu UI. Website: Next.js 16.4.3, React 19.3.0 như hiện tại, không thêm dependency backend.
 
 **Spec:** Yêu cầu của anh trong phiên làm việc ngày 21/10/2026 và phạm vi chức năng, hợp đồng API trong các mục 1–12 của tài liệu này. Tài liệu kết hợp đặc tả và checklist triển khai để frontend/backend dùng chung một hợp đồng.
 
 **Revision 21/10/2026 (sau review đồng thời bởi backend/security/BA/QA):** sửa lệch hiện trạng (`/dang-ky` thay vì `/dung-thu`), thêm bảng `modules`/`consent_records`, mục security headers + CORS + health check, siết lockout admin và anti-spam lead, chính sách cookie/CSRF chặt hơn, index search, quy ước migration/seed, preview bản chưa lưu, hiệu chỉnh lead có kiểm soát, chốt test stack ở Task 0 và bổ sung test case; các câu hỏi mở gom ở mục 12.4.
 
+**Revision 27/10/2026 (chốt phạm vi admin với anh):** G1 gồm 4 nhóm — (1) đăng nhập admin + phân quyền nhân viên theo vai trò/quyền (mục 6.6), (2) đăng bài + SEO, (3) quản lý giá cả theo từng phần mềm MaxV Accounting, MaxV HĐĐT, MaxV HKD, Chữ ký số, Hóa đơn điện tử, `/bang-gia` là trang tổng hợp giá các phần mềm theo thứ tự (mục 6.7, thay `marketing_plans`/`modules` cũ), (4) lead từ form liên hệ và form tư vấn MaxV HKD. Cập nhật hiện trạng: `/dang-ky`, `/dang-nhap` đã gọi thẳng backend `be_maxv` (`hddt.maxv.vn/api/v1`) nên không còn là lead `trial` và nằm ngoài admin này. Kiến trúc chốt: API Node.js riêng, dashboard admin React riêng, website Next.js này chỉ gọi API public; task tách ra thư mục `docs/TASK/`, mỗi file một chức năng theo chuỗi API → UI admin → nối website. API là service mới; giá chỉ nhập ở admin, không còn trong code website; `/bang-gia` chỉ gom gói của các trang sản phẩm.
+
 ## Global Constraints
 
 - Chưa thay đổi code sản phẩm, cài dependency, tạo database hay triển khai dịch vụ trong bước lập kế hoạch.
-- Đọc hướng dẫn Next.js tại `node_modules/next/dist/docs/` trước khi triển khai; project bật `cacheComponents` và `partialPrefetching`.
-- Kiểm tra phiên và quyền ở mọi API/service quản trị; layout và ẩn nút không thay thế kiểm tra quyền.
+- Website: đọc hướng dẫn Next.js tại `node_modules/next/dist/docs/` trước khi sửa; project bật `cacheComponents` và `partialPrefetching`. Website không import code/DB của API, chỉ gọi HTTP `/api/v1/public/*`.
+- API là nơi duy nhất kiểm tra phiên và quyền; dashboard ẩn menu/nút chỉ để tiện dùng, không thay thế kiểm tra quyền ở API.
+- Hợp đồng chung giữa 3 phần là OpenAPI `maxv-api/openapi.yaml`; dashboard và website sinh type từ file này, không tự định nghĩa lại DTO bằng tay.
 - Không trả mật khẩu, session token, reset token, storage secret hoặc dữ liệu lead trong API công khai/log.
 - Không dùng file TypeScript, JSON trong repo hoặc localStorage làm nơi lưu dữ liệu vận hành.
 - Không đổi URL công khai hiện có khi di chuyển layout hoặc nguồn dữ liệu.
-- Giai đoạn 1 chỉ có tài khoản `admin`; phân quyền `editor`/`sales` thuộc giai đoạn mở rộng được mô tả riêng.
+- Phân quyền có từ G1: quyền cố định trong code, admin tạo vai trò bằng cách chọn quyền và gán một vai trò cho mỗi nhân viên (mục 6.6). Mọi API kiểm tra quyền cụ thể, không kiểm tra theo tên vai trò.
 - Mốc thời gian lưu UTC, hiển thị giờ Việt Nam `Asia/Ho_Chi_Minh`; ngày bài viết cũ `YYYY-MM-DD` giữ nguyên ý nghĩa ngày khi migrate.
 - Không commit `.env.local`; tài liệu chỉ mô tả tên biến môi trường, không ghi giá trị bí mật.
-- Security headers bắt buộc mọi response: HSTS ở production, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY` cho admin/API, CSP khởi điểm `default-src 'self'; object-src 'none'; base-uri 'self'` điều chỉnh img-src theo media domain; triển khai qua `headers()` trong `next.config.ts` và kiểm tra ở production build.
-- CORS mặc định từ chối: `/api/v1` không trả `Access-Control-Allow-Origin`; OPTIONS cross-origin trả 404; cấm mở ACAO kèm credentials; nếu bắt buộc mở sau này phải kèm `Vary: Origin`.
-- Ứng dụng validate biến môi trường bắt buộc khi khởi động (fail-fast, liệt kê biến thiếu); thiếu `NEXT_PUBLIC_SITE_URL` hiện làm lỗi runtime toàn site, không chỉ SEO.
+- Security headers bắt buộc mọi response: HSTS ở production, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY` cho admin/API, CSP khởi điểm `default-src 'self'; object-src 'none'; base-uri 'self'` điều chỉnh img-src theo media domain; API đặt header bằng middleware, dashboard qua cấu hình web server phục vụ file tĩnh, website qua `headers()` trong `next.config.ts`; kiểm tra ở production build.
+- CORS theo mục 3.3: `/api/v1/admin/*` không mở CORS (dashboard cùng origin qua reverse proxy); `/api/v1/public/leads` chỉ cho origin website, không credentials, kèm `Vary: Origin`; các GET public không cần CORS vì website gọi từ server.
+- API và website validate biến môi trường bắt buộc khi khởi động (fail-fast, liệt kê biến thiếu); thiếu `NEXT_PUBLIC_SITE_URL` hiện làm lỗi runtime toàn site, không chỉ SEO.
 
 ## Review Focus
 
@@ -44,10 +55,14 @@
 | `app/tin-tuc/[category]/[id]/page.tsx` | Tìm bài trong mảng; metadata và JSON-LD dựa vào bài | Query chung cho trang/SEO; bản nháp không công khai |
 | `app/tin-tuc/_components/news-article.tsx` | Đọc lại mảng để lấy bài liên quan | Nhận bài và bài liên quan từ service |
 | `app/lien-he/page.tsx` | Form hiển thị, submit disabled | Lưu yêu cầu tư vấn/hỗ trợ/hợp tác |
-| `app/dang-ky/page.tsx` (URL `/dang-ky`) | Form đăng ký chưa nối backend; có trường mật khẩu, chưa có company/taxCode/chọn module | Giai đoạn đầu tiếp nhận yêu cầu dùng thử, chưa cấp tài khoản sản phẩm; giữ nguyên URL `/dang-ky` |
-| `app/dang-nhap/page.tsx`, `app/quen-mat-khau/page.tsx` | Giao diện tài khoản khách hàng, chưa có auth | Giữ tách biệt với đăng nhập quản trị |
+| `app/san-pham/maxv-hkd/_components/consultation-form.tsx` | Submit mở `mailto:`, dữ liệu không tới server | Gửi `POST /public/leads` như form liên hệ, admin thấy trong danh sách lead |
+| `app/(auth)/dang-ky`, `app/(auth)/dang-nhap` | Đã nối `be_maxv` qua `app/(auth)/_components/auth-form.tsx` (`/auth/register`, `/auth/login`) | Ngoài phạm vi admin; tài khoản khách hàng thuộc `be_maxv` |
+| `app/(auth)/quen-mat-khau/page.tsx` | Form hiển thị, submit disabled | Nối API reset mật khẩu của `be_maxv` khi backend có; không thuộc admin |
 | `app/_data/customers.ts`, `customer-stories.ts` | Logo trong code, câu chuyện có nội dung mẫu | Quản lý nội dung đã được duyệt; không tự xuất bản mẫu |
-| `app/_data/pricing.ts` | Một số giá chưa xác nhận | Quản lý giá hiển thị; không mặc định đây là giá thanh toán sản phẩm |
+| `app/_data/pricing.ts` | 4 gói dạng module (Dùng thử/Cơ bản/Chuyên nghiệp/Toàn diện), 3 gói `price: null`; giá "từ 138.000đ/tháng" dùng ở trang chủ | Bỏ 4 gói và giá cứng; `/bang-gia` chỉ gom gói của 5 phần mềm từ API (mục 6.7) |
+| `app/san-pham/maxv-accounting/data.ts` | `accountingPricing`: MV01–MV03 (users, scale, price chuỗi) và `extraDataset` | Xóa giá khỏi code; admin nhập gói của `maxv-accounting` |
+| `app/san-pham/maxv-hkd/_components/pricing.tsx` | Giá 01/02/03 năm viết thẳng trong JSX | Xóa giá khỏi JSX; admin nhập gói của `maxv-hkd` |
+| `app/san-pham/maxv-hddt`, `chu-ky-so`, `hoa-don-dien-tu` | Chưa có giá | Chỉ hiện mục giá khi admin tạo gói visible |
 | `app/_lib/contact.ts`, `seo.ts` | Thông tin liên hệ/SEO trong code | Cấu hình nội dung; domain triển khai vẫn ở biến môi trường |
 | `app/layout.tsx` | Header/footer/widget bao toàn ứng dụng | Layout website riêng, layout admin riêng |
 | `app/sitemap.ts`, `app/robots.ts` | Sitemap tĩnh; root mặc định noindex | Sitemap lấy nội dung published; admin luôn noindex |
@@ -65,19 +80,20 @@ Thành công nghĩa là: người vận hành đăng nhập, đăng bài không 
 - Bài viết: danh sách, bộ lọc, tạo/sửa, nháp/xuất bản/gỡ xuất bản/lưu trữ, preview.
 - Giữ cố định 5 chuyên mục hiện có; chỉ API đọc danh mục, chưa làm CRUD chuyên mục.
 - Ảnh: upload, chọn, alt, danh sách, xóa ảnh chưa dùng.
-- Lead từ liên hệ và yêu cầu dùng thử; ghi chú, trạng thái, tìm kiếm, chống gửi trùng.
+- Lead từ form liên hệ `/lien-he` và form tư vấn MaxV HKD; ghi chú, trạng thái, giao người xử lý, tìm kiếm, chống gửi trùng.
 - SEO bài viết và sitemap tự cập nhật; audit log cơ bản.
-- Một quyền admin, tài khoản đầu tiên tạo qua lệnh vận hành an toàn, không có đăng ký admin công khai.
+- Phân quyền: quản lý nhân viên (mời, đổi vai trò, khóa/mở khóa), vai trò tạo từ danh sách quyền cố định, 3 vai trò mẫu (mục 6.6).
+- Giá cả: admin chọn phần mềm, tạo/sửa/ẩn các gói giá; trang sản phẩm và `/bang-gia` cùng đọc một nguồn (mục 6.7).
+- Tài khoản Quản trị viên đầu tiên tạo qua lệnh vận hành an toàn, không có đăng ký admin công khai.
 - Khuyến nghị tạo 2 tài khoản admin từ G1 (một tài khoản dự phòng, mật khẩu giữ trong kho kín), kèm lệnh vận hành break-glass đặt lại mật khẩu admin khi mất quyền truy cập email.
-- Đánh dấu lead trùng tiềm năng (so khớp phone/email 30 ngày gần nhất) và lead `new` quá hạn chưa xử lý để nổi bật trong UI; cân nhắc email thông báo lead mới (đơn giản, không automation) — chốt ở mục 12.4 trước Task 5.
+- Đánh dấu lead trùng tiềm năng (so khớp phone/email 30 ngày gần nhất) và lead `new` quá hạn chưa xử lý để nổi bật trong UI; cân nhắc email thông báo lead mới (đơn giản, không automation) — chốt ở mục 12.4 trước Task 10.
 
 ### G2 — Nhân viên tự cập nhật nội dung website
 
 - Logo khách hàng, câu chuyện khách hàng và lời chứng thực.
 - Nội dung trang chủ, giới thiệu, 4 trang sản phẩm, bảng giá, chính sách bảo mật.
 - Cấu hình liên hệ, kênh mạng xã hội, SEO mặc định.
-- Gói giá/module phục vụ hiển thị marketing.
-- Dashboard số liệu nội bộ, xuất lead, quản lý tài khoản/role, audit log UI.
+- Dashboard số liệu nội bộ, xuất lead, audit log UI.
 
 ### G3 — Chỉ triển khai khi có nhu cầu và hệ thống nguồn
 
@@ -89,34 +105,103 @@ Thành công nghĩa là: người vận hành đăng nhập, đăng bài không 
 
 ## 3. Quyết định kiến trúc
 
-### 3.1 Các phương án
+### 3.1 Ba phần và ranh giới
 
-| Phương án | Ưu điểm | Chi phí/ràng buộc |
-|---|---|---|
-| Admin + API trong Next.js (đề xuất cho repo này) | Cùng origin, cùng kiểu dữ liệu/service, ít thành phần triển khai | Cần bổ sung database/auth/storage và vận hành backup |
-| API trong backend MaxV đang có | Có thể tận dụng tài khoản, DB, vận hành sẵn | Chưa được xem backend; cần xác định quyền sở hữu dữ liệu và cơ chế auth trước |
-| Headless CMS | Có sẵn giao diện biên tập/quản lý ảnh | Lead và tích hợp sản phẩm vẫn cần xử lý; phụ thuộc schema và cơ chế auth CMS |
+| | API `maxv-api` (Node.js) | Dashboard `maxv-admin` (React) | Website `page_maxv` (Next.js) |
+|---|---|---|---|
+| Gọi tới | PostgreSQL, thư mục ảnh trên ổ đĩa, email provider | Chỉ `/api/v1/admin/*` | Chỉ `/api/v1/public/*` |
+| Dữ liệu | Sở hữu duy nhất | Không lưu, chỉ state trên màn hình | Không lưu; `app/_data` chỉ còn nhãn/UI tĩnh |
+| Auth | Session admin, quyền, CSRF | Gửi cookie + header CSRF, xử lý 401/403 | Không có auth admin |
+| Triển khai | Windows Service Node.js sau IIS (URL Rewrite + ARR) | File tĩnh trên IIS | Như hiện tại trên cùng server |
 
-Danh sách REST dưới đây là hợp đồng logic. Nếu backend MaxV sở hữu các resource này thì chuyển phần xử lý sang backend đó; Next.js chỉ làm frontend/BFF khi cần, không tạo hai database cùng sở hữu một dữ liệu.
+Danh sách REST ở mục 4–7 là hợp đồng của `maxv-api`, một service Node.js mới (chốt 27/10/2026), có database riêng. `be_maxv` giữ tài khoản khách hàng; `maxv-api` giữ dữ liệu website và tài khoản admin; không bên nào ghi vào database của bên kia.
 
 ### 3.2 Luồng xử lý
 
-`Admin UI → /api/v1/admin/* → xác thực + quyền + validation → service → DB/storage`
+`Dashboard React → /api/v1/admin/* → xác thực + quyền + validation → service → DB/storage`
 
-`Public UI → /api/v1/public/* → validation + rate limit → service → DB`
+`Website (server, lúc render) → GET /api/v1/public/* → chỉ đọc published/visible → DB → website render/metadata/sitemap`
 
-`Public Server Component → service chỉ đọc published → DB → render/metadata/sitemap`
+`Website (trình duyệt, form) → POST /api/v1/public/leads → validation + rate limit → DB`
 
-Mutation nội dung thực hiện: xác thực → kiểm tra dữ liệu/version → transaction lưu + audit → commit → invalidation cache. Lỗi cache không rollback dữ liệu đã commit; hệ thống phải có retry vận hành và cache hết hạn hữu hạn.
+Mutation nội dung thực hiện ở API: xác thực → kiểm tra dữ liệu/version → transaction lưu + audit → commit. Website đọc request-time (mục 10) nên thay đổi hiện ở request tiếp theo; nếu sau này thêm cache thì API gọi webhook revalidate của website sau commit, lỗi webhook không rollback dữ liệu.
 
-### 3.3 Layout
+### 3.3 Domain, cookie và CORS
 
-- Root layout chỉ giữ HTML/body/font/global metadata và CSS.
-- Di chuyển các page công khai và catch-all vào `app/(site)/`; `(site)/layout.tsx` giữ Header/Footer/ContactWidget và main/skip link hiện có.
-- `app/admin/login`, `forgot-password`, `reset-password` nằm ngoài layout bảo vệ.
-- `app/admin/(protected)/layout.tsx` bọc nội dung cần session bằng Suspense theo tài liệu Next.js cài tại máy; không render dữ liệu riêng tư trong shell tĩnh.
-- `app/_components`, `app/_data`, `app/_lib` vẫn giữ nguyên để giảm thay đổi import.
-- `app/api`, `app/robots.ts`, `app/sitemap.ts`, ảnh metadata có thể giữ root. Kiểm tra lại canonical và đường dẫn tương đối sau khi di chuyển.
+- Đề xuất: `admin.maxv.vn` phục vụ file tĩnh của dashboard, IIS (URL Rewrite + ARR) chuyển `admin.maxv.vn/api/v1/admin/*` sang `maxv-api` (mục 3.5). Dashboard và API admin cùng origin nên không cần CORS, cookie `__Host-maxv_session` host-only, SameSite=Lax.
+- `api.maxv.vn` (hoặc proxy dưới domain website) cho `/api/v1/public/*`. Website gọi GET từ server bằng biến `MAXV_API_URL`; form lead gọi từ trình duyệt bằng `NEXT_PUBLIC_MAXV_API_URL`, nên `POST /api/v1/public/leads` mở CORS chỉ cho origin website, không credentials.
+- `/api/v1/admin/*` không bao giờ trả `Access-Control-Allow-Origin`. Nếu buộc phải tách domain dashboard và API, chỉ mở ACAO đúng origin dashboard + `Access-Control-Allow-Credentials: true` + `Vary: Origin`, và cookie đổi sang `Domain` dùng chung — ghi lại quyết định ở Task 0.
+
+### 3.4 Website sau khi nối API
+
+- Không di chuyển layout, không thêm `app/admin`, không thêm `app/api` nghiệp vụ. URL công khai giữ nguyên.
+- Thêm `app/_lib/api.ts`: hàm fetch server-side tới `MAXV_API_URL`, timeout, map lỗi 404 → `notFound()`, lỗi 5xx → trang lỗi, type sinh từ OpenAPI.
+- `app/_data/news.ts`, `pricing.ts`, `accountingPricing` thu gọn chỉ còn nhãn/UI tĩnh; dữ liệu bài và giá lấy từ API.
+- Ảnh từ media domain cần thêm `images.remotePatterns` đúng domain/path storage trong `next.config.ts`.
+
+### 3.5 Triển khai trên Windows Server 2019 + IIS
+
+Server hiện có (chốt 27/10/2026): Windows Server 2019 Standard 1809, 8 vCPU Xeon Platinum 8260, RAM 32 GB. Cả 3 phần và PostgreSQL chạy chung server này; tài nguyên dư cho tải website. Windows Server 2019 còn bản vá bảo mật tới hết hỗ trợ mở rộng (tháng 1/2029) — lên kế hoạch nâng cấp OS trước mốc đó.
+
+| Thành phần | Cách chạy | Nghe ở |
+|---|---|---|
+| PostgreSQL | Windows service, data dir trên ổ D:, `listen_addresses = 'localhost'` | `127.0.0.1:5432` |
+| `maxv-api` | Windows Service bằng WinSW (`node dist/server.js`), chạy bằng local user `svc-maxv-api` (không dùng LocalSystem), tự khởi động lại khi lỗi, log ra `D:\maxv-api\logs` | `127.0.0.1:4000` |
+| `maxv-admin` | File tĩnh build từ Vite, IIS site `admin.maxv.vn` | IIS 443 |
+| API public | IIS site `api.maxv.vn` chỉ chuyển `/api/v1/public/*` và `/api/v1/health` sang `127.0.0.1:4000`; `/api/v1/admin/*` trả 404 ở domain này | IIS 443 |
+| Ảnh | IIS site `media.maxv.vn`, physical path `D:\maxv-media` (`docs/TASK/thiet-ke-api-db.md` mục 4) | IIS 443 |
+| `page_maxv` | Như cách deploy hiện tại; gọi API bằng `MAXV_API_URL=http://127.0.0.1:4000` (nội bộ, không qua TLS) | — |
+
+Không dùng `iisnode` (đã ngừng phát triển). IIS cần cài thêm module **URL Rewrite** và **Application Request Routing (ARR)**, bật "Enable proxy" ở cấp server.
+
+`admin.maxv.vn` — `web.config` trong thư mục build dashboard:
+
+```xml
+<configuration>
+  <system.webServer>
+    <rewrite>
+      <rules>
+        <rule name="admin-api" stopProcessing="true">
+          <match url="^api/v1/admin/(.*)" />
+          <serverVariables>
+            <set name="HTTP_X_FORWARDED_PROTO" value="https" />
+          </serverVariables>
+          <action type="Rewrite" url="http://127.0.0.1:4000/api/v1/admin/{R:1}" />
+        </rule>
+        <rule name="spa" stopProcessing="true">
+          <match url=".*" />
+          <conditions logicalGrouping="MatchAll">
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="/index.html" />
+        </rule>
+      </rules>
+    </rewrite>
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="6291456" />  <!-- 6 MB, khớp giới hạn ảnh 5 MiB -->
+      </requestFiltering>
+    </security>
+  </system.webServer>
+</configuration>
+```
+
+Cấu hình bắt buộc khi IIS đứng trước API:
+
+- Cho phép server variable `HTTP_X_FORWARDED_PROTO` (IIS Manager → URL Rewrite → View Server Variables), nếu không rule báo lỗi 500.
+- ARR: bật thêm client IP vào `X-Forwarded-For` và **tắt kèm port** (`includePortInXForwardedFor = false`); mặc định ARR gửi `ip:port`, làm rate limit theo IP sai.
+- API chỉ tin `X-Forwarded-For`/`X-Forwarded-Proto` khi request đến từ `127.0.0.1` (trusted proxy = loopback). Nhờ `X-Forwarded-Proto: https`, API mới đặt được cookie `Secure`.
+- API so `Origin` với `ADMIN_ORIGIN`, không dựa vào `Host` (ARR có thể đổi Host thành `127.0.0.1:4000`).
+- Chứng chỉ TLS gắn ở IIS cho cả 3 domain; HSTS bật ở IIS.
+
+Tường lửa và bảo mật server:
+
+- Ảnh chụp cấu hình server cho thấy **Firewall & Network Protection đang báo lỗi (tường lửa có thể đang tắt)**. Bật Windows Defender Firewall cho mọi profile trước khi đưa API/DB lên.
+- Inbound chỉ mở 80/443. RDP 3389 chỉ cho IP quản trị hoặc qua VPN. Không mở 4000 (API) và 5432 (PostgreSQL) ra ngoài; hai dịch vụ này cũng chỉ nghe `127.0.0.1`.
+- Bật Windows Update tự động cho bản vá bảo mật; giữ Defender bật (chỉ loại trừ thư mục ảnh như mục 4.1 file thiết kế).
+
+Deploy `maxv-api`: build trên CI → copy artifact lên server → `npm ci --omit=dev` → `npx prisma migrate deploy` → `Restart-Service maxv-api`. Prisma Client sinh trên Linux CI phải có engine Windows: `binaryTargets = ["native", "windows"]` trong `schema.prisma` (hoặc chạy `prisma generate` ngay trên server).
 
 ## 4. Quy ước API chung
 
@@ -156,23 +241,23 @@ Chi tiết/create/update trả `{ "data": { ... } }`. Delete/logout thành công
 | 401 | `UNAUTHENTICATED` | Chưa đăng nhập/phiên hết hạn |
 | 403 | `FORBIDDEN`, `CSRF_FAILED` | Không có quyền hoặc nguồn request không hợp lệ |
 | 404 | `NOT_FOUND` | Không tồn tại; cũng dùng cho bài chưa publish trong API public |
-| 409 | `VERSION_CONFLICT`, `SLUG_CONFLICT`, `MEDIA_IN_USE`, `LAST_ADMIN`, `CONSENT_VERSION_CHANGED`, `IDEMPOTENCY_PAYLOAD_MISMATCH` | Xung đột dữ liệu/nghiệp vụ |
+| 409 | `VERSION_CONFLICT`, `SLUG_CONFLICT`, `MEDIA_IN_USE`, `LAST_ADMIN`, `ROLE_IN_USE`, `SYSTEM_ROLE`, `CONSENT_VERSION_CHANGED`, `IDEMPOTENCY_PAYLOAD_MISMATCH` | Xung đột dữ liệu/nghiệp vụ |
 | 413 | `PAYLOAD_TOO_LARGE` | Vượt dung lượng |
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Content-Type/file không hỗ trợ |
 | 422 | `VALIDATION_ERROR`, `INVALID_STATE_TRANSITION` | Sai trường/trạng thái |
 | 428 | `PRECONDITION_REQUIRED` | Mutation DELETE đòi `If-Match` mà request không gửi |
 | 429 | `RATE_LIMITED` | Quá giới hạn; có `Retry-After` |
-| 500/503 | `INTERNAL_ERROR`, `SERVICE_UNAVAILABLE` | Không lộ stack/query/secret; ghi requestId để tra log |
+| 500/503 | `INTERNAL_ERROR`, `SERVICE_UNAVAILABLE`, `STORAGE_FULL` (ổ ảnh dưới ngưỡng trống) | Không lộ stack/query/secret; ghi requestId để tra log |
 
 ### 4.2 Quyền, phiên và đồng thời
 
-- Cookie session tên `__Host-maxv_session`: HttpOnly, Secure, SameSite=Lax, Path=/ (prefix `__Host-` buộc Secure và chặn cookie từ subdomain); session server-side có thể thu hồi. Không lưu token vào localStorage.
+- Cookie session tên `__Host-maxv_session`: HttpOnly, Secure, SameSite=Lax, Path=/ (prefix `__Host-` buộc Secure và chặn cookie từ subdomain); session server-side có thể thu hồi. Dashboard React không đọc/lưu token (cookie HttpOnly), không lưu token hay PII vào localStorage; CSRF token chỉ giữ trong bộ nhớ, lấy lại từ `GET /admin/auth/session` khi tải trang.
 - Phiên admin hết hạn sau 8 giờ, hết hạn do không hoạt động sau 30 phút; kiểm tra idle ở request đã xác thực, không cho polling tự kéo dài vô hạn.
-- Mutation dùng JSON hoặc multipart, kiểm tra Origin cùng origin; yêu cầu CSRF token gắn với session qua header `X-CSRF-Token`. Login cũng kiểm tra Origin, chỉ nhận JSON.
+- Mutation admin dùng JSON hoặc multipart, kiểm tra Origin đúng origin dashboard; yêu cầu CSRF token gắn với session qua header `X-CSRF-Token`. Login cũng kiểm tra Origin, chỉ nhận JSON.
 - `GET /admin/auth/session` trả thông tin người dùng và CSRF token; token không phải session secret, không ghi log.
 - Login luôn sinh session token mới, không tái sử dụng identifier nào từ request trước login (chống session fixation). CSRF token là random ≥128-bit gắn với session, rotate khi login và khi đổi mật khẩu, một token active mỗi session, vô hiệu khi logout.
 - Có test regression cho ngoại lệ SameSite=Lax+POST (cookie mới set trong 2 phút vẫn được gửi kèm cross-site POST top-level): Origin check phải chặn ở mọi route mutation, kể cả khi một route quên kiểm tra.
-- G1 chỉ `admin`; G2 `editor` quản lý nội dung/media, `sales` xử lý lead, `admin` toàn quyền. Preview cần quyền nội dung; sales không đọc draft.
+- Quyền kiểm tra theo permission key ở mục 6.6 (`requirePermission("posts.publish")`), đọc quyền của vai trò từ DB mỗi request để đổi quyền có hiệu lực ngay. Preview cần `posts.view`; vai trò không có quyền này không đọc được draft.
 - Record chỉnh sửa có `version` số nguyên. PATCH/PUT và hành động publish/archive/delete phải gửi version hiện đọc; update atomically `WHERE id AND version`, tăng version khi thành công.
 - JSON mutation gửi `version` trong body; DELETE gửi `If-Match: "<version>"`. Không cho version của client thay đổi timestamp/actor.
 - `Cache-Control: private, no-store` với mọi response auth/admin/preview/lead; không dùng shared cache cho session hoặc PII.
@@ -183,26 +268,30 @@ Chi tiết/create/update trả `{ "data": { ... } }`. Delete/logout thành công
 
 ## 5. Mô hình dữ liệu
 
+DDL PostgreSQL đầy đủ, ví dụ request/response và phương án lưu ảnh: [thiet-ke-api-db.md](../../TASK/thiet-ke-api-db.md). Bảng dưới là tóm tắt; khi lệch thì file đó là bản đúng.
+
 Các bảng có UUID, createdAt, updatedAt trừ bảng liên kết. Nội dung có createdBy/updatedBy/version. Foreign key và unique constraint là bắt buộc ở DB, không chỉ kiểm tra trong UI.
 
 | Bảng | Trường chính | Ràng buộc và index |
 |---|---|---|
-| `admin_users` | email, displayName, passwordHash/providerId, role, status | Email normalize lowercase unique; role admin/editor/sales; status active/disabled |
+| `admin_users` | email, displayName, passwordHash/providerId, roleId, status, lastLoginAt | Email normalize lowercase unique; roleId FK `admin_roles`; status invited/active/disabled; không xóa cứng để audit giữ tên người thao tác |
+| `admin_roles` | name, description, isSystem, version | name unique; `isSystem=true` chỉ cho "Quản trị viên" (toàn quyền, không sửa/xóa); xóa chỉ khi không còn user dùng |
+| `admin_role_permissions` | roleId, permission | Unique (roleId, permission); permission thuộc whitelist mục 6.6, CHECK hoặc validate ở service |
 | `admin_sessions` | userId, tokenHash, expiresAt, lastActivityAt | Không lưu raw token; index tokenHash, expiresAt; thu hồi khi disable/reset mật khẩu |
-| `admin_password_resets` | userId, tokenHash, expiresAt, usedAt | Token một lần, hết hạn 15 phút; không lưu raw token |
+| `admin_tokens` | userId, scope activation/password_reset, tokenHash, expiresAt, usedAt | Token một lần (activation 24h, reset 15 phút); không lưu raw token; thay bảng `admin_password_resets` |
 | `news_categories` | slug, label, description, sortOrder | Seed 5 slug hiện tại; G1/G2 không thêm/xóa/đổi slug |
 | `posts` | categoryId, slug, title, excerpt, content, coverMediaId, featured, state, publishedAt, firstPublishedAt, seoTitle, seoDescription, version | Slug unique trong category; state draft/published/archived; index state+publishedAt, categoryId+state+publishedAt, GIN pg_trgm+unaccent cho tìm kiếm title/excerpt/content |
 | `media` | storageKey, originalName, mimeType, sizeBytes, width, height, alt, status, uploadedBy | storageKey unique; status ready/deleting; URL dẫn xuất từ storageKey, không tin URL client gửi |
 | `media_usages` | mediaId, resourceType, resourceId, field | Unique theo bộ trường; update trong transaction cùng nội dung; chặn xóa ảnh đang dùng |
-| `leads` | type, topic, name, phone, email, company, taxCode, productKeys, message, sourcePath, utm, consentAt, consentVersion, status, assignedTo, version | type contact/trial; status new/contacted/qualified/closed/spam; index createdAt, status, assignedTo, pg_trgm các cột tìm kiếm (name/phone/email/company/taxCode); PII không public |
+| `leads` | type, topic, name, phone, email, company, industry, productKey, message, sourcePath, utm, consentAt, consentVersion, status, assignedTo, version | type contact (`/lien-he`)/consult (form tư vấn trang sản phẩm, hiện là MaxV HKD); status new/contacted/qualified/closed/spam; index createdAt, status, assignedTo, pg_trgm các cột tìm kiếm (name/phone/email/company); PII không public |
 | `lead_notes` | leadId, authorId, body | Append-only, index leadId+createdAt; không cho chỉnh lịch sử ngầm |
 | `lead_requests` | idempotencyKeyHash, payloadHash, ipHash, leadId, expiresAt | Unique key; lưu 24 giờ để chống retry trùng; ipHash (SHA-256 + pepper) chỉ phục vụ rate limit, không lưu raw IP |
 | `consent_records` | leadRefHash, type, sourcePath, consentAt, consentVersion | Append-only bằng chứng đồng ý tách khỏi lead; chỉ lưu hash tham chiếu (không PII trực tiếp); retention dài hơn lead (đề xuất 3 năm), không xóa theo yêu cầu xóa PII của chủ dữ liệu |
 | `customers` | name, logoMediaId, websiteUrl, sortOrder, visible, version | URL https/http hợp lệ; className từ code không phải trường editable |
 | `customer_stories` | customerId, slug, title, excerpt, content, heroMediaId, results, testimonial, state, publishedAt, version | Slug unique; chỉ renderer hỗ trợ mới cho publish |
 | `pages` | key, draftContent, publishedContent, draftSeo, publishedSeo, publishedAt, version | key whitelist cố định; sửa draft không đổi website live |
-| `marketing_plans` | key, name, audience, priceAmount, currency, billingPeriod, priceMode, moduleKeys, featured, sortOrder, visible, version | key unique; priceMode free/fixed/from/contact; currency VND; giá lưu integer đồng |
-| `modules` | key, label, shortLabel, comingSoon, sortOrder, version | key unique; seed 5 key hiện có trong `app/_data/pricing.ts`; `marketing_plans.moduleKeys` tham chiếu key của bảng này |
+| `pricing_products` | key, name, title, description, notes, sortOrder, visible, version | key cố định seed 5 phần mềm `maxv-accounting|maxv-hddt|maxv-hkd|chu-ky-so|hoa-don-dien-tu`, không tạo/xóa qua API; sortOrder là thứ tự trên `/bang-gia`; notes tối đa 5 dòng |
+| `pricing_plans` | productId, name, description, priceMode, priceAmount, billingPeriod, specs, features, featured, cta, sortOrder, visible, version | FK productId; priceMode free/fixed/from/contact; currency VND; giá lưu integer đồng, không lưu chuỗi đã định dạng; index (productId, sortOrder) |
 | `site_settings` | key, value, version | key cố định contact/social/seo; từng value có schema riêng |
 | `audit_logs` | actorId, action, resourceType, resourceId, changedFields, requestId, result | Append-only; không lưu raw password/token/lead message hoặc snapshot PII; index (actorId, createdAt) và (resourceType, resourceId, createdAt) |
 
@@ -215,7 +304,7 @@ Email/password có thể do thư viện/provider auth sở hữu schema; không 
 - Tối đa 200 block/bài, 100.000 ký tự tổng văn bản, heading/paragraph không được rỗng. Link chỉ http/https hoặc đường dẫn nội bộ bắt đầu `/` nhưng không `//`.
 - React render text escape mặc định; không dùng `dangerouslySetInnerHTML`. Khi cần rich text phức tạp phải có schema/sanitizer và test riêng trước khi mở định dạng.
 - Trang marketing dùng section schema tương ứng từng trang hiện có, không tạo page builder tổng quát. Icon là key whitelist ánh xạ sang lucide trong code; không lưu React component trong DB.
-- Bảng `pages` quản lý hero/features/FAQ/CTA theo trang. Giá lấy từ `marketing_plans`; liên hệ lấy từ settings; logo/câu chuyện lấy resource tương ứng. Không lưu hai bản cùng trường ở nhiều nguồn.
+- Bảng `pages` quản lý hero/features/FAQ/CTA theo trang. Giá lấy từ `pricing_plans`; liên hệ lấy từ settings; logo/câu chuyện lấy resource tương ứng. Không lưu hai bản cùng trường ở nhiều nguồn.
 
 ### 5.2 Xuất bản và URL
 
@@ -229,8 +318,8 @@ Email/password có thể do thư viện/provider auth sở hữu schema; không 
 
 ### 5.3 Migration, seed và index search
 
-- Một công cụ migration duy nhất cho toàn dự án; migration chạy bằng lệnh vận hành/CI trước khi roll code, ứng dụng không tự chạy migration khi start. Theo kiểu expand-contract: thêm cột/bảng trước, backfill, mới siết constraint; mỗi migration có rollback tương ứng.
-- Seed idempotent bằng UPSERT theo slug/key (5 category, 5 module, marketing plans ở trạng thái hidden); chạy lại không tạo bản sao.
+- Một công cụ migration duy nhất: Prisma Migrate (`prisma migrate deploy` ở CI/production). CHECK và hàm không khai báo được trong schema thì dán vào migration tạo bằng `--create-only` (`docs/TASK/thiet-ke-api-db.md` mục 5.2); migration chạy bằng lệnh vận hành/CI trước khi roll code, ứng dụng không tự chạy migration khi start. Theo kiểu expand-contract: thêm cột/bảng trước, backfill, mới siết constraint; mỗi migration ghi cách phục hồi. G1 không xóa cột/bảng: ưu tiên quay về code tương thích với schema mở rộng hoặc migration sửa tiến; không đảo migration bằng cách xóa dữ liệu vừa nhập. Khôi phục backup phải ghi rõ khoảng dữ liệu có thể mất (checklist phát hành ở `docs/TASK/06-phat-hanh-g1.md`).
+- Seed idempotent bằng UPSERT theo slug/key (5 category, 5 pricing product, 3 vai trò mẫu; không seed gói giá); chạy lại không tạo bản sao.
 - Search tiếng Việt: pg_trgm + unaccent, GIN trgm index cho `posts` và các cột tìm kiếm của `leads`; index `audit_logs` theo mục 5.
 
 ## 6. Danh sách API G1 — bắt buộc
@@ -262,7 +351,7 @@ Giới hạn bắt buộc trước khi bật endpoint (không còn là "đề xu
 | POST | `/api/v1/admin/posts/{id}/archive` | version | Lưu trữ, gỡ công khai |
 | POST | `/api/v1/admin/posts/{id}/restore` | version | Archived về draft |
 | DELETE | `/api/v1/admin/posts/{id}` | If-Match version | Xóa cứng theo quy tắc mục 5.2; 204 |
-| GET | `/api/v1/admin/posts/{id}/preview` | Cookie | DTO preview riêng tư; UI `/admin/posts/{id}/preview` render bằng renderer bài public |
+| GET | `/api/v1/admin/posts/{id}/preview` | Cookie | DTO preview riêng tư; dashboard `/posts/{id}/preview` render bằng component preview (mục 9) |
 | POST | `/api/v1/admin/posts/{id}/preview` | Payload như PostPatch | Preview bản chưa lưu (stateless), validate như PATCH, không ghi DB; xem trước bản sửa bài published |
 
 PostCreate: `title` bắt buộc 1–200 ký tự; `categoryId` UUID bắt buộc; `slug` bắt buộc dạng `[a-z0-9]+(-[a-z0-9]+)*`, tối đa 160; `excerpt` tối đa 500; `content` danh sách block, draft cho rỗng; `coverMediaId` nullable; `featured` mặc định false; `seoTitle` tối đa 70; `seoDescription` tối đa 170. SEO có thể bỏ trống để fallback title/excerpt. Publish yêu cầu excerpt có nội dung. Slug tự gợi ý ở UI từ tiêu đề nhưng server kiểm tra uniqueness, không tự đổi slug khi sửa title.
@@ -289,7 +378,7 @@ Các chuỗi UUID trong ví dụ là nhãn minh họa, request thật phải dù
 
 | Method | Endpoint | Input | Chức năng |
 |---|---|---|---|
-| POST | `/api/v1/admin/media` | multipart `file`, `alt` | Upload server-side lên object storage, 201 media |
+| POST | `/api/v1/admin/media` | multipart `file`, `alt` | Upload server-side, ghi vào thư mục ảnh trên ổ đĩa server, 201 media |
 | GET | `/api/v1/admin/media` | q theo tên/alt, page, pageSize | Danh sách ảnh ready, sort createdAt:desc |
 | GET | `/api/v1/admin/media/{id}` | UUID | Metadata + usageCount + usage references admin được phép đọc |
 | PATCH | `/api/v1/admin/media/{id}` | alt, version | Sửa alt, không thay binary tại cùng storageKey |
@@ -298,21 +387,21 @@ Các chuỗi UUID trong ví dụ là nhãn minh họa, request thật phải dù
 - G1 nhận JPEG/PNG/WebP tối đa 5 MiB, 4096×4096 và tối đa 16 triệu pixel, alt 1–250 ký tự. Reject SVG/GIF/file executable, tên đường dẫn và MIME giả; kiểm tra magic bytes và decode ảnh phía server. SVG đang có trong repo vẫn được dùng tĩnh, không mở upload SVG mới.
 - StorageKey do server sinh UUID, không dùng filename/path client. Public URL chỉ cho media ready; ảnh upload là tài nguyên công khai dù bài gắn ảnh còn draft, không upload tài liệu mật vào kho này.
 - Backend upload và ghi DB có bù trừ khi một bên thất bại; job dọn orphan có tuổi >24 giờ, không xóa file đang pending request.
-- Xóa chuyển status deleting trong transaction sau kiểm tra usage và khóa record; service gắn ảnh phải lock/check ready để không tạo reference trong lúc xóa. Xóa object idempotent rồi xóa DB; retry nếu storage lỗi, không báo thành công giả.
+- Xóa chuyển status deleting trong transaction sau kiểm tra usage và khóa record; service gắn ảnh phải lock/check ready để không tạo reference trong lúc xóa. Xóa file idempotent rồi xóa DB; retry nếu xóa file lỗi, không báo thành công giả.
 - Ảnh dùng URL bất biến; thay ảnh tạo media mới. Cấu hình Next Image remotePatterns chỉ domain/path storage được chọn; không cho arbitrary remote URL.
 - Strip toàn bộ metadata EXIF và re-encode ảnh (JPEG/WebP chuẩn, không giữ metadata) trước khi lưu — xóa GPS/thời điểm chụp và payload nhúng trong file gốc, vì ảnh là công khai với URL bất biến.
-- Bucket/CDN tắt directory listing cho anonymous; object được serve với `Content-Type` cố định theo mimeType đã validate, `X-Content-Type-Options: nosniff`, `Content-Disposition: inline; filename="media"`, `Cache-Control: public, max-age=31536000, immutable`.
+- IIS phục vụ ảnh ở `media.maxv.vn`: tắt directory browsing, chỉ trả đuôi webp/jpg/png, `Content-Type` theo đuôi, `X-Content-Type-Options: nosniff`, `Content-Disposition: inline; filename="media"`, `Cache-Control: public, max-age=31536000, immutable` (cấu hình mẫu ở `docs/TASK/thiet-ke-api-db.md` mục 4.3, `web.config`).
 - Giới hạn upload: tối đa 10 upload/phút/user và trần dung lượng theo user; từ chối sớm qua Content-Length trước khi đọc body.
 - Job reconcile định kỳ quét media `status=deleting` quá 24 giờ: kiểm tra usage lần nữa rồi hoàn tất xóa object + DB, hoặc đưa về `ready` nếu object còn tồn tại và không có tham chiếu — tránh record kẹt vĩnh viễn khi process chết giữa chừng.
-- UI upload hiển thị cảnh báo cố định "mọi ảnh upload là công khai ngay cả khi bài chưa đăng"; quy trình sự cố ảnh nhạy cảm (gỡ tham chiếu → xóa → purge CDN → audit sự cố) ghi trong runbook mục 12.2.
+- UI upload hiển thị cảnh báo cố định "mọi ảnh upload là công khai ngay cả khi bài chưa đăng"; quy trình sự cố ảnh nhạy cảm (gỡ tham chiếu → xóa → purge cache Cloudflare nếu có, xóa snapshot backup chứa ảnh → audit sự cố) ghi trong runbook mục 12.2.
 
 ### 6.4 Lead quản trị
 
 | Method | Endpoint | Input | Chức năng |
 |---|---|---|---|
-| GET | `/api/v1/admin/leads` | q, type, topic, status, assignedTo, from, to, page, pageSize | Danh sách sort createdAt:desc; q tìm tên/phone/email/company/taxCode |
+| GET | `/api/v1/admin/leads` | q, type, topic, status, assignedTo, from, to, page, pageSize | Danh sách sort createdAt:desc; q tìm tên/phone/email/company |
 | GET | `/api/v1/admin/leads/{id}` | UUID | Chi tiết, nguồn, consent, người phụ trách; không trả hash idempotency/IP |
-| PATCH | `/api/v1/admin/leads/{id}` | status, assignedTo nullable, version | Đổi trạng thái/giao việc; G1 chỉ giao admin active; không sửa thông tin khách gửi |
+| PATCH | `/api/v1/admin/leads/{id}` | status, assignedTo nullable, version | Đổi trạng thái/giao việc; chỉ giao nhân viên active có quyền `leads.update`; không sửa thông tin khách gửi |
 | GET | `/api/v1/admin/leads/{id}/notes` | page, pageSize | Ghi chú theo createdAt:asc |
 | POST | `/api/v1/admin/leads/{id}/notes` | body 1–2000 ký tự | 201 ghi chú append-only, actor từ session |
 
@@ -322,7 +411,7 @@ Quy tắc bổ sung:
 
 - Khi tạo lead, server so khớp phone/email đã normalize với lead tạo trong 30 ngày gần nhất và gắn nhãn "có thể trùng" (không chặn); UI chi tiết hiển thị các lead trùng tiềm năng kèm trạng thái. G1 xử lý trùng bằng note + đóng lead phụ (`closed`); merge thật thuộc G3.
 - PATCH cho phép hiệu chỉnh có kiểm soát `name/phone/email/company` kèm `reason` bắt buộc 1–500 ký tự: giá trị gốc và lý do lưu vào audit/note nội bộ, không ghi đè âm thầm — phục vụ dữ liệu khách gõ sai và yêu cầu chỉnh sửa theo Nghị định 13/2023.
-- Lead `new` quá 4 giờ giờ hành chính chưa `contacted` được đánh dấu "quá hạn" và nổi bật trong UI; lead `topic=ho-tro` hiển thị đầu danh sách mặc định.
+- Dự kiến: lead `new` quá 4 giờ giờ hành chính chưa `contacted` được đánh dấu "quá hạn" và nổi bật trong UI; mốc thời gian, lịch làm việc/ngày nghỉ và cách tính cần chốt tại mục 12.4 câu 6 trước triển khai logic quá hạn. Lead `topic=ho-tro` hiển thị đầu danh sách mặc định.
 
 ### 6.5 API công khai
 
@@ -347,8 +436,7 @@ LeadCreate:
   "phone": "0900000000",
   "email": "khach@example.com",
   "company": "Công ty ABC",
-  "taxCode": "0123456789",
-  "productKeys": ["maxv-hddt"],
+  "productKey": "maxv-hddt",
   "message": "Tôi muốn được tư vấn.",
   "sourcePath": "/lien-he",
   "utm": { "source": "google", "medium": "cpc", "campaign": "maxv" },
@@ -360,10 +448,10 @@ LeadCreate:
 
 Quy tắc:
 
-- type contact/trial; contact yêu cầu topic `tu-van|ho-tro|hop-tac`; trial topic không nhận. name 1–100, phone 8–20 ký tự sau normalize khoảng trắng/dấu phân cách, chỉ `+` đầu và chữ số; không ép Number làm mất số 0.
-- contact: name/phone bắt buộc, email/company tùy chọn. trial: name/phone/email/company bắt buộc. email tối đa 254 và hợp lệ; company tối đa 200; message tối đa 5000.
-- taxCode tùy chọn theo form hiện tại: `^\d{10}(-\d{3})?$`. Cần xác nhận nghiệp vụ nếu muốn nhận mã định danh khác trước khi mở rộng, không tuyên bố đây là kiểm chứng pháp lý mã số thuế.
-- productKeys whitelist 4 key marketing `maxv-accounting|maxv-hddt|hoa-don-dien-tu|chu-ky-so`; form dùng thử có thêm `moduleKeys` whitelist `hddt|tokhai|dvc|accounting|hrm`. Không dùng chung hai loại key. Server chỉ cho chọn module đang mở dùng thử theo cấu hình; hiện accounting có soon=true.
+- type contact/consult; contact yêu cầu topic `tu-van|ho-tro|hop-tac`; consult không nhận topic, bắt buộc đúng một productKey (form MaxV HKD gửi `maxv-hkd`). name 1–100, phone 8–20 ký tự sau normalize khoảng trắng/dấu phân cách, chỉ `+` đầu và chữ số; không ép Number làm mất số 0.
+- contact: name/phone bắt buộc, email/company tùy chọn. consult: name/phone bắt buộc, `industry` tùy chọn theo whitelist option của form HKD. email tối đa 254 và hợp lệ; company tối đa 200; message tối đa 5000.
+- Không nhận mã số thuế: form hiện tại không có trường này (bỏ `taxCode`, thêm khi form có).
+- `productKey` (một giá trị, vì form chỉ cho chọn một sản phẩm) thuộc whitelist trùng key `pricing_products`: `maxv-accounting|maxv-hddt|maxv-hkd|hoa-don-dien-tu|chu-ky-so`. Không nhận `moduleKeys`; đăng ký dùng thử đi thẳng `be_maxv`, không qua lead.
 - consent phải true; consentVersion phải khớp phiên bản chính sách đang hiển thị, sai phiên bản trả 409 `CONSENT_VERSION_CHANGED`. consentAt do server ghi. G1 phải xuất bản trang chính sách thật trước khi bật nhận lead.
 - sourcePath là path nội bộ tối đa 300, không URL tùy ý; mỗi UTM tối đa 100, không đưa cookie/query có secret vào payload. Nguồn là dữ liệu attribution client cung cấp, không dùng để quyết định quyền.
 - `website` honeypot phải rỗng; nếu không rỗng trả `201` với receiptId giả và không tạo lead (không tiết lộ rằng bị phát hiện); kèm kiểm tra tốc độ gửi và tín hiệu bot phía server. Không gửi PII tới analytics.
@@ -371,7 +459,81 @@ Quy tắc:
 - Giới hạn bắt buộc trước khi bật form: 5 lần/IP/10 phút (IPv6 đếm theo prefix /64), trần toàn hệ thống 100 lead/10 phút (vượt trần trả 429 kèm alert vận hành) và chiều phụ theo `type`/`sourcePath`; trusted proxy phải được cấu hình, không tin X-Forwarded-For tùy ý. Khi tỷ lệ spam vượt ngưỡng do vận hành chốt, bật Turnstile/hCaptcha theo quy trình runbook cụ thể — không để ở mức "cân nhắc sau".
 - IP lưu dạng `ipHash` (hash kèm pepper) trong `lead_requests`, tự xóa theo cửa sổ 24 giờ của idempotency; không đưa IP (kể cả hash) vào API response hay export.
 - Không dedupe vĩnh viễn theo phone/email: khách có thể gửi nhu cầu mới hợp lệ.
-- Form dùng thử thực tế nằm ở `/dang-ky` (không tồn tại `/dung-thu`); giữ nguyên URL `/dang-ky`. Nếu chọn luồng yêu cầu dùng thử G1 thì bỏ mật khẩu và đổi CTA thành “Gửi yêu cầu dùng thử”; không nhận/lưu mật khẩu trong lead; trường `password` nếu gửi lên bị strip, không lưu DB/audit. Google OAuth đang disabled tiếp tục disabled cho đến khi có tích hợp thật. Các trường `company`/`taxCode`/`moduleKeys` là trường mới cần bổ sung UI; option “Sản phẩm quan tâm” đổi value từ label tiếng Việt sang productKey slug khi nối backend.
+- `/dang-ky` đã tạo tài khoản thật trên `be_maxv` nên không gửi lead; trường `password` nếu lọt vào payload lead bị strip, không lưu DB/audit. Form HKD bỏ `mailto:`, gửi `type=consult`; form `/lien-he` đổi value option “Sản phẩm quan tâm” từ label tiếng Việt sang productKey slug khi nối backend.
+
+### 6.6 Phân quyền và nhân viên
+
+Quyền cố định trong code (mỗi quyền đều có code kiểm tra đi kèm, admin không tạo quyền mới):
+
+| Chức năng | Xem | Tạo/Sửa | Xuất bản | Xóa |
+|---|---|---|---|---|
+| Bài viết & SEO | `posts.view` | `posts.edit` | `posts.publish` | `posts.delete` |
+| Thư viện ảnh | `media.view` | `media.upload` | | `media.delete` |
+| Giá cả | `pricing.view` | `pricing.edit` | | |
+| Lead | `leads.view` | `leads.update` (trạng thái, ghi chú, giao việc) | | |
+| Xuất lead | `leads.export` | | | |
+| Cấu hình website (G2) | `settings.view` | `settings.edit` | | |
+| Nhân viên & vai trò | `users.view` | `users.manage` | | |
+| Nhật ký thao tác | `audit.view` | | | |
+
+`posts.publish` tách khỏi `posts.edit` để cộng tác viên viết bài mà chưa được đăng; `leads.export` tách riêng vì file chứa PII.
+
+Vai trò seed:
+
+| Vai trò | Quyền |
+|---|---|
+| Quản trị viên (`isSystem`) | Toàn bộ, kể cả quyền thêm sau; không sửa/xóa |
+| Biên tập viên | `posts.*`, `media.*`, `pricing.view` |
+| Kinh doanh | `leads.view`, `leads.update`, `pricing.view` |
+
+| Method | Endpoint | Quyền | Chức năng |
+|---|---|---|---|
+| GET | `/api/v1/admin/permissions` | `users.view` | Danh sách quyền cố định (key, nhóm, nhãn tiếng Việt) để render bảng tick |
+| GET | `/api/v1/admin/roles` | `users.view` | Vai trò kèm số nhân viên đang dùng |
+| POST | `/api/v1/admin/roles` | `users.manage` | name 1–100, description ≤300, permissions[] thuộc whitelist; 201 |
+| GET | `/api/v1/admin/roles/{id}` | `users.view` | Chi tiết + permissions + version |
+| PATCH | `/api/v1/admin/roles/{id}` | `users.manage` | name/description/permissions + version; vai trò hệ thống trả 409 `SYSTEM_ROLE` |
+| DELETE | `/api/v1/admin/roles/{id}` | `users.manage` | If-Match; còn nhân viên dùng trả 409 `ROLE_IN_USE` |
+| GET | `/api/v1/admin/users` | `users.view` | q, roleId, status, pagination |
+| POST | `/api/v1/admin/users` | `users.manage` | email, displayName, roleId; tạo user `invited`, gửi email kích hoạt một lần; email trùng 409 |
+| GET | `/api/v1/admin/users/{id}` | `users.view` | Thông tin user, lastLoginAt; không passwordHash |
+| PATCH | `/api/v1/admin/users/{id}` | `users.manage` | displayName, roleId, status, version |
+| POST | `/api/v1/admin/users/{id}/send-activation` | `users.manage` | Gửi lại link kích hoạt user `invited`, không trả token |
+| POST | `/api/v1/admin/users/{id}/reset-password` | `users.manage` | Gửi link đặt lại mật khẩu; admin không tự đặt mật khẩu cho người khác |
+| POST | `/api/v1/admin/users/{id}/revoke-sessions` | `users.manage` | Thu hồi toàn bộ phiên |
+
+Quy tắc:
+
+- Luôn còn ít nhất một user active giữ vai trò Quản trị viên: không tự hạ quyền/khóa chính mình, không khóa/hạ Quản trị viên cuối cùng kể cả hai request đồng thời (kiểm tra và khóa trong transaction, lỗi `LAST_ADMIN`).
+- Đổi vai trò hoặc khóa user thu hồi ngay mọi phiên của user đó. Sửa quyền của vai trò có hiệu lực ở request tiếp theo vì quyền đọc từ DB mỗi request.
+- Không xóa cứng user; khóa (`disabled`) để audit vẫn hiện tên người đã thao tác.
+- Audit: mời/khóa/mở khóa user, đổi vai trò user, tạo/sửa/xóa vai trò (ghi danh sách quyền trước/sau).
+- Kích hoạt dùng token scope activation riêng, 24h, một lần; đặt mật khẩu và chuyển active atomically.
+- UI ẩn menu/nút theo quyền chỉ để tiện dùng; API vẫn trả 403 khi thiếu quyền.
+
+### 6.7 Giá cả theo phần mềm và `/bang-gia`
+
+Mỗi phần mềm (`pricing_products`, 5 key cố định) có danh sách gói (`pricing_plans`) do admin tạo. Giao diện mỗi trang giữ trong code; admin chỉ sửa dữ liệu. Trang sản phẩm đọc gói của phần mềm đó; `/bang-gia` hiện lần lượt từng phần mềm visible theo `sortOrder`, mỗi phần mềm là một section với các gói visible của nó. Phần mềm chưa có gói visible không hiện mục giá.
+
+| Method | Endpoint | Quyền | Chức năng |
+|---|---|---|---|
+| GET | `/api/v1/admin/pricing/products` | `pricing.view` | 5 phần mềm kèm số gói, sortOrder, visible |
+| GET | `/api/v1/admin/pricing/products/{key}` | `pricing.view` | Thông tin phần mềm + toàn bộ gói (cả hidden) |
+| PATCH | `/api/v1/admin/pricing/products/{key}` | `pricing.edit` | title, description, notes, sortOrder, visible + version |
+| POST | `/api/v1/admin/pricing/products/{key}/plans` | `pricing.edit` | Tạo gói, mặc định visible=false; 201 |
+| PATCH | `/api/v1/admin/pricing/plans/{id}` | `pricing.edit` | Sửa gói + version |
+| DELETE | `/api/v1/admin/pricing/plans/{id}` | `pricing.edit` | If-Match; ưu tiên ẩn; không xóa gói đang chọn làm giá trang chủ |
+| GET | `/api/v1/public/pricing` | Public | Các phần mềm visible theo sortOrder, mỗi phần mềm kèm gói visible |
+| GET | `/api/v1/public/pricing/{key}` | Public | Một phần mềm + gói visible; phần mềm hidden trả 404 |
+
+PlanInput: `name` 1–100 (ví dụ `MV01`, `01 năm`, `Cơ bản`); `description` ≤300; `priceMode` free/fixed/from/contact; `priceAmount` integer ≥0 ≤1.000.000.000.000 VND — contact dùng null (hiện "Liên hệ"), free dùng 0 (hiện "Miễn phí"), fixed/from bắt buộc >0 (from hiện "Từ …"); `billingPeriod` month/year/once/none; `specs` tối đa 8 `{label≤50, value≤100}` (ví dụ Người dùng: 02, Quy mô: nhỏ); `features` tối đa 20 dòng ≤150; `featured`; `cta {label≤100, href}` chỉ đường dẫn nội bộ/anchor hoặc https domain được duyệt, không `javascript:`; `sortOrder`; `visible`. ProductPatch `notes` tối đa 5 dòng ≤300 (ví dụ "Bộ số liệu thêm: 800.000đ/năm", "Giá tham khảo, xác nhận khi đăng ký").
+
+Quyết định 27/10/2026:
+
+- Giá không còn nằm trong code `page_maxv`. Seed chỉ tạo 5 phần mềm, không seed gói; admin nhập toàn bộ gói và giá trên dashboard. Sau Task 15, mọi giá cứng trong `app/_data/pricing.ts`, `app/san-pham/maxv-accounting/data.ts`, `app/san-pham/maxv-hkd/_components/pricing.tsx` bị xóa.
+- `/bang-gia` không có bộ gói riêng, chỉ gom gói của 5 phần mềm ở `/san-pham/*`. 4 gói Dùng thử/Cơ bản/Chuyên nghiệp/Toàn diện hiện có bị bỏ; admin tạo lại thành gói của phần mềm tương ứng nếu cần.
+
+Quy tắc: giá định dạng khi render (`1650000` → `1.650.000đ`), không lưu chuỗi đã định dạng, không dùng float. Mọi thay đổi `priceAmount`/`priceMode`/`visible` ghi audit kèm giá trị cũ và mới. Website đọc giá request-time nên sửa giá hiện ngay ở trang sản phẩm tương ứng, `/bang-gia` và trang chủ (mục 10). Giá hiển thị là giá marketing, không phải giá thanh toán trong `be_maxv`.
 
 ## 7. API G2 — quản trị nội dung mở rộng
 
@@ -430,38 +592,23 @@ Không có POST tạo trang, DELETE trang hay chỉnh URL tùy ý. Các key cố
 | maxv-hddt | `/san-pham/maxv-hddt` | Hero, features, steps, CTA |
 | hoa-don-dien-tu | `/san-pham/hoa-don-dien-tu` | Hero, topics, CTA |
 | chu-ky-so | `/san-pham/chu-ky-so` | Hero, topics, CTA |
-| pricing | `/bang-gia` | Heading, FAQ/CTA nếu có; giá không nhập lại ở đây |
+| pricing | `/bang-gia` | Heading, FAQ/CTA nếu có; giá và thứ tự phần mềm quản lý ở mục 6.7, không nhập lại ở đây |
 | privacy | `/chinh-sach-bao-mat` | Nội dung chính sách và policyVersion; thay version buộc form lấy consent mới |
 
 G1 chính sách privacy có thể là trang tĩnh đã duyệt. G2 migrate thành published page trước khi chuyển form sang đọc policyVersion ở dữ liệu này. Không được có hai nguồn version chính sách cùng hoạt động.
 
 Mỗi key có schema riêng trong file `.schema.ts`, dựa vào data export/JSX hiện có, giới hạn array/text/media cụ thể trước khi viết endpoint. Không nhận blob JSON tùy ý chỉ vì cột DB là JSONB. Section sản phẩm nào đang nằm trong JSX phải tách dữ liệu ra trước rồi mới có trường admin tương ứng. G2 thực hiện từng trang, không yêu cầu chuyển toàn bộ trang trong một đợt deploy.
 
-### 7.4 Bảng giá và module marketing
+### 7.4 Bảng giá
 
-| Method | Endpoint | Chức năng |
-|---|---|---|
-| GET | `/api/v1/admin/marketing-plans` | Tất cả gói, sortOrder:asc,id:asc |
-| POST | `/api/v1/admin/marketing-plans` | Tạo gói hidden với key bất biến |
-| GET | `/api/v1/admin/marketing-plans/{id}` | Chi tiết + version |
-| PATCH | `/api/v1/admin/marketing-plans/{id}` | Cập nhật + version |
-| DELETE | `/api/v1/admin/marketing-plans/{id}` | If-Match; không xóa gói đang dùng làm entry price, ưu tiên visible=false |
-| GET | `/api/v1/admin/modules` | Danh mục key cố định và trạng thái available/coming-soon |
-| PATCH | `/api/v1/admin/modules/{key}` | label, shortLabel, comingSoon, version |
-| GET | `/api/v1/public/marketing-plans` | Gói visible và danh mục module công khai |
-
-PlanInput: key dạng slug<=80 (chỉ create), name<=100, audience<=300, priceMode, priceAmount nullable integer >=0 <=1.000.000.000.000 VND, billingPeriod month/year/once/none, moduleKeys[], featured, sortOrder, visible, cta `{label<=100,href}`. contact dùng priceAmount=null; free dùng 0; fixed/from bắt buộc amount>0. CTA chỉ đường dẫn nội bộ whitelist hoặc https domain được duyệt, không javascript URL.
-
-Một gói được chọn làm entry price qua trường `entryPlanId` trong page pricing; home và các chỗ hiển thị cùng mức giá đọc cùng nguồn. Seed gói có giá chưa xác nhận dưới trạng thái hidden hoặc contact, không biến giá mẫu thành cam kết kinh doanh. Sửa comingSoon trong CMS không tự bật chức năng thực ở backend sản phẩm.
-
-Publish/sửa `visible` của marketing-plans và bài thuộc chuyên mục khuyến mãi yêu cầu role `admin` (không cần workflow duyệt nhiều cấp) — che rủi ro pháp lý của sai số tiền/điều kiện ưu đãi; thay đổi `priceAmount` của gói đang visible phải có audit.
+Đã chuyển lên G1, xem mục 6.7. Bảng `marketing_plans`/`modules` và endpoint `marketing-plans`/`modules` cũ bỏ. Giá trang chủ ("Từ …/tháng") đọc từ một gói được chọn, cách chọn chốt ở mục 12.4.
 
 ### 7.5 Cấu hình website
 
 | Method | Endpoint | Quyền/ý nghĩa |
 |---|---|---|
-| GET | `/api/v1/admin/settings/{key}` | admin; key contact/social/seo |
-| PUT | `/api/v1/admin/settings/{key}` | admin; value có schema + version; áp dụng live và audit |
+| GET | `/api/v1/admin/settings/{key}` | `settings.view`; key contact/social/seo |
+| PUT | `/api/v1/admin/settings/{key}` | `settings.edit`; value có schema + version; áp dụng live và audit |
 | GET | `/api/v1/public/site-config` | Chỉ trường công khai, không biến môi trường/secrets |
 
 - contact: hotline, hotlineDisplay, email, address, businessHours. hotlineHref/mailto dẫn xuất ở server, không nhập lại nhiều trường dễ lệch.
@@ -470,30 +617,26 @@ Publish/sửa `visible` của marketing-plans và bài thuộc chuyên mục khu
 - public site-config bao gồm policyVersion để form G2 dùng, nhưng không trả cài đặt email/storage/DB.
 - contact widget, footer, trang liên hệ và JSON-LD Organization phải cùng đọc nguồn cấu hình.
 
-### 7.6 Nhân sự, dashboard, export và audit
+### 7.6 Dashboard, export và audit
+
+Quản lý nhân viên và vai trò đã chuyển lên G1, xem mục 6.6.
 
 | Method | Endpoint | Chức năng / quyền |
 |---|---|---|
-| GET | `/api/v1/admin/users` | admin; q, role, status, pagination |
-| POST | `/api/v1/admin/users` | admin; email, displayName, role; tạo user disabled, gửi link kích hoạt qua luồng reset một lần |
-| GET | `/api/v1/admin/users/{id}` | admin; thông tin user, không passwordHash |
-| PATCH | `/api/v1/admin/users/{id}` | admin; displayName, role, status, version |
-| POST | `/api/v1/admin/users/{id}/send-activation` | admin; gửi lại link kích hoạt user chưa active, không trả token |
-| POST | `/api/v1/admin/users/{id}/revoke-sessions` | admin; thu hồi toàn bộ phiên |
-| GET | `/api/v1/admin/dashboard` | admin; from/to; số bài, lead theo type/status và chuỗi lead theo ngày |
-| GET | `/api/v1/admin/leads/export` | admin/sales; cùng bộ lọc lead, date range tối đa 90 ngày, tối đa 10.000 dòng |
-| GET | `/api/v1/admin/audit-logs` | admin; actorId, action, resourceType, resourceId, from/to, pagination |
-| DELETE | `/api/v1/admin/leads/{id}` | admin; If-Match version, lý do bắt buộc qua body JSON `{"reason"}` 1–300 ký tự (HTTP header không truyền được tiếng Việt); xóa PII theo yêu cầu hợp lệ |
-
-Quản lý tài khoản: không tự disable hoặc tự hạ quyền; không disable/hạ quyền admin active cuối cùng kể cả hai request đồng thời. Kiểm tra và khóa trong transaction. Disable/đổi role lập tức thu hồi session. Kích hoạt dùng token scope activation riêng, 24h, chỉ dùng một lần; reset-password nhận token scope activation thì thiết lập password và chuyển active atomically. Email trùng trả 409 cho admin được phép quản lý user.
+| GET | `/api/v1/admin/dashboard` | Đăng nhập; from/to; chỉ trả số liệu thuộc quyền user (số bài cần `posts.view`, lead cần `leads.view`): lead theo type/status/sản phẩm và chuỗi lead theo ngày |
+| GET | `/api/v1/admin/leads/export` | `leads.export`; cùng bộ lọc lead, date range tối đa 90 ngày, tối đa 10.000 dòng |
+| GET | `/api/v1/admin/audit-logs` | `audit.view`; actorId, action, resourceType, resourceId, from/to, pagination |
+| DELETE | `/api/v1/admin/leads/{id}` | Quản trị viên; If-Match version, lý do bắt buộc qua body JSON `{"reason"}` 1–300 ký tự (HTTP header không truyền được tiếng Việt); xóa PII theo yêu cầu hợp lệ |
 
 Dashboard không phải Google Analytics: không thể thống kê page view, doanh thu, conversion rate chính xác nếu chưa có nguồn sự kiện. Nếu thêm phân tích truy cập phải đặc tả dữ liệu/consent riêng.
 
-Export CSV UTF-8 có BOM, attachment, escape dấu quote/newline và chống spreadsheet formula injection với ô bắt đầu `= + - @` hoặc ký tự điều khiển. Không vượt 10.000 thì âm thầm cắt: trả 422 yêu cầu thu hẹp bộ lọc. Export và xóa PII phải có audit không chứa nội dung PII. Route `leads/export` dùng segment tĩnh, không coi export là UUID. Export chỉ xuất whitelist cột: name, phone, email, company, taxCode, type, topic, status, createdAt, assignedTo, consentVersion — không xuất IP (kể cả hash) hay idempotency key. Giới hạn 5 export/user/giờ qua shared rate limit; audit export ghi actor, bộ lọc đã scrub, rowCount, timestamp để monitoring phát hiện hành vi rà soát dữ liệu. Cân nhắc yêu cầu re-auth (xác nhận mật khẩu) cho export trên 5.000 dòng.
+Export CSV UTF-8 có BOM, attachment, escape dấu quote/newline và chống spreadsheet formula injection với ô bắt đầu `= + - @` hoặc ký tự điều khiển. Không vượt 10.000 thì âm thầm cắt: trả 422 yêu cầu thu hẹp bộ lọc. Export và xóa PII phải có audit không chứa nội dung PII. Route `leads/export` dùng segment tĩnh, không coi export là UUID. Export chỉ xuất whitelist cột: name, phone, email, company, productKey, industry, type, topic, status, createdAt, assignedTo, consentVersion — không xuất IP (kể cả hash) hay idempotency key. Giới hạn 5 export/user/giờ qua shared rate limit; audit export ghi actor, bộ lọc đã scrub, rowCount, timestamp để monitoring phát hiện hành vi rà soát dữ liệu. Cân nhắc yêu cầu re-auth (xác nhận mật khẩu) cho export trên 5.000 dòng.
 
 Xóa lead đồng thời xóa notes/idempotency references trong transaction; xóa email job chưa gửi có PII nếu đã bổ sung job. Audit chỉ giữ ID mờ + loại hành động + actor + timestamp, không ghi lý do chứa PII. Bản backup tuân theo thời gian lưu tại mục 12, không cam kết xóa ngay mọi backup.
 
 ## 8. Hợp đồng tích hợp G3 với backend sản phẩm
+
+Cập nhật 27/10/2026: đăng ký và đăng nhập khách hàng đã gọi thẳng `be_maxv` (`POST /api/v1/auth/register`, `POST /api/v1/auth/login`, cookie phiên của `hddt.maxv.vn`, MFA chuyển sang trang login của hddt), nên các dòng `account/auth/login`, `session`, `logout` và `trial-registrations` dưới đây không cần làm ở website. Còn lại quên/đặt lại mật khẩu khách hàng, chờ endpoint thật của `be_maxv`.
 
 Các đường dẫn bên dưới là endpoint mới đề xuất ở website, KHÔNG phải endpoint đã xác minh của backend MaxV. Không triển khai hoặc hứa hoạt động trước khi có tài liệu backend và môi trường thử nghiệm.
 
@@ -511,35 +654,40 @@ Các đường dẫn bên dưới là endpoint mới đề xuất ở website, K
 
 Nếu đăng ký sản phẩm cần password thì chỉ gửi trực tiếp tới auth provider/product backend qua TLS và không lưu vào lead/log/queue. Nếu provisioning bất đồng bộ thì cần job có retry/backoff, idempotency, timeout và xác minh webhook signature + timestamp + eventId chống replay. Failure provisioning không xóa lead; thông báo rõ trạng thái, không báo “đã tạo tài khoản” khi mới nhận yêu cầu.
 
-## 9. Màn hình admin và API tương ứng
+## 9. Màn hình dashboard React (`maxv-admin`) và API tương ứng
+
+URL dưới đây là route của dashboard tại `admin.maxv.vn` (React Router). Mỗi màn hình chỉ gọi `/api/v1/admin/*` đã liệt kê; task UI ở mục 11 chỉ bắt đầu sau khi task API tương ứng đạt nghiệm thu.
 
 | Màn hình | URL | API/resource |
 |---|---|---|
-| Đăng nhập | `/admin/login` | auth/login, auth/session |
-| Quên/đặt lại mật khẩu | `/admin/forgot-password`, `/admin/reset-password` | auth/forgot-password, reset-password |
-| Bài viết | `/admin/posts` | posts list, news-categories |
-| Tạo/sửa bài | `/admin/posts/new`, `/admin/posts/{id}/edit` | posts CRUD, publish actions, media |
-| Xem trước | `/admin/posts/{id}/preview` | private preview; không cần link chia sẻ công khai |
-| Thư viện ảnh | `/admin/media` | media CRUD |
-| Yêu cầu khách hàng | `/admin/leads`, `/admin/leads/{id}` | leads, notes; G2 export |
-| Đổi mật khẩu | `/admin/account` | auth/change-password |
-| Khách hàng | `/admin/customers` | customers G2 |
-| Câu chuyện | `/admin/customer-stories` và new/edit/preview | customer-stories G2 |
-| Trang cố định | `/admin/pages`, `/admin/pages/{key}` | pages G2 |
-| Gói giá | `/admin/marketing-plans` | marketing-plans/modules G2 |
-| Cấu hình | `/admin/settings` | settings G2 |
-| Tài khoản | `/admin/users` | users G2 |
-| Nhật ký | `/admin/audit-logs` | audit-logs G2 |
-| Tổng quan | `/admin` | G1 redirect /admin/posts; G2 dashboard |
+| Đăng nhập | `/login` | auth/login, auth/session |
+| Quên/đặt lại mật khẩu | `/forgot-password`, `/reset-password` | auth/forgot-password, reset-password |
+| Bài viết | `/posts` | posts list, news-categories |
+| Tạo/sửa bài | `/posts/new`, `/posts/{id}/edit` | posts CRUD, publish actions, media |
+| Xem trước | `/posts/{id}/preview` | private preview; không cần link chia sẻ công khai |
+| Thư viện ảnh | `/media` | media CRUD |
+| Yêu cầu khách hàng | `/leads`, `/leads/{id}` | leads, notes; lọc theo nguồn form/sản phẩm; G2 export |
+| Đổi mật khẩu | `/account` | auth/change-password |
+| Giá cả | `/pricing` | Danh sách 5 phần mềm, kéo/sửa thứ tự hiển thị trên `/bang-gia`, bật/tắt |
+| Gói giá của phần mềm | `/pricing/{key}` | Thông tin + ghi chú phần mềm, bảng gói (thêm/sửa/ẩn/xóa, thứ tự, nổi bật), xem trước như trang công khai |
+| Nhân viên | `/users` | users G1: mời, đổi vai trò, khóa/mở khóa, gửi lại link kích hoạt/đặt lại mật khẩu |
+| Vai trò | `/roles`, `/roles/{id}` | roles, permissions G1: bảng tick quyền theo nhóm |
+| Khách hàng | `/customers` | customers G2 |
+| Câu chuyện | `/customer-stories` và new/edit/preview | customer-stories G2 |
+| Trang cố định | `/pages`, `/pages/{key}` | pages G2 |
+| Cấu hình | `/settings` | settings G2 |
+| Nhật ký | `/audit-logs` | audit-logs G2 |
+| Tổng quan | `/` | G1 redirect tới màn đầu tiên user có quyền (bài viết hoặc lead); G2 dashboard |
 
-UI bắt buộc có loading/empty/error, thông báo session hết hạn, lỗi trường, cảnh báo rời trang chưa lưu, xác nhận publish/gỡ/xóa, hỗ trợ keyboard và label. Khi 409 giữ nội dung đang nhập và cho tải bản mới, hiển thị diff với bản mới khi khả thi; không tự submit đè lần hai. Màn edit trang cố định hiển thị người giữ bản cập nhật gần nhất (updatedBy). Không cần UI phân quyền nếu G1 chỉ một role.
+UI bắt buộc có loading/empty/error, thông báo session hết hạn, lỗi trường, cảnh báo rời trang chưa lưu, xác nhận publish/gỡ/xóa, hỗ trợ keyboard và label. Khi 409 giữ nội dung đang nhập và cho tải bản mới, hiển thị diff với bản mới khi khả thi; không tự submit đè lần hai. Màn edit trang cố định hiển thị người giữ bản cập nhật gần nhất (updatedBy). Menu admin chỉ hiện mục user có quyền xem; vào thẳng URL không có quyền thì hiện trang 403, không lộ dữ liệu.
+
+Xem trước bài/giá render trong dashboard bằng component React riêng mô phỏng giao diện website (cùng Tailwind token), không nhúng website bằng iframe và không có URL preview công khai. Có thể lệch nhỏ so với trang thật; nếu cần khớp tuyệt đối thì tách block renderer thành package dùng chung ở G2.
 
 ## 10. Cache, SEO và cập nhật website
 
-- Ban đầu query published chạy request-time, dùng Suspense đúng hướng dẫn cài tại máy; admin luôn uncached. Chỉ thêm shared cache cho dữ liệu công khai khi đã có test invalidation.
-- Nếu cache: tag theo `posts`, `post:{id}`, `stories`, `customers`, `page:{key}`, `settings:{key}`, `marketing-plans`. Cache có TTL hữu hạn với giới hạn trên cứng 5 phút, không cấu hình dài hơn.
-- Route Handler không dùng `updateTag` (chỉ dành Server Actions); đọc API reference cài sẵn cho `revalidateTag`/`revalidatePath` trước khi chọn semantics. Gỡ bài phải hết hiệu lực ngay ở request tiếp theo; không dùng stale-while-revalidate còn trả bài cũ sau unpublish.
-- Invalidate danh sách, bài liên quan, chi tiết, page liên quan, sitemap và metadata sau commit. Không chỉ refresh admin UI.
+- Ban đầu website gọi API public request-time (`fetch` không cache), dùng Suspense đúng hướng dẫn Next.js cài tại máy. Sửa bài/giá trong dashboard hiện ở request tiếp theo, không cần cơ chế invalidation.
+- API public trả `Cache-Control` ngắn hoặc `no-store`; response admin luôn `private, no-store`.
+- Chỉ thêm cache ở website khi đo được cần thiết và đã có test invalidation: tag theo `posts`, `post:{id}`, `stories`, `customers`, `page:{key}`, `settings:{key}`, `pricing`, `pricing:{key}`, TTL tối đa 5 phút. Khi đó website thêm một Route Handler duy nhất `POST /api/revalidate` (secret dùng chung với API, chỉ gọi `revalidateTag`), API gọi sau commit; lỗi webhook ghi log + retry, không rollback dữ liệu. Gỡ bài phải hết hiệu lực ở request tiếp theo; không dùng stale-while-revalidate trả bài cũ sau unpublish.
 - Metadata và render lấy chung DTO, không query một bài theo hai tiêu chí khác nhau. Bài public có canonical `/tin-tuc/{category}/{slug}`, title/description, OpenGraph, Article JSON-LD với datePublished/dateModified.
 - `[id]` hiện tại có thể đổi tên thành `[slug]` đồng bộ thư mục/type helper; URL thực giữ nguyên cấu trúc. Không để hai dynamic segment cùng cấp trùng route.
 - Root mặc định noindex: chỉ trang published đã hoàn chỉnh mới opt-in `index:true`; draft/preview/admin noindex. Sitemap chỉ dùng URL published có renderer, có lastModified thực tế, không dùng giờ hiện tại cho mọi trang.
@@ -548,171 +696,49 @@ UI bắt buộc có loading/empty/error, thông báo session hết hạn, lỗi 
 
 ## 11. Kế hoạch triển khai theo đầu việc
 
-### Task 0 — Chốt hạ tầng và đóng băng hợp đồng G1
+Danh sách task nằm trong thư mục [`docs/TASK/`](../../TASK/README.md), mỗi file là một chức năng gồm đủ các bước **[API]** (`maxv-api`) → **[UI]** (`maxv-admin`) → **[Site]** (`page_maxv`). Thứ tự, phụ thuộc và cách đánh dấu tiến độ xem [README](../../TASK/README.md).
 
-**Files:** Tạo `docs/admin-api.md`, `docs/admin-openapi.yaml`, `.env.example`; cập nhật `package.json` chỉ sau khi chọn thư viện thực tế. Không sửa `.env.local` để ghi secret vào tài liệu.
+| File | Chức năng | Task |
+|---|---|---|
+| `00-chuan-bi.md` | Hạ tầng, tạo repo, OpenAPI G1 | 0 |
+| `01-dang-nhap-admin.md` | Đăng nhập admin, khung dashboard | 1 [API] → 2 [UI] |
+| `02-phan-quyen.md` | Phân quyền, vai trò, nhân viên | 3 [API] → 4 [UI] |
+| `03-bai-viet-seo.md` | Ảnh, bài viết, SEO, `/tin-tuc` | 5 → 6 → 7 → 8 → 9 [Site] |
+| `04-lead.md` | Lead form liên hệ và tư vấn HKD | 10 [API] → 11 [UI] → 12 [Site] |
+| `05-gia-ca.md` | Giá 5 phần mềm, `/bang-gia`, trang chủ | 13 [API] → 14 [UI] → 15 [Site] |
+| `06-phat-hanh-g1.md` | Phát hành G1 | 16 |
+| `07`–`09` (G2) | Khách hàng; trang cố định, cấu hình; dashboard, export, audit | 17, 18, 19 |
 
-**Interfaces:** OpenAPI 3.1 mô tả mọi endpoint G1, UUID, DTO, error/status, securitySchemes cookie+CSRF, pagination; service nội bộ nhận input đã validate nhưng vẫn kiểm tra quyền ở entrypoint.
-
-- [ ] Xác nhận có tái sử dụng backend/database/auth/storage/email MaxV hay không bằng tài liệu triển khai thực tế; chọn một nguồn sở hữu mỗi resource.
-- [ ] Chốt G1 dùng “yêu cầu dùng thử”, chưa cấp account; chốt chính sách privacy được duyệt và tên version.
-- [ ] Chọn auth library/provider được duy trì, database client và image decoder tương thích runtime đã chọn; ưu tiên hạ tầng sẵn có, không viết tự chế crypto/session.
-- [ ] Viết OpenAPI G1 từ mục 4–6, kèm request/response/error examples và enum. Không tạo endpoint G2/G3 trong G1.
-- [ ] Validate OpenAPI bằng validator được chọn, kiểm tra example theo schema; chỉ commit tài liệu và `.env.example` không secret.
-- [ ] Chốt test stack ở Task 0 (không đợi Task 1): Vitest cho integration — gọi trực tiếp Route Handler qua `Request` dựng tay kèm cookie/CSRF header; Playwright cho e2e — multi-session bằng `browser.newContext()`; thêm `test:integration`, `test:e2e` vào `package.json`; quyết CI matrix (Node + service PostgreSQL).
-- [ ] Đặc tả hạ tầng test DB: biến `TEST_DATABASE_URL` riêng, script reset (drop/create + migration + seed 5 categories/modules), test-bootstrap assert không trỏ production; e2e production smoke dùng biến build riêng.
-- [ ] Đưa health endpoint (`/api/v1/health`, `/api/v1/health/ready`) vào OpenAPI.
-
-### Task 1 — Database, session admin và layout
-
-**Files:** Tạo `app/_lib/server/db.ts`, `app/_lib/server/auth.ts`, `app/_lib/server/api.ts`; migration trong `db/migrations/`; `scripts/bootstrap-admin.ts`; `app/admin/login/page.tsx`, `app/admin/(protected)/layout.tsx`, auth routes theo mục 6.1; chuyển page công khai sang `app/(site)/` theo mục 3.3, sửa root layout. Tạo `tests/integration/admin-auth.test.ts`, `tests/e2e/admin-auth.spec.ts`.
-
-**Interfaces:** `requireAdminSession(): Promise<AdminSession>`; `requireRole(allowed: Role[]): Promise<AdminSession>`; `AdminSession={userId,role,sessionId}` chỉ server; `ApiError` dùng error envelope mục 4. Không tạo abstraction database chung ngoài nhu cầu query thật.
-
-- [ ] Viết test chưa login gọi API posts/leads nhận 401, sai CSRF nhận 403, login sai có thông báo chung, logout thu hồi cookie/session, phiên hết hạn không đọc được dữ liệu.
-- [ ] Chạy test xác nhận fail vì chưa có route/schema; dùng test DB riêng, không production.
-- [ ] Tạo migration auth, password reset và audit; triển khai session theo thư viện đã chọn, bootstrap kín, limit login và reset.
-- [ ] Tách layout; kiểm tra mọi URL site cũ vẫn giữ nguyên, admin không có header/footer marketing, shell không chứa PII.
-- [ ] Kiểm tra reset token một lần, hết hạn 15 phút; đổi password thu hồi session; 2 browser không thấy session nhau.
-- [ ] Test idle expiry 30 phút: `lastActivityAt` cách 31 phút → 401; polling GET session không kéo dài phiên; editor hết hạn giữa chừng vẫn giữ nội dung, hiện thông báo, login lại rồi submit không mất dữ liệu.
-- [ ] Test login rate limit (6 lần sai → 429 kèm `Retry-After`), account lockout tích lũy kèm audit `AUTH_LOCKOUT`; test cross-site POST ngay sau login (ngoại lệ Lax+POST) bị Origin check chặn; test login sinh session token mới.
-- [ ] Test bootstrap: admin đầu tiên bị ép đổi mật khẩu lần đầu (`must_change_password`) trước khi dùng API khác; lệnh break-glass reset-admin-password chạy được khi đã có admin (môi trường thử nghiệm).
-- [ ] Validate env fail-fast khi khởi động (thiếu `NEXT_PUBLIC_SITE_URL` báo lỗi rõ ràng); security headers (HSTS, nosniff, X-Frame-Options) hiện diện ở production build.
-- [ ] Chạy integration/e2e liên quan, lint/build; commit `feat: add admin authentication and isolated layout`.
-
-### Task 2 — Media có kiểm tra và vòng đời file
-
-**Files:** `app/_lib/server/media.ts`, `app/api/v1/admin/media/route.ts`, `app/api/v1/admin/media/[id]/route.ts`, `app/admin/(protected)/media/page.tsx`, `app/admin/_components/media-picker.tsx`, migration media/usages, `tests/integration/media.test.ts`.
-
-**Interfaces:** `uploadMedia(file: File, alt: string, actor: AdminSession): Promise<MediaDto>`; `deleteUnusedMedia(id: string, version: number, actor: AdminSession): Promise<void>`; `MediaDto={id,url,alt,mimeType,width,height,sizeBytes,version}`.
-
-- [ ] Test upload PNG thật thành công; MIME giả/SVG/ảnh decode lỗi/5 MiB+1 bị chặn; ảnh đang được tham chiếu không xóa được.
-- [ ] Xác nhận test fail rồi triển khai DB/storage adapter nhỏ theo provider thật, decode/giới hạn ảnh và quy trình bù trừ mục 6.3.
-- [ ] UI upload/chọn ảnh bằng components hiện có; lỗi upload giữ form người dùng.
-- [ ] Test storage lỗi khi upload/xóa và attach cùng lúc delete; không mất ảnh đang dùng/không rò file mồ côi lâu dài.
-- [ ] Test PATCH alt với version cũ trả 409; test strip EXIF (ảnh có GPS sau upload không còn metadata); test quota upload từ chối sớm qua Content-Length.
-- [ ] Test bù trừ cụ thể: upload thành công storage nhưng ghi DB fail → object bị xóa/đánh dấu dọn (assert số object trong bucket); job dọn chỉ xóa orphan >24 giờ; job reconcile đưa media kẹt `deleting` >24 giờ về trạng thái nhất quán.
-- [ ] Chạy test/lint/build; commit `feat: manage validated media uploads`.
-
-### Task 3 — Bài viết, preview và xuất bản
-
-**Files:** `app/_lib/server/posts.ts`, `app/_lib/server/posts.schema.ts`, `app/_lib/server/audit.ts`; từng `route.ts` trong `app/api/v1/admin/posts/` và news-categories; admin posts pages; `app/_components/sections/content-blocks.tsx`; migration categories/posts; `tests/integration/posts.test.ts`, `tests/e2e/admin-posts.spec.ts`.
-
-**Interfaces:** `listPublishedPosts(input: PublicPostQuery): Promise<Paginated<PublicPostSummary>>`; `getPublishedPost(category: string, slug: string): Promise<PublicPostDetail|null>`; `getAdminPost(id: string, actor: AdminSession): Promise<AdminPost>`; `publishPost(id: string, version: number, actor: AdminSession): Promise<AdminPost>`; `ContentBlock` đúng union mục 5.1.
-
-- [ ] Test tạo draft không public, publish đủ dữ liệu thành công, thiếu cover/excerpt bị 422; duplicate slug/category bị 409.
-- [ ] Test version cũ không ghi đè, slug/category khóa sau lần publish đầu, unpublish/archive/restore đúng state, xóa bài đã từng publish bị chặn.
-- [ ] Test PATCH-vs-PUBLISH: publish ở nơi khác làm tăng version → PATCH gửi version cũ nhận 409 và DB giữ bản mới; DELETE thiếu `If-Match` nhận 428, If-Match sai version nhận 409.
-- [ ] Triển khai `POST /posts/{id}/preview` stateless và UI dùng nó xem trước bản sửa bài published trước khi PATCH live (kèm diff khi khả thi).
-- [ ] Sau khi test fail, triển khai schema/query/transaction/audit/media usages và các endpoint mục 6.2.
-- [ ] Viết renderer block dùng chung public/preview; test text `<script>` chỉ hiển thị text, javascript link bị reject; preview phải có session.
-- [ ] Làm UI list/filter/editor/preview/actions; kiểm tra keyboard và thông báo lỗi trường.
-- [ ] Chạy test/lint/build; commit `feat: add article editing and publishing`.
-
-### Task 4 — Tin tức công khai, SEO, sitemap và tìm kiếm
-
-**Files:** Sửa các page tin tức dưới `app/(site)/tin-tuc/`, `app/tin-tuc/_components/news-listing.tsx`, `news-article.tsx`, `app/_lib/seo.ts`, `app/sitemap.ts`, `app/_components/layout/header-search.tsx`, `mobile-nav.tsx`; tạo routes public posts/categories; thu gọn `app/_data/news.ts` còn dữ liệu UI cần thiết/kiểu tương thích tạm thời. Tests `tests/integration/public-posts.test.ts`, `tests/e2e/public-news.spec.ts`.
-
-**Interfaces:** Dùng `listPublishedPosts`, `getPublishedPost` Task 3; NewsListing nhận dữ liệu phân trang, NewsArticle nhận post+related, không import newsPosts để tự lọc.
-
-- [ ] Test pagination 9 bài mặc định, q tiếng Việt có dấu không lỗi, category không tồn tại 404, query injection không trở thành SQL; sort có tie-breaker.
-- [ ] Xác nhận fail rồi thay mọi caller `newsPosts`, `categoryOf`, `postHref` có liên quan; giữ 5 chuyên mục và URL hiện có.
-- [ ] Nối search header/mobile và listing cùng query `q`; thay filter giữ q, đổi q/category reset page=1; pagination giữ bộ lọc.
-- [ ] Metadata/JSON-LD/sitemap đọc published cùng nguồn; thay `site.url` thành config được kiểm tra URL tại startup, không expose secret.
-- [ ] Test publish → truy cập được và indexable → unpublish → public API/HTML/sitemap không lộ bài; kiểm tra cả production cache.
-- [ ] Test production (`next build && next start`): client router cache — context 1 đã xem bài, context 2 unpublish, context 1 điều hướng nội bộ + reload đều nhận 404; publish bài mới xuất hiện ở `/sitemap.xml` và public API ở request tiếp theo không cần restart; unpublish bài nằm trong related của bài khác không còn trong response detail sau invalidation.
-- [ ] Chạy test/lint/build; commit `feat: connect public news and SEO to published content`.
-
-### Task 5 — Nhận và xử lý lead
-
-**Files:** `app/_lib/server/leads.ts`, `leads.schema.ts`, routes public leads/admin leads/notes; admin lead pages; sửa `app/(site)/lien-he/page.tsx`, `app/(site)/dang-ky/page.tsx`, `app/_components/sections/trial-signup.tsx`; form client nhỏ tương ứng; tạo trang privacy thật; migrations leads/notes/lead_requests/consent_records; tests `tests/integration/leads.test.ts`, `tests/e2e/lead-forms.spec.ts`.
-
-**Interfaces:** `createLead(input: LeadCreate, key: string, context: LeadRequestContext): Promise<{receiptId:string,replayed:boolean}>`; `updateLead(id: string, input: LeadPatch, actor: AdminSession): Promise<AdminLead>`; `addLeadNote(id: string, body: string, actor: AdminSession): Promise<LeadNote>`.
-
-- [ ] Test thiếu consent/type sai/email sai/module chưa mở bị reject, phone giữ số 0, không nhận password field.
-- [ ] Test hai request cùng key chỉ có một lead, cùng key khác payload 409; giả proxy không bỏ được rate limit.
-- [ ] Test race đồng thời thật: `Promise.all` 5 request cùng Idempotency-Key → đúng 1 lead, 4 replay cùng receiptId; 6 request mỗi request một `X-Forwarded-For` khác nhau vẫn bị rate limit theo IP thật; rate-limit store là DB/Redis (assert config), không phải memory map.
-- [ ] Test consent version sai trả 409 `CONSENT_VERSION_CHANGED` và không tạo lead; honeypot không rỗng trả 201 giả không tạo lead; payload có trường password bị strip.
-- [ ] Test đánh dấu lead trùng (cùng phone trong 30 ngày) và PATCH hiệu chỉnh phone kèm reason lưu giá trị gốc vào audit.
-- [ ] Test chưa login không đọc lead, cập nhật version cũ 409, note actor lấy từ server và không chấp nhận authorId client.
-- [ ] Sau fail triển khai transaction lưu lead/idempotency, shared rate limit và audit. Không bắt buộc email thông báo để coi lead lưu thành công.
-- [ ] Bật form liên hệ/dùng thử; bỏ password, đổi CTA yêu cầu dùng thử, xử lý pending/success/error/retry đúng key. Banner home dẫn tới form, không thu thêm một bộ dữ liệu rời rạc.
-- [ ] Test e2e gửi form → thấy receipt → admin thấy lead đúng trường → ghi chú/đổi trạng thái → reload không mất dữ liệu.
-- [ ] Chạy test/lint/build; commit `feat: capture and manage customer enquiries`.
-
-### Task 6 — Logo/câu chuyện khách hàng (G2)
-
-**Files:** `app/_lib/server/customers.ts`, `customer-stories.ts` và schema; routes mục 7.1/7.2; admin pages tương ứng; sửa `customer-trust.tsx`, `customer-stories.tsx`; tạo public customer pages dưới `app/(site)/khach-hang/`; migration customers/stories; `tests/integration/customers.test.ts`, `tests/e2e/customer-stories.spec.ts`.
-
-**Interfaces:** Public customer/story DTO chỉ chứa approved/visible/published; story dùng ContentBlock Task 3; media usage dùng Task 2.
-
-- [ ] Test logo hidden không ra public, customer có story không xóa được, archived story 404, URL sau publish không đổi.
-- [ ] Implement endpoint/UI/render theo schema mục 7.1/7.2; seed logo thật, giữ câu chuyện mẫu ở draft và không dùng số liệu mẫu làm chứng thực.
-- [ ] Xóa entry placeholder đã thay, cập nhật sitemap/metadata và home chỉ chọn story published.
-- [ ] Chạy tests và kiểm tra link trang chủ/khách hàng; commit riêng module.
-
-### Task 7 — Pages, settings và bảng giá (G2)
-
-**Files:** `app/_lib/server/pages.ts`, `settings.ts`, `marketing-plans.ts`; `app/_lib/server/page-schemas/{key}.schema.ts` cho 8 key mục 7.3; routes mục 7.3–7.5; admin pages; sửa các home/product components và `_lib/contact.ts`, `_lib/seo.ts`; migrations pages/settings/plans; `tests/integration/pages.test.ts`, `settings.test.ts`, `marketing-plans.test.ts`.
-
-**Interfaces:** `getPublishedPage(key: PageKey): Promise<PublishedPage|null>`; `publishPage(key: PageKey, version: number, actor: AdminSession): Promise<AdminPage>`; `getPublicSiteConfig(): Promise<PublicSiteConfig>`; `getPublicMarketingPlans(): Promise<PublicMarketingPlan[]>`.
-
-- [ ] Tách dữ liệu từng page hiện có và viết schema field đúng section; mỗi page là một increment có kiểm tra riêng, không migrate tất cả trước khi có renderer.
-- [ ] Test PUT draft không đổi live, publish invalid schema bị chặn, key lạ 404/422, unknown fields bị reject; ảnh draft/published đều được giữ usage.
-- [ ] Test giá fixed/from không âm, free=0, contact=null, entry price nhất quán home/pricing, không đổi currency/giá bằng float.
-- [ ] Implement pages/settings/plans endpoints và UI, không có JSON editor tự do cho người vận hành.
-- [ ] Migrate approved content thành published; mẫu và giá chưa xác nhận không publish; xác nhận privacy version cùng nguồn consent.
-- [ ] Kiểm tra hồi quy responsive/link/FAQ/CTA từng page và metadata; commit theo từng nhóm trang.
-
-### Task 8 — Nhân sự, export, audit UI và dashboard (G2)
-
-**Files:** `app/_lib/server/admin-users.ts`, `dashboard.ts`, `lead-export.ts`; routes mục 7.6; pages users/audit/dashboard; tests `tests/integration/admin-users.test.ts`, `lead-export.test.ts`, `dashboard.test.ts`.
-
-**Interfaces:** Role union `admin|editor|sales`; `exportLeadsCsv(input: LeadFilter, actor: AdminSession): Promise<Response>`; dashboard DTO chỉ số thực có nguồn DB.
-
-- [ ] Test editor không đọc lead/settings/users; sales không đọc draft/media; admin được phép; không chỉ test ẩn menu.
-- [ ] Test sales gọi `GET /admin/posts/{id}/preview` trả 403; export chỉ chứa whitelist cột (không IP/idempotency key), giới hạn 5 export/user/giờ, audit ghi rowCount; DELETE lead với reason tiếng Việt qua body JSON hoạt động đúng.
-- [ ] Test không tự hạ quyền/disable, hai request không làm mất admin cuối, disable thu hồi session lập tức, activation hết hạn/đã dùng không hoạt động lại.
-- [ ] Test CSV dấu tiếng Việt/quote/newline/formula và vượt 10.000 dòng không bị cắt ngầm; API export luôn private/no-store.
-- [ ] Implement endpoint/UI, audit việc export/xóa PII, xác nhận số dashboard đúng timezone/range và không giả số truy cập.
-- [ ] Chạy tests/lint/build; commit riêng module.
-
-### Task 9 — Kiểm tra phát hành và vận hành
-
-**Files:** `docs/admin-runbook.md`, `docs/admin-release-checklist.md`, CI config theo nền tảng repo; scripts migration/seed/cleanup theo DB/storage đã chọn; `tests/e2e/admin-smoke.spec.ts`.
-
-- [ ] Cập nhật OpenAPI theo implementation và kiểm tra không thiếu endpoint đã triển khai; mọi API admin có auth/role/CSRF thích hợp.
-- [ ] Chạy bộ integration trên DB sạch + apply migration + seed; test bằng ít nhất hai session browser và user role khác nhau.
-- [ ] Chạy `npm run lint`, `npm run build`, `npm run test:integration`, `npm run test:e2e`. Hai script test hiện chưa tồn tại: thêm test runner/dev dependencies ở Task 1 sau khi chọn công cụ; không coi các lệnh này đã chạy thành công trong bước lập kế hoạch.
-- [ ] Test production bằng `npm run start`, không chỉ next dev: cache/unpublish, cookie Secure qua HTTPS, file upload, status 404, search/pagination, canonical/sitemap và route groups.
-- [ ] Verify security headers ở production (HSTS, CSP, nosniff, X-Frame-Options) và health endpoint trả 503 khi DB down; chạy axe-core trên form public và admin (label, keyboard, focus-visible).
-- [ ] Đo baseline hiệu năng: danh sách tin với 1.000 bài seed < 2s (P75, production), search `q` tiếng Việt < 2s, upload ảnh 5 MiB < 10s.
-- [ ] Thử backup/restore staging, restart/redeploy không mất DB/ảnh, kiểm tra migration tương thích phiên bản app trước.
-- [ ] Viết rollback từng migration và release; rollback code không làm mất dữ liệu admin vừa nhập. Bật form sau khi DB, privacy, rate limit và admin xử lý lead đều sẵn sàng.
-- [ ] Chỉ đánh dấu complete khi có log kết quả kiểm tra; commit tài liệu vận hành không chứa secret.
+Đặc tả (mục 1–10, 12) vẫn ở file này; khi đặc tả đổi thì cập nhật file task liên quan trong cùng commit.
 
 ## 12. Vận hành, lưu trữ và kiểm tra nghiệm thu
 
 ### 12.1 Biến cấu hình cần quản lý
 
-| Biến/nhóm | Phạm vi |
-|---|---|
-| NEXT_PUBLIC_SITE_URL | Origin công khai hợp lệ, dùng metadata/canonical/sitemap |
-| DATABASE_URL | Chỉ server; connection pool phù hợp deployment |
-| AUTH_SECRET / auth provider credentials | Theo thư viện được chọn, chỉ server |
-| STORAGE_ENDPOINT, STORAGE_BUCKET, STORAGE_ACCESS_KEY, STORAGE_SECRET_KEY | Chỉ server, quyền tối thiểu bucket media |
-| MEDIA_PUBLIC_BASE_URL | Origin/path public cố định, đồng bộ Next Image config |
-| EMAIL_FROM, email provider secret | Reset/activation; không expose ở site-config |
-| Shared rate-limit connection | Database hoặc store dùng chung; không dùng Map memory cho nhiều instance |
-| TEST_DATABASE_URL | Database riêng cho test; test-bootstrap assert khác DATABASE_URL |
+| Repo | Biến/nhóm | Phạm vi |
+|---|---|---|
+| `maxv-api` | DATABASE_URL | Connection pool phù hợp deployment |
+| `maxv-api` | SESSION_SECRET / auth library credentials | Theo thư viện được chọn |
+| `maxv-api` | MEDIA_DIR, MEDIA_MIN_FREE_BYTES | Thư mục ảnh trên ổ đĩa (`D:\maxv-media`), ngưỡng trống tối thiểu trước khi nhận upload |
+| `maxv-api` | MEDIA_PUBLIC_BASE_URL | Origin/path public cố định của ảnh |
+| `maxv-api` | EMAIL_FROM, email provider secret | Reset/activation/mời nhân viên |
+| `maxv-api` | ADMIN_ORIGIN, SITE_ORIGIN | Origin check admin và CORS `POST /public/leads` |
+| `maxv-api` | Shared rate-limit connection | Database hoặc store dùng chung; không dùng Map memory cho nhiều instance |
+| `maxv-api` | TEST_DATABASE_URL | Database riêng cho test; test-bootstrap assert khác DATABASE_URL |
+| `maxv-admin` | VITE_API_BASE | Mặc định `/api/v1/admin` (cùng origin qua proxy); không chứa secret vì build ra file tĩnh |
+| `page_maxv` | NEXT_PUBLIC_SITE_URL | Origin công khai, dùng metadata/canonical/sitemap |
+| `page_maxv` | MAXV_API_URL | Chỉ server; gọi GET `/api/v1/public/*` khi render |
+| `page_maxv` | NEXT_PUBLIC_MAXV_API_URL | Trình duyệt gửi `POST /public/leads` |
+| `page_maxv` | NEXT_PUBLIC_HDDT_URL | Đã có; đăng ký/đăng nhập khách hàng `be_maxv` |
+| `page_maxv` | MEDIA_PUBLIC_BASE_URL | Đồng bộ `images.remotePatterns` |
 
 Không mặc định biến env là admin setting. Secret được xoay vòng và tách staging/production. Log requestId và lỗi kỹ thuật đã scrub, không log body auth/lead, Cookie hoặc Authorization.
 
 ### 12.2 Lưu trữ và sự cố
 
-- Đề xuất ban đầu: backup DB mỗi ngày, giữ 30 ngày; object storage bật cơ chế khôi phục theo khả năng provider. Mục tiêu RPO <=24 giờ, RTO <=4 giờ cần được kiểm chứng bằng restore staging, không phải SLA đã cam kết.
+- Backup DB và ảnh cùng một script hằng ngày bằng `restic` ra ngoài VPS: dump DB trước rồi mới backup thư mục ảnh, giữ 7 ngày/4 tuần/6 tháng, `restic check` hằng tuần, khôi phục thử staging hằng tháng, cảnh báo khi không có lần backup thành công trong 26 giờ. Script và quy trình khôi phục ở `docs/TASK/thiet-ke-api-db.md` mục 4.5. Mục tiêu RPO <=24 giờ, RTO <=4 giờ cần được kiểm chứng bằng restore staging, không phải SLA đã cam kết.
 - Backup là điều kiện tiên quyết trước khi bật form nhận lead PII; số ngày retention lead phải đã được duyệt trước khi bật form — chưa duyệt thì chưa bật nhận lead.
-- Runbook sự cố media nhạy cảm: gỡ tham chiếu/unpublish nếu cần → xóa media → purge/invalidate CDN theo provider → ghi audit sự cố; URL bất biến có thể còn tồn tại trong cache/bộ nhớ ngoài kiểm soát, phải nêu rõ trong phản hồi sự cố.
+- Runbook sự cố media nhạy cảm: gỡ tham chiếu/unpublish nếu cần → xóa media → purge cache Cloudflare nếu có → xóa snapshot backup chứa ảnh (`restic forget <id> --prune`) → ghi audit sự cố; URL bất biến có thể còn tồn tại trong cache/bộ nhớ ngoài kiểm soát, phải nêu rõ trong phản hồi sự cố.
 - Chính sách lưu lead đề xuất 180 ngày sau khi closed/spam, audit 180 ngày; phải được đơn vị vận hành duyệt trước khi chạy job xóa tự động. Khi chưa duyệt, không tự đặt cron xóa dữ liệu.
 - Dọn session/reset/idempotency hết hạn và file orphan bằng job có log, retry, chế độ xem trước danh sách trước khi bật xóa tự động.
 - Reset email lỗi: trả lỗi dịch vụ phù hợp nếu không enqueue được, không báo reset đã gửi thực tế; response không tiết lộ email tồn tại. Lead lưu thành công vẫn hiện ở admin dù email thông báo phụ trợ lỗi.
@@ -725,28 +751,37 @@ Không mặc định biến env là admin setting. Secret được xoay vòng v�
 - [ ] Tạo bài tiếng Việt, upload ảnh hợp lệ, preview, publish; danh sách/chi tiết/SEO/sitemap hiện đúng.
 - [ ] Bài draft/archive không tìm thấy bằng public API, URL hay sitemap; hai người sửa không mất dữ liệu.
 - [ ] Search header/mobile/listing và phân trang giữ query/category đúng.
-- [ ] Form liên hệ/dùng thử lưu đúng dữ liệu/consent/nguồn, không nhận password, retry không tạo bản sao.
-- [ ] Admin tìm lead, xem chi tiết, ghi chú và đổi trạng thái; dữ liệu không mất sau deploy.
+- [ ] Form liên hệ và form tư vấn HKD lưu đúng dữ liệu/consent/nguồn, không nhận password, retry không tạo bản sao; HKD không còn mở `mailto:`.
+- [ ] Nhân viên có quyền lead tìm lead, xem chi tiết, ghi chú và đổi trạng thái; dữ liệu không mất sau deploy.
+- [ ] Quản trị viên mời nhân viên, tạo vai trò bằng bảng tick quyền, đổi vai trò; nhân viên chỉ thấy và gọi được chức năng thuộc quyền; không thể mất Quản trị viên cuối cùng.
+- [ ] Admin sửa gói giá của từng phần mềm; trang sản phẩm, `/bang-gia` (theo thứ tự phần mềm) và trang chủ hiện giá mới, gói ẩn không hiện; audit ghi giá cũ/mới.
 - [ ] File giả ảnh/quá dung lượng và ảnh đang dùng không thể xóa/upload sai quy tắc.
-- [ ] Trang privacy thật đã được duyệt; UI không hứa cấp tài khoản dùng thử nếu chưa tích hợp backend.
+- [ ] Trang privacy thật đã được duyệt trước khi bật nhận lead.
 - [ ] Security headers hiện diện ở production; health endpoint phản ánh đúng trạng thái DB; env bắt buộc được validate khi khởi động.
-- [ ] Audit log ghi đủ hành động chính sau kịch bản nghiệm thu: login, change-password, publish/unpublish, upload/delete media, đổi trạng thái lead, export, xóa PII.
+- [ ] Audit log ghi đủ hành động chính sau kịch bản nghiệm thu: login, change-password, publish/unpublish, upload/delete media, đổi trạng thái lead, sửa giá, mời/khóa nhân viên, đổi vai trò/quyền, export, xóa PII.
 - [ ] 429 kèm `Retry-After` hoạt động cho login throttle và lead rate limit trước khi bật form công khai; a11y cơ bản (label/keyboard) đạt trên form public và admin.
-- [ ] lint/build/integration/e2e production smoke đạt; DB/storage backup và restore đã kiểm tra.
+- [ ] lint/build/integration/e2e production smoke đạt; backup DB + thư mục ảnh ra ngoài VPS chạy hằng ngày và đã khôi phục thử thành công.
 
 ### 12.4 Phần cần xác nhận trước triển khai, không chặn việc review kế hoạch
 
-1. Repo backend MaxV hiện có, stack/database/auth đã dùng và quyền truy cập tài liệu API.
-2. Hạ tầng deploy website, database, storage, email và môi trường staging.
-3. Danh sách nhân sự admin/editor/sales thực tế; G1 một quyền admin có đáp ứng vận hành không.
-4. Dùng thử là gửi yêu cầu hay phải tạo tài khoản ngay; nếu ngay, cần hợp đồng tích hợp G3 trước.
+Các câu dưới là đầu vào cần chốt khi thực hiện kế hoạch, không phải bằng chứng code còn thiếu. Thời điểm chốt và vai trò phụ trách nằm ở [README task](../../TASK/README.md); ghi thêm tên người phụ trách thực tế, quyết định và ngày chốt ngay dưới câu tương ứng. Chỉ chặn phần việc phụ thuộc vào quyết định, không chặn toàn bộ dự án.
+
+1. ~~API đặt ở đâu~~ — đã chốt 27/10/2026: service Node.js mới `maxv-api`, database riêng.
+2. Hạ tầng đã chốt (27/10/2026): một Windows Server 2019 + IIS chạy cả API, PostgreSQL, dashboard, website; ảnh trên ổ đĩa server (mục 3.5). Còn phải chốt: staging chạy chung server (site/DB/service riêng) hay máy khác; email provider; nơi chứa backup ngoài server cho `restic` (server/NAS khác qua SFTP, hoặc bucket Backblaze B2 chỉ làm kho backup).
+3. Danh sách nhân sự thực tế và vai trò của từng người, để chỉnh 3 vai trò mẫu ở mục 6.6 trước khi seed.
+4. Giá "Từ …/tháng" trên trang chủ: tự lấy gói rẻ nhất đang visible, hay admin chọn một gói cụ thể. (4 gói ở `/bang-gia` đã chốt 27/10/2026: bỏ, `/bang-gia` chỉ gom gói của các trang sản phẩm.)
 5. Nội dung privacy, giá thật, quyền sử dụng logo/lời chứng thực và thời hạn lưu PII được duyệt.
 6. SLA phản hồi lead theo topic (tu-van/ho-tro/hop-tac) và có kéo email thông báo lead mới từ G3 lên G1 không; ai theo dõi ngoài giờ hành chính.
-7. URL và câu chữ trang dùng thử: giữ `/dang-ky`; xử lý lời hứa "dùng thử miễn phí 15 ngày" khi G1 chỉ nhận yêu cầu (bỏ "15 ngày" hay đổi mô tả quy trình) — cần người phụ trách kinh doanh duyệt.
+7. Câu chữ "dùng thử miễn phí 15 ngày" trên site phải khớp thời hạn dùng thử thật mà `be_maxv` cấp khi đăng ký — người phụ trách kinh doanh xác nhận.
 8. Email vận hành: có dùng Gmail cá nhân hiện có làm `EMAIL_FROM` cho reset/activation không, hay cấp email tên miền riêng (deliverability và hình thức thương hiệu).
 9. Quyền hiệu chỉnh dữ liệu liên hệ lead và quy trình đáp ứng yêu cầu truy xuất/chỉnh sửa/xóa của khách theo Nghị định 13/2023 — pháp lý duyệt cùng chính sách bảo mật.
 10. Nội dung go-live: 5 chuyên mục đang trống, logo/câu chuyện đang là mẫu — ai sản xuất nội dung thật trước ngày bật form.
 11. Tiêu chí "một admin là đủ": có tạo admin dự phòng từ G1 không, ai giữ mật khẩu dự phòng, quy trình break-glass ra sao.
 12. Link `/tra-cuu-mst` trong header đang 404: gỡ khỏi nav hay xây trang ở G3.
+13. Lead — phụ trách kinh doanh phối hợp quản trị viên chốt trước Task 10: ý nghĩa/điều kiện chuyển từng trạng thái, ai được đưa vào spam, khi nào bắt buộc ghi chú; cách bàn giao lead khi người phụ trách bị khóa/nghỉ việc và ai theo dõi lead chưa giao. Không mặc định bổ sung tự động phân công.
+14. Giá — phụ trách kinh doanh chốt trước duyệt hợp đồng pricing ở Task 0/triển khai Task 13: VAT đã gồm/chưa gồm, phí khởi tạo/bổ sung, ý nghĩa giá "Từ" và so sánh gói khác kỳ hạn. Ưu tiên notes/specs hiện có, không thêm bộ tính thuế hoặc lịch giá tương lai vào G1.
+15. Khách hàng/story — phụ trách nội dung chốt trước Task 17: khi ẩn logo khách hàng thì story đang publish có tiếp tục công khai không; đồng bộ hành vi public và tiêu chí nghiệm thu theo một quyết định.
+16. Privacy G2 — chủ dự án cùng người phụ trách nội dung/privacy chốt trước Task 18: người duyệt chính sách, cách phối hợp chuyển nguồn policyVersion giữa API/form và xử lý form mở với phiên bản cũ; không để hai nguồn version cùng hoạt động.
+17. Số liệu G2 — phụ trách kinh doanh chốt trước Task 19: định nghĩa từng chỉ số, trường ngày để đếm, múi giờ Việt Nam, bộ lọc và fixture đối chiếu. Không suy ra doanh thu/conversion từ dữ liệu lead khi chưa có nguồn tương ứng.
 
 Không xây ở đợt này: kế toán/hóa đơn/tồn kho/thanh toán, CRM đầy đủ, page builder kéo thả, đa ngôn ngữ, lịch đăng, automation marketing, tra cứu MST hoặc cổng support hoàn chỉnh. Mỗi phần cần nghiệp vụ và nguồn dữ liệu riêng; thêm endpoint không làm chúng tự hoạt động.

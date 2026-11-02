@@ -1,6 +1,7 @@
+import { env } from "@/app/_lib/env";
+
 export const site = {
-  // shortcut: fallback is the current staging domain; set NEXT_PUBLIC_SITE_URL to the real one in production.
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://app.vinhlab.site").replace(/\/$/, ""),
+  url: env("NEXT_PUBLIC_SITE_URL"),
   name: "MaxV",
   title: "MaxV – Phần mềm kế toán online",
   description:

@@ -1,0 +1,325 @@
+// Trạng thái cuối G1 của maxv-api. Đã kiểm tra: prisma validate (6.19.3), migrate diff --from-empty chạy được trên PostgreSQL 18, drift = rỗng sau khi áp checks.sql.
+// Mỗi task API chỉ thêm model của mình (và field quan hệ ngược trên AdminUser), xem docs/TASK/thiet-ke-api-db.md mục 5.
+
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "windows"]   // deploy lên Windows Server 2019 (mục 3.5 kế hoạch gốc)
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pg_trgm, unaccent]
+}
+
+// ───────────── Admin, phân quyền, phiên, audit ─────────────
+
+model AdminRole {
+  id          String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String                @unique
+  description String?
+  isSystem    Boolean               @default(false) @map("is_system")
+  version     Int                   @default(1)
+  createdAt   DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  permissions AdminRolePermission[]
+  users       AdminUser[]
+
+  @@map("admin_roles")
+}
+
+model AdminRolePermission {
+  roleId     String    @map("role_id") @db.Uuid
+  permission String
+  role       AdminRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permission])
+  @@map("admin_role_permissions")
+}
+
+model AdminUser {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String    @unique
+  displayName        String    @map("display_name")
+  passwordHash       String?   @map("password_hash")
+  roleId             String    @map("role_id") @db.Uuid
+  status             String    @default("invited")
+  mustChangePassword Boolean   @default(false) @map("must_change_password")
+  failedLoginCount   Int       @default(0) @map("failed_login_count")
+  lockedUntil        DateTime? @map("locked_until") @db.Timestamptz(6)
+  lastLoginAt        DateTime? @map("last_login_at") @db.Timestamptz(6)
+  version            Int       @default(1)
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  role               AdminRole        @relation(fields: [roleId], references: [id])
+  sessions           AdminSession[]
+  tokens             AdminToken[]
+  auditLogs          AuditLog[]
+  media              Media[]
+  postsCreated       Post[]           @relation("PostCreatedBy")
+  postsUpdated       Post[]           @relation("PostUpdatedBy")
+  leadsAssigned      Lead[]
+  leadNotes          LeadNote[]
+  pricingProducts    PricingProduct[]
+  pricingPlansCreated PricingPlan[]   @relation("PlanCreatedBy")
+  pricingPlansUpdated PricingPlan[]   @relation("PlanUpdatedBy")
+
+  @@map("admin_users")
+}
+
+model AdminSession {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String    @map("user_id") @db.Uuid
+  tokenHash      Bytes     @unique @map("token_hash")
+  csrfTokenHash  Bytes     @map("csrf_token_hash")
+  expiresAt      DateTime  @map("expires_at") @db.Timestamptz(6)
+  lastActivityAt DateTime  @default(now()) @map("last_activity_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  user           AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("admin_sessions")
+}
+
+model AdminToken {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  scope     String
+  tokenHash Bytes     @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(6)
+  usedAt    DateTime? @map("used_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admin_tokens")
+}
+
+model AuditLog {
+  id           BigInt     @id @default(autoincrement())
+  actorId      String?    @map("actor_id") @db.Uuid
+  action       String
+  resourceType String?    @map("resource_type")
+  resourceId   String?    @map("resource_id")
+  changes      Json?
+  requestId    String?    @map("request_id")
+  result       String     @default("success")
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  actor        AdminUser? @relation(fields: [actorId], references: [id])
+
+  @@index([actorId, createdAt(sort: Desc)])
+  @@index([resourceType, resourceId, createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
+
+model RateLimit {
+  key         String   @id
+  windowStart DateTime @map("window_start") @db.Timestamptz(6)
+  count       Int
+
+  @@map("rate_limits")
+}
+
+// ───────────── Ảnh ─────────────
+
+model Media {
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  storageKey   String       @unique @map("storage_key")
+  originalName String       @map("original_name")
+  mimeType     String       @map("mime_type")
+  sizeBytes    Int          @map("size_bytes")
+  width        Int
+  height       Int
+  alt          String
+  status       String       @default("ready")
+  uploadedById String       @map("uploaded_by") @db.Uuid
+  version      Int          @default(1)
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  uploadedBy   AdminUser    @relation(fields: [uploadedById], references: [id])
+  usages       MediaUsage[]
+  postsCover   Post[]
+
+  @@index([createdAt(sort: Desc)])
+  @@map("media")
+}
+
+model MediaUsage {
+  mediaId      String @map("media_id") @db.Uuid
+  resourceType String @map("resource_type")
+  resourceId   String @map("resource_id") @db.Uuid
+  field        String
+  media        Media  @relation(fields: [mediaId], references: [id], onDelete: Restrict)
+
+  @@id([mediaId, resourceType, resourceId, field])
+  @@index([resourceType, resourceId])
+  @@map("media_usages")
+}
+
+// ───────────── Tin tức ─────────────
+
+model NewsCategory {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug        String @unique
+  label       String
+  description String
+  sortOrder   Int    @map("sort_order")
+  posts       Post[]
+
+  @@map("news_categories")
+}
+
+model Post {
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryId       String       @map("category_id") @db.Uuid
+  slug             String
+  title            String
+  excerpt          String       @default("")
+  content          Json         @default("[]")
+  coverMediaId     String?      @map("cover_media_id") @db.Uuid
+  featured         Boolean      @default(false)
+  state            String       @default("draft")
+  publishedAt      DateTime?    @map("published_at") @db.Timestamptz(6)
+  firstPublishedAt DateTime?    @map("first_published_at") @db.Timestamptz(6)
+  seoTitle         String?      @map("seo_title")
+  seoDescription   String?      @map("seo_description")
+  searchText       String       @default("") @map("search_text")
+  createdById      String       @map("created_by") @db.Uuid
+  updatedById      String       @map("updated_by") @db.Uuid
+  version          Int          @default(1)
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  category         NewsCategory @relation(fields: [categoryId], references: [id])
+  cover            Media?       @relation(fields: [coverMediaId], references: [id])
+  createdBy        AdminUser    @relation("PostCreatedBy", fields: [createdById], references: [id])
+  updatedBy        AdminUser    @relation("PostUpdatedBy", fields: [updatedById], references: [id])
+
+  @@unique([categoryId, slug])
+  @@index([state, publishedAt(sort: Desc), id(sort: Desc)])
+  @@index([categoryId, state, publishedAt(sort: Desc), id(sort: Desc)])
+  @@index([searchText(ops: raw("gin_trgm_ops"))], type: Gin, map: "posts_search_trgm")
+  @@map("posts")
+}
+
+// ───────────── Lead ─────────────
+
+model Lead {
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type              String
+  topic             String?
+  name              String
+  phone             String
+  email             String?
+  company           String?
+  productKey        String?      @map("product_key")
+  industry          String?
+  message           String?
+  sourcePath        String       @map("source_path")
+  utm               Json?
+  consentAt         DateTime     @map("consent_at") @db.Timestamptz(6)
+  consentVersion    String       @map("consent_version")
+  status            String       @default("new")
+  assignedToId      String?      @map("assigned_to") @db.Uuid
+  possibleDuplicate Boolean      @default(false) @map("possible_duplicate")
+  searchText        String       @default("") @map("search_text")
+  version           Int          @default(1)
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  assignedTo        AdminUser?   @relation(fields: [assignedToId], references: [id])
+  notes             LeadNote[]
+  requests          LeadRequest[]
+
+  @@index([createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@index([assignedToId])
+  @@index([phone, createdAt])
+  @@index([email, createdAt])
+  @@index([searchText(ops: raw("gin_trgm_ops"))], type: Gin, map: "leads_search_trgm")
+  @@map("leads")
+}
+
+model LeadNote {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  leadId    String    @map("lead_id") @db.Uuid
+  authorId  String    @map("author_id") @db.Uuid
+  body      String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  lead      Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  author    AdminUser @relation(fields: [authorId], references: [id])
+
+  @@index([leadId, createdAt])
+  @@map("lead_notes")
+}
+
+model LeadRequest {
+  idempotencyKeyHash Bytes    @id @map("idempotency_key_hash")
+  payloadHash        Bytes    @map("payload_hash")
+  leadId             String?  @map("lead_id") @db.Uuid
+  expiresAt          DateTime @map("expires_at") @db.Timestamptz(6)
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  lead               Lead?    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("lead_requests")
+}
+
+model ConsentRecord {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  leadRefHash    Bytes    @map("lead_ref_hash")
+  type           String
+  sourcePath     String   @map("source_path")
+  consentVersion String   @map("consent_version")
+  consentAt      DateTime @map("consent_at") @db.Timestamptz(6)
+
+  @@map("consent_records")
+}
+
+// ───────────── Giá cả ─────────────
+
+model PricingProduct {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key         String        @unique
+  name        String
+  title       String        @default("")
+  description String        @default("")
+  notes       Json          @default("[]")
+  sortOrder   Int           @map("sort_order")
+  visible     Boolean       @default(false)
+  updatedById String?       @map("updated_by") @db.Uuid
+  version     Int           @default(1)
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedBy   AdminUser?    @relation(fields: [updatedById], references: [id])
+  plans       PricingPlan[]
+
+  @@map("pricing_products")
+}
+
+model PricingPlan {
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  productId     String         @map("product_id") @db.Uuid
+  name          String
+  description   String         @default("")
+  priceMode     String         @map("price_mode")
+  priceAmount   BigInt?        @map("price_amount")
+  billingPeriod String         @default("year") @map("billing_period")
+  specs         Json           @default("[]")
+  features      Json           @default("[]")
+  featured      Boolean        @default(false)
+  ctaLabel      String         @default("Nhận tư vấn") @map("cta_label")
+  ctaHref       String         @default("/lien-he") @map("cta_href")
+  sortOrder     Int            @default(0) @map("sort_order")
+  visible       Boolean        @default(false)
+  createdById   String         @map("created_by") @db.Uuid
+  updatedById   String         @map("updated_by") @db.Uuid
+  version       Int            @default(1)
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  product       PricingProduct @relation(fields: [productId], references: [id])
+  createdBy     AdminUser      @relation("PlanCreatedBy", fields: [createdById], references: [id])
+  updatedBy     AdminUser      @relation("PlanUpdatedBy", fields: [updatedById], references: [id])
+
+  @@index([productId, sortOrder])
+  @@map("pricing_plans")
+}
