@@ -4,13 +4,11 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useActionState } from "react";
 
-import { fieldClass, labelClass } from "@/app/(auth)/_components/auth-shell";
+import { fieldClass, labelClass, newPasswordProps, required } from "@/app/(auth)/_components/auth-shell";
 import { PasswordInput } from "@/app/(auth)/_components/password-input";
 import { registerAction, type AuthState } from "@/app/api/auth/actions";
 import { Button } from "@/app/_components/ui/button";
 import { Input } from "@/app/_components/ui/input";
-
-const required = <span className="text-destructive">*</span>;
 
 export function RegisterForm() {
   const [state, formAction, pending] = useActionState<AuthState, FormData>(registerAction, {});
@@ -71,11 +69,7 @@ export function RegisterForm() {
             id="password"
             name="password"
             required
-            minLength={8}
-            pattern="(?=.*[A-Za-z])(?=.*\d).{8,}"
-            title="Mật khẩu tối thiểu 8 ký tự, gồm cả chữ và số"
-            autoComplete="new-password"
-            placeholder="Tối thiểu 8 ký tự, gồm chữ và số"
+            {...newPasswordProps}
           />
         </div>
 

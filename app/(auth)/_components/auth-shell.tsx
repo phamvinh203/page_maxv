@@ -11,6 +11,22 @@ import { googleIcon } from "@/app/_lib/assets";
 export const fieldClass = "mt-2 h-11 rounded-lg bg-white";
 export const labelClass = "text-sm font-medium";
 
+// shared required-field marker for auth form labels.
+export const required = <span className="text-destructive">*</span>;
+
+// password policy the API enforces; shared by the register and reset-password forms.
+export const newPasswordProps = {
+  minLength: 8,
+  pattern: "(?=.*[A-Za-z])(?=.*\\d).{8,}",
+  title: "Mật khẩu tối thiểu 8 ký tự, gồm cả chữ và số",
+  autoComplete: "new-password",
+  placeholder: "Tối thiểu 8 ký tự, gồm chữ và số",
+} as const;
+
+// query flag resetPasswordAction appends to /dang-nhap after a successful reset;
+// the login page shows a confirmation banner when it is present.
+export const RESET_DONE_QUERY = "dat-lai";
+
 // trial perks only make sense on the signup page, not for existing customers logging in.
 const perks = [
   { label: "Miễn phí 15 ngày", Icon: Clock3, trial: true },
