@@ -15,7 +15,15 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function Page() {
+export default async function Page({ searchParams }: PageProps<"/dang-ky">) {
+  // The homepage trial-signup box lands here as ?contact=...; split it into the
+  // matching register field. Anything that isn't an email is treated as a phone
+  // number — the form's own pattern validation will bounce a bad value.
+  const raw = (await searchParams).contact;
+  const contact = Array.isArray(raw) ? raw[0] : raw;
+  const defaultEmail = contact?.includes("@") ? contact : undefined;
+  const defaultPhone = contact && !contact.includes("@") ? contact : undefined;
+
   return (
     <AuthShell trial>
       <h1 className="text-2xl font-bold text-primary sm:text-3xl">
@@ -25,7 +33,7 @@ export default function Page() {
         {trialSignup.description}
       </p>
 
-      <RegisterForm />
+      <RegisterForm defaultEmail={defaultEmail} defaultPhone={defaultPhone} />
 
       <GoogleAuthButton label="Đăng ký bằng Google" />
 

@@ -10,7 +10,7 @@ import { registerAction, type AuthState } from "@/app/api/auth/actions";
 import { Button } from "@/app/_components/ui/button";
 import { Input } from "@/app/_components/ui/input";
 
-export function RegisterForm() {
+export function RegisterForm({ defaultEmail, defaultPhone }: { defaultEmail?: string; defaultPhone?: string }) {
   const [state, formAction, pending] = useActionState<AuthState, FormData>(registerAction, {});
 
   return (
@@ -41,6 +41,7 @@ export function RegisterForm() {
             required
             autoComplete="email"
             placeholder="ban@congty.vn"
+            defaultValue={defaultEmail}
             className={fieldClass}
           />
         </div>
@@ -57,6 +58,7 @@ export function RegisterForm() {
             title="Số điện thoại gồm 10 số, bắt đầu bằng 0"
             autoComplete="tel"
             placeholder="0901234567"
+            defaultValue={defaultPhone}
             className={fieldClass}
           />
         </div>
