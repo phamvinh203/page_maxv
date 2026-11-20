@@ -2,7 +2,7 @@
 
 import { ArrowRight, Box, CircleCheck, Handshake, Headphones } from "lucide-react";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 
 import { sendContactLeadAction, type ContactLeadState } from "@/app/api/leads/actions";
 import { Button } from "@/app/_components/ui/button";
@@ -21,15 +21,18 @@ const topics = [
 export function ContactForm() {
   const [sentMessage, setSentMessage] = useState<string | null>(null);
   // One key per intentional submission, kept on retries (plan 6.5) — regenerated
-  // only after a success, so "gửi yêu cầu khác" creates a fresh lead.
-  const [idempotencyKey, setIdempotencyKey] = useState(() => crypto.randomUUID());
+  // only after a success, so "gửi yêu cầu khác" creates a fresh lead. Sinh lúc submit
+  // (chỉ client): prerender chặn crypto lúc build (cacheComponents).
+  const idempotencyKey = useRef<string | null>(null);
 
   const [state, formAction, pending] = useActionState<ContactLeadState, FormData>(
     async (prev, formData) => {
+      idempotencyKey.current ??= crypto.randomUUID();
+      formData.set("idempotencyKey", idempotencyKey.current);
       const result = await sendContactLeadAction(prev, formData);
       if (!result.error) {
         setSentMessage(result.message ?? null);
-        setIdempotencyKey(crypto.randomUUID());
+        idempotencyKey.current = null;
       }
       return result;
     },
@@ -64,7 +67,6 @@ export function ContactForm() {
         <label htmlFor="website">Website</label>
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" defaultValue="" />
       </div>
-      <input type="hidden" name="idempotencyKey" value={idempotencyKey} />
 
       <fieldset className="mt-6 grid gap-3 sm:grid-cols-3">
         <legend className="sr-only">Chủ đề cần trao đổi</legend>
