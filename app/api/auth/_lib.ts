@@ -14,11 +14,12 @@ const AUTH_COOKIES: readonly string[] = ["accessToken", "refreshToken"];
 
 // Shared upstream POST. Parses the API's error envelope (error.message per the
 // docs, else the top-level message the real errorHandler returns) once so every
-// caller surfaces the same reason.
-export async function postApi(path: string, body: unknown) {
+// caller surfaces the same reason. Extra headers carry per-call needs such as
+// the lead intake's Idempotency-Key.
+export async function postApi(path: string, body: unknown, headers?: Record<string, string>) {
   const res = await fetch(`${API_BASE}${path}`, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", ...headers },
     body: JSON.stringify(body),
     cache: "no-store",
   });

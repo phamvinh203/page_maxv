@@ -7,9 +7,10 @@ import { Input } from "@/app/_components/ui/input";
 import {
   Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetClose,
 } from "@/app/_components/ui/sheet";
-import { headerNavigation } from "@/app/_lib/navigation";
+import { getHeaderNavigation } from "@/app/_lib/navigation";
 
-export function MobileNav() {
+export async function MobileNav() {
+  const headerNavigation = await getHeaderNavigation();
   return (
     <Sheet>
       <SheetTrigger asChild>

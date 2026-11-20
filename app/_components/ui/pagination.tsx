@@ -3,14 +3,20 @@ import Link from "next/link";
 
 import { Button } from "@/app/_components/ui/button";
 
-export function Pagination({ currentPage, totalPages, basePath }: {
+export function Pagination({ currentPage, totalPages, basePath, query }: {
   currentPage: number;
   totalPages: number;
   basePath: string;
+  /** Tham số giữ lại khi chuyển trang (vd `q`, `the`). */
+  query?: Record<string, string | undefined>;
 }) {
   if (totalPages <= 1) return null;
 
-  const href = (page: number) => page === 1 ? basePath : `${basePath}?page=${page}`;
+  const href = (page: number) => {
+    const params = new URLSearchParams(Object.entries(query ?? {}).filter((entry): entry is [string, string] => !!entry[1]));
+    if (page > 1) params.set("page", String(page));
+    return params.size ? `${basePath}?${params}` : basePath;
+  };
 
   return (
     <nav aria-label="Phân trang" className="mt-8">

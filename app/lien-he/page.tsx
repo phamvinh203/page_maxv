@@ -1,10 +1,8 @@
 import {
   ArrowRight,
   BookOpen,
-  Box,
   Clock,
   ExternalLink,
-  Handshake,
   Headphones,
   Mail,
   MapPin,
@@ -20,9 +18,8 @@ import { Breadcrumbs } from "@/app/_components/ui/breadcrumbs";
 import { Button } from "@/app/_components/ui/button";
 import { ButtonLink } from "@/app/_components/ui/button-link";
 import { Container } from "@/app/_components/ui/container";
-import { Input } from "@/app/_components/ui/input";
+import { ContactForm } from "@/app/lien-he/_components/contact-form";
 import { contact } from "@/app/_lib/contact";
-import { productLinks } from "@/app/_lib/navigation";
 
 export const metadata: Metadata = {
   title: "Liên hệ",
@@ -30,12 +27,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/lien-he" },
   robots: { index: true, follow: true },
 };
-
-const topics = [
-  { value: "tu-van", label: "Tư vấn sản phẩm", Icon: Box },
-  { value: "ho-tro", label: "Hỗ trợ sử dụng", Icon: Headphones },
-  { value: "hop-tac", label: "Hợp tác", Icon: Handshake },
-];
 
 const resources = [
   { title: "Hướng dẫn sử dụng", text: "Tìm hiểu cách sử dụng các tính năng trên phần mềm MaxV.", href: "/tai-nguyen/huong-dan-su-dung", Icon: BookOpen },
@@ -47,9 +38,6 @@ const faqs = [
   { q: "Cần chuẩn bị thông tin gì khi liên hệ?", a: "Họ tên, số điện thoại, tên doanh nghiệp và mô tả ngắn nhu cầu của bạn là đủ để đội ngũ MaxV liên hệ lại." },
   { q: "Tôi có thể tìm hiểu bảng giá ở đâu?", a: "Bạn có thể xem các gói và mức giá tại trang Bảng giá." },
 ];
-
-const fieldClass = "mt-2 h-11 rounded-lg bg-white";
-const labelClass = "text-sm font-medium";
 
 export default function Page() {
   return (
@@ -134,63 +122,7 @@ export default function Page() {
             </div>
           </div>
 
-          {/* shortcut: no backend yet, so the form is display-only; wire a server action when lead intake exists. */}
-          <form className="rounded-2xl border bg-white p-6 shadow-sm sm:p-8">
-            <h2 className="text-2xl font-bold text-primary">Bạn muốn MaxV hỗ trợ điều gì?</h2>
-            <p className="mt-2 text-sm text-muted-foreground">Hãy cho chúng tôi biết nhu cầu của bạn. Đội ngũ MaxV sẽ liên hệ lại trong thời gian sớm nhất.</p>
-
-            <fieldset className="mt-6 grid gap-3 sm:grid-cols-3">
-              <legend className="sr-only">Chủ đề cần trao đổi</legend>
-              {topics.map(({ value, label, Icon }, i) => (
-                <label key={value} className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border bg-white px-3 py-3 text-sm font-medium has-checked:border-primary has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:ring-2 has-focus-visible:ring-primary">
-                  <input type="radio" name="topic" value={value} defaultChecked={i === 0} className="sr-only" />
-                  <Icon className="size-5" aria-hidden="true" />{label}
-                </label>
-              ))}
-            </fieldset>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="name" className={labelClass}>Họ và tên <span className="text-red-500">*</span></label>
-                <Input id="name" name="name" required placeholder="Nhập họ và tên của bạn" className={fieldClass} />
-              </div>
-              <div>
-                <label htmlFor="phone" className={labelClass}>Số điện thoại <span className="text-red-500">*</span></label>
-                <Input id="phone" name="phone" type="tel" required placeholder="Nhập số điện thoại" className={fieldClass} />
-              </div>
-              <div>
-                <label htmlFor="email" className={labelClass}>Email</label>
-                <Input id="email" name="email" type="email" placeholder="Nhập email của bạn" className={fieldClass} />
-              </div>
-              <div>
-                <label htmlFor="company" className={labelClass}>Tên doanh nghiệp</label>
-                <Input id="company" name="company" placeholder="Nhập tên doanh nghiệp" className={fieldClass} />
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <label htmlFor="product" className={labelClass}>Sản phẩm quan tâm</label>
-              <select id="product" name="product" defaultValue="" className={`${fieldClass} w-full border border-input px-3 text-sm text-muted-foreground`}>
-                <option value="" disabled>Chọn sản phẩm hoặc dịch vụ</option>
-                {productLinks.map(({ label }) => <option key={label}>{label}</option>)}
-              </select>
-            </div>
-
-            <div className="mt-4">
-              <label htmlFor="message" className={labelClass}>Nội dung cần trao đổi</label>
-              <textarea id="message" name="message" rows={4} placeholder="Chia sẻ ngắn gọn nhu cầu của bạn..." className="mt-2 w-full rounded-lg border border-input px-3 py-2 text-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50" />
-            </div>
-
-            <label className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-              <input type="checkbox" name="consent" required className="size-4" />
-              Tôi đồng ý với <Link href="/chinh-sach-bao-mat" className="text-primary underline">chính sách bảo mật</Link>
-            </label>
-
-            <Button type="submit" disabled className="mt-6 h-12 w-full rounded-lg text-base disabled:opacity-100">
-              Gửi yêu cầu tư vấn <ArrowRight aria-hidden="true" />
-            </Button>
-            <p className="mt-3 text-center text-xs text-muted-foreground">Thông tin được sử dụng để tiếp nhận và phản hồi yêu cầu của bạn.</p>
-          </form>
+          <ContactForm />
         </Container>
       </section>
 

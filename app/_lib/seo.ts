@@ -82,14 +82,18 @@ export function softwareJsonLd({ name, description, path }: { name: string; desc
   };
 }
 
-export function articleJsonLd(post: { title: string; date: string; image?: string; content: string[] }, path: string) {
+export function articleJsonLd(
+  post: { title: string; summary: string; seoDescription: string | null; publishedAt: string; updatedAt: string; image: { url: string } | null },
+  path: string,
+) {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    description: post.content[0],
-    datePublished: post.date,
-    ...(post.image && { image: post.image.startsWith("http") ? post.image : `${site.url}${post.image}` }),
+    description: post.seoDescription || post.summary,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt,
+    ...(post.image && { image: post.image.url }),
     mainEntityOfPage: `${site.url}${path}`,
     inLanguage: "vi-VN",
     author: { "@id": `${site.url}/#organization` },
