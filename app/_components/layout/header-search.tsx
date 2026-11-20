@@ -13,7 +13,6 @@ export function HeaderSearch({ children }: { children: ReactNode }) {
   return (
     <div className="hidden min-w-0 flex-1 items-center justify-end gap-1 xl:flex">
       {open ? (
-        // shortcut: /tin-tuc ignores ?q= until article search exists; point the action at the search endpoint then.
         <form
           action="/tin-tuc"
           role="search"

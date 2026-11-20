@@ -4,9 +4,10 @@ import {
   NavigationMenu, NavigationMenuContent, NavigationMenuItem,
   NavigationMenuList, NavigationMenuTrigger, NavigationMenuLink, navigationMenuTriggerStyle,
 } from "@/app/_components/ui/navigation-menu";
-import { headerNavigation } from "@/app/_lib/navigation";
+import { getHeaderNavigation } from "@/app/_lib/navigation";
 
-export function DesktopNav() {
+export async function DesktopNav() {
+  const headerNavigation = await getHeaderNavigation();
   return (
     <NavigationMenu aria-label="Điều hướng chính" className="hidden xl:flex">
       <NavigationMenuList className="gap-0">

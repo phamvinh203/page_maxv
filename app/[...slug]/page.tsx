@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
 
+import { Container } from "@/app/_components/ui/container";
 import { PlaceholderPage } from "@/app/_components/ui/placeholder-page";
+import { NewsContent } from "@/app/tin-tuc/_components/news-content";
+import { getCmsPage } from "@/app/_lib/newsApi";
 
 // Pages not built yet: path -> title. When a page gets its own folder (app/<path>/page.tsx) it wins over this
-// catch-all; delete its entry here. Paths missing from this map return 404.
+// catch-all; delete its entry here. A published CMS page (REQ-046, BR-022) wins over this map; paths with neither return 404.
 const titles = new Map(
   Object.entries({
     "bang-gia/tu-van-goi-phu-hop": "Tư vấn gói phù hợp",
@@ -38,12 +41,38 @@ export const instant = false;
 
 export const generateStaticParams = () => [...titles.keys()].map((path) => ({ slug: path.split("/") }));
 
+// Trang tĩnh CMS (1–3 đoạn) trước, rồi tới trang chờ. Lỗi API: trang chờ vẫn hiện (và build không vỡ), còn lại ném ra error.tsx (REQ-049).
+async function loadPage(slug: string[]) {
+  const path = slug.join("/");
+  const title = titles.get(path);
+  const page = slug.length <= 3 ? await getCmsPage(path) : null;
+  if (page === undefined && !title) throw new Error("News API unavailable");
+  return { path, title, page: page ?? null };
+}
+
 export async function generateMetadata({ params }: PageProps<"/[...slug]">) {
-  return { title: titles.get((await params).slug.join("/")) };
+  const { path, title, page } = await loadPage((await params).slug);
+  if (!page) return { title };
+  return {
+    title: page.seoTitle || page.title,
+    description: page.seoDescription || undefined,
+    alternates: { canonical: `/${path}` },
+    robots: { index: true, follow: true },
+  };
 }
 
 export default async function Page({ params }: PageProps<"/[...slug]">) {
-  const title = titles.get((await params).slug.join("/"));
+  const { title, page } = await loadPage((await params).slug);
+  if (page) {
+    return (
+      <Container className="py-12 sm:py-16">
+        <article className="max-w-3xl">
+          <h1 className="text-3xl font-bold sm:text-4xl">{page.title}</h1>
+          <NewsContent html={page.content} className="mt-6" />
+        </article>
+      </Container>
+    );
+  }
   if (!title) notFound();
   return <PlaceholderPage title={title} />;
 }

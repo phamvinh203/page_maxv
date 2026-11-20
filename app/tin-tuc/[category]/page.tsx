@@ -1,21 +1,25 @@
 import { notFound } from "next/navigation";
 
 import { NewsListing } from "@/app/tin-tuc/_components/news-listing";
-import { newsCategories } from "@/app/_data/news";
+import { getNewsCategories } from "@/app/_lib/newsApi";
 
-export const generateStaticParams = () => newsCategories.map(({ slug }) => ({ category: slug }));
+const findCategory = async (slug: string) => (await getNewsCategories()).find((category) => category.slug === slug);
 
-const findCategory = (slug: string) => newsCategories.find((category) => category.slug === slug);
+// Danh mục từ API (REQ-040). Cache Components đòi ≥ 1 params; API lỗi lúc build thì dùng giá trị giữ chỗ → notFound().
+export async function generateStaticParams() {
+  const categories = await getNewsCategories();
+  return categories.length ? categories.map(({ slug }) => ({ category: slug })) : [{ category: "_" }];
+}
 
 export async function generateMetadata({ params }: PageProps<"/tin-tuc/[category]">) {
   const { category } = await params;
-  const found = findCategory(category);
-  return found && { title: found.label, description: found.description, alternates: { canonical: `/tin-tuc/${category}` } };
+  const found = await findCategory(category);
+  return found && { title: found.name, description: found.description ?? undefined, alternates: { canonical: `/tin-tuc/${category}` }, robots: { index: true, follow: true } };
 }
 
 export default async function Page({ params, searchParams }: PageProps<"/tin-tuc/[category]">) {
   const { category } = await params;
-  const found = findCategory(category);
+  const found = await findCategory(category);
   if (!found) notFound();
   return <NewsListing searchParams={searchParams} category={found.slug} />;
 }

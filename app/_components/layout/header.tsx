@@ -11,7 +11,7 @@ import { maxvLogo } from "@/app/_lib/assets";
 
 export function Header() {
   return (
-    <header className="relative z-40 border-b border-border/60 bg-white">
+    <header data-site-header className="relative z-40 border-b border-border/60 bg-white">
       <Container className="flex h-18 items-center justify-between gap-2 sm:gap-4 lg:h-20">
         <Link href="/" aria-label="MaxV – Trang chủ" className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">
           <Image src={maxvLogo} alt="MaxV" className="h-auto w-24 sm:w-28 lg:w-32" sizes="(min-width: 1024px) 128px, (min-width: 640px) 112px, 96px" loading="eager" />

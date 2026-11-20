@@ -1,5 +1,5 @@
 import { industrySolutions } from "@/app/_data/industry-solutions";
-import { newsCategories } from "@/app/_data/news";
+import { getNewsCategories } from "@/app/_lib/newsApi";
 
 export const productLinks = [
   { label: "MaxV Accounting", href: "/san-pham/maxv-accounting" },
@@ -16,8 +16,6 @@ const customerLinks = [
   { label: "Khách hàng tiêu biểu", href: "/khach-hang/khach-hang-tieu-bieu" },
 ];
 
-const newsLinks = newsCategories.map(({ label, slug }) => ({ label, href: `/tin-tuc/${slug}` }));
-
 const supportLinks = [
   { label: "Trung tâm trợ giúp", href: "/tai-nguyen/trung-tam-tro-giup" },
   { label: "Hướng dẫn sử dụng", href: "/tai-nguyen/huong-dan-su-dung" },
@@ -31,16 +29,20 @@ const companyLinks = [
   { label: "Liên hệ", href: "/lien-he" },
 ];
 
-export const headerNavigation = [
-  { title: "Giới thiệu", href: "/gioi-thieu" },
-  { title: "Sản phẩm", items: productLinks },
-  { title: "Báo giá", href: "/bang-gia" },
-  { title: "Tin tức", items: newsLinks },
-  { title: "Khách hàng", items: customerLinks },
-  { title: "Tra cứu MST", href: "/tra-cuu-mst" },
-  { title: "Hỗ trợ", items: supportLinks },
-  { title: "Liên hệ", href: "/lien-he" },
-];
+// Menu Tin tức lấy danh mục từ API (REQ-040); API lỗi thì "Tin tức" thành link trơn.
+export async function getHeaderNavigation() {
+  const newsLinks = (await getNewsCategories()).map(({ name, slug }) => ({ label: name, href: `/tin-tuc/${slug}` }));
+  return [
+    { title: "Giới thiệu", href: "/gioi-thieu" },
+    { title: "Sản phẩm", items: productLinks },
+    { title: "Báo giá", href: "/bang-gia" },
+    newsLinks.length ? { title: "Tin tức", items: newsLinks } : { title: "Tin tức", href: "/tin-tuc" },
+    { title: "Khách hàng", items: customerLinks },
+    { title: "Tra cứu MST", href: "/tra-cuu-mst" },
+    { title: "Hỗ trợ", items: supportLinks },
+    { title: "Liên hệ", href: "/lien-he" },
+  ];
+}
 
 export const footerNavigation = [
   { title: "Sản phẩm", items: productLinks },
